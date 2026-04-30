@@ -1,0 +1,171 @@
+/* ===== Container ===== */
+.container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #111;
+  font-family: Arial, sans-serif;
+}
+
+/* ===== Phone Wrapper (Responsive) ===== */
+.phone {
+  width: 100%;
+  max-width: 420px;
+  height: 100dvh;
+  background: linear-gradient(to bottom, #7fb3b6, #5f9ea0);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+/* ===== Header ===== */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: clamp(18px, 4vw, 22px);
+}
+
+.header p {
+  font-size: clamp(10px, 3vw, 12px);
+  opacity: 0.8;
+  margin: 0;
+}
+
+.menu {
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* ===== Top Section ===== */
+.top {
+  display: flex;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.addBox,
+.profile {
+  flex: 1;
+  aspect-ratio: 1;
+  border-radius: 16px;
+}
+
+/* Add button */
+.addBox {
+  background: rgba(255,255,255,0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.addBox:hover {
+  background: rgba(255,255,255,0.5);
+  transform: scale(1.05);
+}
+
+/* Profile */
+.profile {
+  background: #d9d9d9;
+  border-radius: 50%;
+}
+
+/* ===== Search ===== */
+.search {
+  display: flex;
+  align-items: center;
+  background: rgba(255,255,255,0.4);
+  border-radius: 20px;
+  padding: 8px 12px;
+  margin-bottom: 16px;
+}
+
+.search input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 14px;
+}
+
+/* ===== Grid ===== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  flex: 1;
+}
+
+/* Tablet */
+@media (min-width: 500px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Desktop */
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ===== Card ===== */
+.card {
+  background: rgba(255,255,255,0.3);
+  border-radius: 12px;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  background: rgba(255,255,255,0.5);
+}
+
+/* Thumbnail */
+.thumb {
+  width: 100%;
+  aspect-ratio: 1.2;
+  background: #5b5555;
+  border-radius: 8px;
+  margin-bottom: 6px;
+}
+
+/* Text */
+.card p {
+  font-size: 12px;
+  margin: 0;
+}
+
+/* ===== Pagination Dots ===== */
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.dots span {
+  width: 6px;
+  height: 6px;
+  background: white;
+  opacity: 0.4;
+  border-radius: 50%;
+}
+
+.dots .active {
+  opacity: 1;
+}
