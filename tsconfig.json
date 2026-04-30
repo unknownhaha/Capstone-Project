@@ -18,9 +18,11 @@
         "name": "next"
       }
     ],
+    "baseUrl": ".",
     "paths": {
       "@/*": ["./*"]
-    }
+    },
+     "ignoreDeprecations": "6.0"
   },
   "include": [
     "next-env.d.ts",
@@ -28,7 +30,11 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
+    "**/*.mts",
+    "types/**/*.d.ts", 
+    
+   
+    
   ],
   "exclude": ["node_modules"]
 }

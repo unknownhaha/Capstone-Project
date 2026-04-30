@@ -12,6 +12,7 @@
 
 html {
   height: 100%;
+  
 }
 
 html,
@@ -21,7 +22,7 @@ body {
 }
 
 body {
-  min-height: 100%;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   color: var(--foreground);
@@ -29,6 +30,8 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+   background: linear-gradient(to bottom, #0f5f6b, #7fb3b6);
+     background-attachment: fixed;
 }
 
 * {
