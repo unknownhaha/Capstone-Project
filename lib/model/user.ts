@@ -5,7 +5,7 @@ export interface IUser {
   lastName: string;
   password: string;
   profileImg?: string;
-
+  projects? : Types.ObjectId[];
   contact: {
     email: string;
     phone?: string;
@@ -21,6 +21,7 @@ export interface IUser {
 
   createdAt?: Date;
   updatedAt?: Date;
+
 }
 const userSchema = new mongoose.Schema<IUser>({
   
@@ -28,7 +29,14 @@ const userSchema = new mongoose.Schema<IUser>({
   lastName: { type: String, required: true },
   password: { type: String, required: true, select: false } ,
   contact: {
-    email: { type: String, required: true, unique: true },
+    email: { 
+      type: String, 
+      required: true, 
+      unique: true,
+      lowercase: true,
+      trim: true,
+        match: [/^\S+@\S+\.\S+$/, "Please use a valid email address"]
+    },
     phone: String,
     address: String
   },
@@ -40,8 +48,12 @@ const userSchema = new mongoose.Schema<IUser>({
     workAddress: String
   },
 
-  profileImg: String
-
+  profileImg: String,
+  projects :  [{
+    type : mongoose.Schema.Types.ObjectId,
+    ref : "Project"
+  }]
+   
 }, { timestamps: true });
 
 const User =
