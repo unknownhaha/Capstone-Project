@@ -169,3 +169,128 @@
 .dots .active {
   opacity: 1;
 }
+/* ===== Overlay ===== */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 5;
+}
+
+/* ===== Sidebar ===== */
+.sidebar {
+  position: absolute;
+  top: 0;
+  right: -70%;
+  width: 70%;
+  height: 100%;
+  background: #e5e5e5;
+  padding: 20px;
+  transition: 0.3s ease;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Show state */
+.show {
+  right: 0;
+}
+
+/* Menu items */
+.menuItem {
+  padding: 12px 0;
+  border-bottom: 1px solid #999;
+  cursor: pointer;
+  font-weight: 500;
+  color: black;
+}
+
+.menuItem:hover {
+  opacity: 0.7;
+}
+
+/* ===== Overlay (upgrade) ===== */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(4px);
+  z-index: 5;
+}
+
+/* ===== Create Modal ===== */
+.createBox {
+  position: absolute;
+  bottom: -100%;
+  left: 0;
+  width: 100%;
+  background: #f2f2f2;
+  border-radius: 20px 20px 0 0;
+  padding: 20px;
+  transition: 0.3s ease;
+  z-index: 10;
+}
+
+/* แยกจาก sidebar */
+.showCreate {
+  bottom: 0;
+}
+
+/* title */
+.createBox h3 {
+  margin-bottom: 15px;
+  font-size: 18px;
+  opacity: 0.8;
+}
+
+/* input group */
+.inputGroup {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.inputGroup span {
+  margin-right: 8px;
+}
+
+.inputGroup input {
+  border: none;
+  outline: none;
+  flex: 1;
+}
+
+/* input */
+.input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 12px;
+  border: none;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* button */
+.submit {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  background: #5f9ea0;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.2s;
+}
+
+.submit:hover {
+  background: #4a8b8d;
+}
+
