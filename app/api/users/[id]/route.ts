@@ -1,33 +1,30 @@
-
-
-
-// app/api/users/[id]/route.ts
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { connectDB } from "@/lib/db";
 import User from "@/lib/model/user";
 
 export async function GET(
-  req: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+    { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const {id} = await params;
     const session = await auth();
 
-    // 1. Check if logged in
+    
     if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // 2. Prevent fetching other users' data
-    if (session.user.id !== params.id) {
+   
+    if (session.user.id !== id) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     await connectDB();
 
     // 3. Fetch user — password excluded by default (select: false)
-    const user = await User.findById(params.id);
+    const user = await User.findById(id);
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
