@@ -6,7 +6,7 @@ if (!MONGO_URI) {
   throw new Error("Please define MONGO_URI in .env");
 }
 
-// 🔥 FIX: persist cache globally
+
 let cached = (global as any).mongoose;
 
 if (!cached) {

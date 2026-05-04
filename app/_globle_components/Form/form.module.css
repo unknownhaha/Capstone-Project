@@ -2,18 +2,18 @@
 
 
 .line {
-    width: 140%;
+    width: 19.5rem;
     background-color: white;
     height: 1px;
     margin : 0.5rem 0 1rem 0;
 }
 .input{
-    background-color: white;
-       background-color: rgba(255, 255, 255, 0.5);
+    
+    background-color: rgba(255, 255, 255, 0.5);
     border : none;
     margin : 0.1rem 0 0.7rem 0;
     height: 2rem;
-    width: 140%;
+    width: 19.5rem;
     padding-left : 0.5rem;
     border-radius: 5px;
 }

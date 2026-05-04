@@ -1,9 +1,12 @@
 "use client";
 
 import styles from "./register.module.css";
-
+import { useSession } from "next-auth/react";
 export default function RegisterPage() {
+  
+  
   return (
+    
     <div className={styles.container}>
       <div className={styles.box}>
 

@@ -1,8 +1,44 @@
-{
-  "code": "1.5.1",
-  "name": {
-    "th": "ทางลาดแนวดิ่ง",
-    "en": "Ramp"
-  },
-  "criteria": []
-}
+ {
+      "code": "1.5.1",
+      "name": {
+        "th": "การสัญจรแนวดิ่ง - ทางลาด",
+        "en": "Vertical Circulation - Ramp"
+      },
+      "criteria": [
+        {
+          "id": "1.5.1-001",
+          "group": { "key": "ramp_slope", "label": "ความลาดชัน" },
+          "label": "ความลาดชัน ≤ 1:12",
+          "ref": "มยผ.6301-3.2.6",
+          "target": ["PD"]
+        },
+        {
+          "id": "1.5.1-002",
+          "group": { "key": "ramp_width", "label": "ความกว้าง" },
+          "label": "ความกว้าง ≥ 1.50 m",
+          "ref": "มยผ.6301-3.2.6",
+          "target": ["PD"]
+        },
+        {
+          "id": "1.5.1-003",
+          "group": { "key": "ramp_landing", "label": "ชานพัก" },
+          "label": "มีชานพักทุกระยะตามมาตรฐาน",
+          "ref": "มยผ.6301-3.2.6",
+          "target": ["PD"]
+        },
+        {
+          "id": "1.5.1-004",
+          "group": { "key": "ramp_surface", "label": "พื้น" },
+          "label": "พื้นไม่ลื่น",
+          "ref": "มยผ.6301-3.2.4",
+          "target": ["VI", "PD"]
+        },
+        {
+          "id": "1.5.1-005",
+          "group": { "key": "ramp_handrail", "label": "ราวจับ" },
+          "label": "มีราวจับทั้งสองด้าน",
+          "ref": "มยผ.6301-3.2.6",
+          "target": ["VI", "PD"]
+        }
+      ]
+    }

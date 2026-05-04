@@ -4,16 +4,111 @@
     align-items: center;
     justify-content: flex-start;
 }
-.img {
-    border-radius : 50%;
-    object-fit: cover;
-    border : 1px solid white;
-    width: 5rem;
-    height: auto;
-    cursor: pointer;
-}
+
 .name {
-    font-size : 16px;
-    margin-left : 1rem;
-    color : white;
+  display: flex;
+  gap: 0.5rem; 
+   font-size: 16px;
+  margin-left: 1rem;
+  width: 10rem;
+  padding-right : 2px;
+  color: white;
+}
+.name input {
+    
+   background-color: transparent;
+  border: none;           
+  border-bottom: 1px solid white; 
+  outline: none;               
+   font-size: 16px;
+  height: 1.5rem;
+  width: 7rem;
+ 
+  color: white;
+}
+.imgWrapper {
+    position: relative; 
+    flex-shrink: 0;
+    width: 4rem;
+    height:4rem;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #ffffff99;
+}
+.imgWrapper > div,
+.imgWrapper form {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+.uploadBtn input {
+    display: none;
+}
+
+.uploadBtn {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;   
+    height: 100%;  
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;  /* also fix this */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 2;
+}
+
+
+.img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.overlay {
+    width: 5.625rem;
+    height: 5.625rem;
+}
+
+.profileContainer {
+    position: relative;
+    width: 34.375rem;
+    height: 12.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    
+}
+.uploadBtn {
+ 
+  position: relative;
+}
+
+
+.overlay {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+.uploadBtn:disabled {
+  pointer-events: none;
+  cursor: default;
+}
+
+.editing .uploadBtn {
+  opacity: 1;
 }
