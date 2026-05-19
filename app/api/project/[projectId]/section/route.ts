@@ -31,7 +31,7 @@ export async function POST(
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    // 🚨 prevent duplicate section
+   
     const exists = project.sections.some((s: any) => s.code === code);
 
     if (exists) {
@@ -41,7 +41,7 @@ export async function POST(
       );
     }
 
-    // ✅ add section
+  
     project.sections.push({
       code,
       items: []

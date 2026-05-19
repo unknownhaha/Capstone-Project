@@ -1,15 +1,13 @@
 import mongoose from "mongoose";
 
-/* =========================
-   CRITERIA (USER ANSWER)
-========================= */
+
 const projectCriteriaSchema = new mongoose.Schema({
   criteriaId: {
     type: String,
     required: true,
   },
 
-  // null = not answered
+  
   score: {
     type: Number,
     enum: [0, 1, 2, null],
@@ -19,33 +17,29 @@ const projectCriteriaSchema = new mongoose.Schema({
   note: String,
 });
 
-/* =========================
-   SECTION (GROUP)
-========================= */
+
 const projectSectionSchema = new mongoose.Schema({
   code: {
     type: String,
     required: true,
   },
 
-  // ❌ removed name (comes from JSON standard)
+
 
   criteria: [projectCriteriaSchema],
 
-  /* ===== SCORE ===== */
+  
   totalScore: { type: Number, default: 0 },
   maxScore: { type: Number, default: 0 },
   scorePercent: { type: Number, default: 0 },
 
-  /* ===== PROGRESS ===== */
+ 
   answeredCriteria: { type: Number, default: 0 },
   totalCriteria: { type: Number, default: 0 },
   completionRate: { type: Number, default: 0 },
 });
 
-/* =========================
-   PROJECT
-========================= */
+
 const projectSchema = new mongoose.Schema(
   {
     userId: {
@@ -54,7 +48,7 @@ const projectSchema = new mongoose.Schema(
       required: true,
     },
 
-    // ✅ JSON-based standard reference
+  
     standardKey: {
       type: String,
       required : true,
@@ -78,7 +72,7 @@ const projectSchema = new mongoose.Schema(
       address: String,
     },
 
-    /* ===== PAGE 1 DATA ===== */
+
     buildingType: {
       type: String,
       enum: ["single_floor", "multi_floor"],
@@ -109,12 +103,12 @@ const projectSchema = new mongoose.Schema(
 
     sections: [projectSectionSchema],
 
-    /* ===== PROJECT SCORE ===== */
+    
     totalScore: { type: Number, default: 0 },
     maxScore: { type: Number, default: 0 },
     scorePercent: { type: Number, default: 0 },
 
-    /* ===== PROJECT PROGRESS ===== */
+    
     answeredCriteria: { type: Number, default: 0 },
     totalCriteria: { type: Number, default: 0 },
     completionRate: { type: Number, default: 0 },
@@ -122,9 +116,7 @@ const projectSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-/* =========================
-   PRE-SAVE CALCULATION
-========================= */
+
 projectSchema.pre("save", function () {
   if (!this.sections || this.sections.length === 0) {
     throw new Error("Project must have at least one section");
@@ -149,31 +141,31 @@ projectSchema.pre("save", function () {
       }
     });
 
-    /* ===== SECTION SCORE ===== */
+    
     section.totalScore = sectionScore;
     section.maxScore = sectionMax;
     section.scorePercent = sectionMax > 0 ? Math.round((sectionScore / sectionMax) * 1000) / 10 : 0;
 
-    /* ===== SECTION PROGRESS ===== */
+    
     section.totalCriteria = sectionTotal;
     section.answeredCriteria = sectionAnswered;
     section.completionRate =
       sectionTotal > 0 ? (sectionAnswered / sectionTotal) * 100 : 0;
 
-    /* ===== PROJECT ACCUMULATION ===== */
+    
     projectTotalScore += sectionScore;
     projectMaxScore += sectionMax;
     projectAnswered += sectionAnswered;
     projectTotalCriteria += sectionTotal;
   });
 
-  /* ===== PROJECT SCORE ===== */
+  
   this.totalScore = projectTotalScore;
   this.maxScore = projectMaxScore;
   this.scorePercent =
     projectMaxScore > 0 ? (projectTotalScore / projectMaxScore) * 100 : 0;
 
-  /* ===== PROJECT PROGRESS ===== */
+ 
   this.answeredCriteria = projectAnswered;
   this.totalCriteria = projectTotalCriteria;
   this.completionRate =
@@ -182,15 +174,11 @@ projectSchema.pre("save", function () {
       : 0;
 });
 
-/* =========================
-   INDEXES
-========================= */
 projectSchema.index({ userId: 1, status: 1 });
 projectSchema.index({ userId: 1, createdAt: -1 });
 projectSchema.index({ standardKey: 1 });
 
-/* =========================
-   EXPORT
-========================= */
+
+
 export default mongoose.models.Project ||
   mongoose.model("Project", projectSchema);

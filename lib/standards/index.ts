@@ -1,20 +1,13 @@
-import s11 from "./1.1.json";
-import s12 from "./1.2.json";
-import s131 from "./1.3.1.json";
-import s132 from "./1.3.2.json";
-import s133 from "./1.3.3.json";
-import s134 from "./1.3.4.json";
-import s14 from "./1.4.json";
-import s151 from "./1.5.1.json";
-import s152 from "./1.5.2.json";
-import s153 from "./1.5.3.json";
-import s16 from "./1.6.json";
-import s17 from "./1.7.json";
-import s18 from "./1.8.json";
-import s19 from "./1.9.json";
+import s1 from "./ทั่วไป.json";
+import s2 from "./ทางเข้าอาคาร ทางเดินระหว่างอาคาร ทางเชื่อมระหว่างอาคาร ทางลาด ลิฟต์ และบันได.json";
+import s3 from "./ประตูและหน้าต่าง.json";
+import s4 from "./ที่จอดรถและที่รับส่งผู้โดยสาร.json";
+import s5 from "./ที่พักอาศัยและห้องนอน.json";
+import s6 from "./การครอบครองพิเศษ.json";
+import s7 from "./สิ่งอำนวยความสะดวกอื่นๆ.json";
+import s8 from "./ป้ายสัญลักษณ์.json";
+
 
 export const standards = [
-  s11, s12, s131, s132, s133, s134,
-  s14, s151, s152, s153,
-  s16, s17, s18, s19
+  s1,s2,s3,s4,s5,s6,s7,s8
 ];

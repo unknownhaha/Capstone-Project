@@ -18,19 +18,19 @@ export const uploadRouter = {
   })
 
   .onUploadComplete(async ({ metadata, file }) => {
-    console.log("FILE FULL:", file); // 👈 ADD HERE
+    console.log("FILE FULL:", file); 
     try {
       await connectDB();
 
       const userId = "680f1a1a1a1a1a1a1a1a1a01"; 
 
-      // 🔵 IMPORTANT: UploadThing v10 usually uses file.url
+    
       const imageUrl = file.url;
       console.log("UserId:", metadata.userId);
       console.log("Type:", typeof metadata.userId);
       console.log("File URL:", file.ufsUrl);
       if (!imageUrl) {
-        console.log("❌ No file.url returned:", file);
+        console.log(" No file.url returned:", file);
         return;
       }
 
@@ -41,16 +41,16 @@ export const uploadRouter = {
       );
 
       if (!updatedUser) {
-        console.log("❌ User not found in DB");
+        console.log(" User not found in DB");
         return;
       }
 
-      console.log("✅ Upload success:", updatedUser);
+      console.log(" Upload success:", updatedUser);
 
       return { success: true, userId };
 
     } catch (err) {
-      console.error("❌ UploadThing crash:", err);
+      console.error(" UploadThing crash:", err);
       return;
     }
   }),

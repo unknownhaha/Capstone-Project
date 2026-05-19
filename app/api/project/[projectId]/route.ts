@@ -47,7 +47,7 @@ export async function PATCH(
     if (project.userId.toString() !== session.user.id)
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
-    // Replace sections (simple approach)
+    
     project.sections = body.sections ?? project.sections;
 
     await project.save();

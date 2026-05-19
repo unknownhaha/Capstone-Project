@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import { connectDB } from "@/lib/db";
 import User from "@/lib/model/user";
 import mongoose from "mongoose";
+
 export async function GET(
   req: NextRequest,
     { params }: { params: Promise<{ id: string }> }
@@ -23,7 +24,7 @@ export async function GET(
 
     await connectDB();
 
-    // 3. Fetch user — password excluded by default (select: false)
+    
     const user = await User.findById(id);
 
     if (!user) {
@@ -58,7 +59,7 @@ export async function PUT(
 
     const body = await req.json();
 
-    // 🧠 Build update object safely (only include provided fields)
+   
     const updateFields: any = {
       ...(body.email !== undefined && { "contact.email": body.email }),
       ...(body.phone !== undefined && { "contact.phone": body.phone }),
