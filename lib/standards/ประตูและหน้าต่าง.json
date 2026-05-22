@@ -1,37 +1,58 @@
 {
-      "code": "1.3.2",
-      "name": {
-        "th": "การเดินทางแนวราบ - สิ่งกีดขวาง",
-        "en": "Horizontal Circulation - Obstructions"
+  "section": {
+    "id": "3.3",
+    "title": "ประตูและหน้าต่าง",
+    "criteria": [
+      {
+        "id": "3.3.1",
+        "title": "วัตถุยื่น",
+        "items": [
+          {
+            "item_id": "3.3.1-001",
+            "source_clause": "3.1.5.1",
+            "source_text": "วัตถุยื่นเป็นไปตามมาตรฐาน",
+            "display_text": "วัตถุยื่นเป็นไปตามมาตรฐาน",
+            "applicable_to": "both",
+            "notes": "มยผ.6301-3.1.5.1"
+          }
+        ]
       },
-      "criteria": [
-        {
-          "id": "1.3.2-001",
-          "group": { "key": "protruding_objects", "label": "วัตถุยื่น" },
-          "label": "วัตถุยื่นเป็นไปตามมาตรฐาน",
-          "ref": "มยผ.6301-3.1.5.1",
-          "target": ["VI"]
-        },
-        {
-          "id": "1.3.2-002",
-          "group": { "key": "pole_objects", "label": "วัตถุบนเสา" },
-          "label": "วัตถุบนเสาเป็นไปตามมาตรฐาน",
-          "ref": "มยผ.6301-3.1.5.2",
-          "target": ["VI"]
-        },
-        {
-          "id": "1.3.2-003",
-          "group": { "key": "low_height", "label": "พื้นที่ต่ำ" },
-          "label": "พื้นที่ < 2.0 m มีราวกั้น",
-          "ref": "มยผ.6301-3.1.5.3",
-          "target": ["VI", "DS", "ASD"]
-        },
-        {
-          "id": "1.3.2-004",
-          "group": { "key": "low_height", "label": "พื้นที่ต่ำ" },
-          "label": "มีป้ายเตือนความสูงจำกัด",
-          "ref": "มยผ.6301-3.1.5",
-          "target": ["DS", "ASD"]
-        }
-      ]
-    }
+      {
+        "id": "3.3.2",
+        "title": "วัตถุบนเสา",
+        "items": [
+          {
+            "item_id": "3.3.2-001",
+            "source_clause": "3.1.5.2",
+            "source_text": "วัตถุบนเสาเป็นไปตามมาตรฐาน",
+            "display_text": "วัตถุบนเสาเป็นไปตามมาตรฐาน",
+            "applicable_to": "both",
+            "notes": "มยผ.6301-3.1.5.2"
+          }
+        ]
+      },
+      {
+        "id": "3.3.3",
+        "title": "พื้นที่ต่ำ",
+        "items": [
+          {
+            "item_id": "3.3.3-001",
+            "source_clause": "3.1.5.3",
+            "source_text": "พื้นที่ < 2.0 m มีราวกั้น",
+            "display_text": "พื้นที่ < 2.0 m มีราวกั้น",
+            "applicable_to": "both",
+            "notes": "มยผ.6301-3.1.5.3"
+          },
+          {
+            "item_id": "3.3.3-002",
+            "source_clause": "3.1.5",
+            "source_text": "มีป้ายเตือนความสูงจำกัด",
+            "display_text": "มีป้ายเตือนความสูงจำกัด",
+            "applicable_to": "both",
+            "notes": "มยผ.6301-3.1.5"
+          }
+        ]
+      }
+    ]
+  }
+}

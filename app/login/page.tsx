@@ -1,10 +1,13 @@
 "use client";
 
 import styles from "./login.module.css";
-import { useTransition, useState } from "react";
+import { Suspense, useTransition, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { loginAction } from "./action";
 
-export default function LoginPage() {
+function LoginForm() {
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") ?? "/allproject";
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [show, setShow] = useState(false);
@@ -30,6 +33,7 @@ export default function LoginPage() {
        
 
         <form onSubmit={handleSubmit}>
+          <input type="hidden" name="callbackUrl" value={callbackUrl} />
           <input
             name="email"
             type="email"
@@ -84,5 +88,13 @@ export default function LoginPage() {
 
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className={styles.container}>Loading...</div>}>
+      <LoginForm />
+    </Suspense>
   );
 }

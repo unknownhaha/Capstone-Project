@@ -1,0 +1,176 @@
+.sectionList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.sectionListCreate {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+}
+
+.sectionListScroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 4px;
+  padding-bottom: 20px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.sectionListScroll::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.sectionCard {
+  background: white;
+  border-radius: 14px;
+  overflow: visible;
+  color: #111;
+  flex-shrink: 0;
+  margin-bottom: 2px;
+}
+
+.sectionCardCreate {
+  margin-bottom: 8px;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.sectionTitle {
+  flex: 1;
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.toggleBtn {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 8px;
+  background: #e8e8e8;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.groupList {
+  border-top: 1px solid #eee;
+  padding: 8px 12px 12px;
+  max-height: min(50vh, 360px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.groupList::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.groupListCreate {
+  border-top: 1px solid #eee;
+  padding: 10px 12px 20px;
+  margin-bottom: 8px;
+  overflow-y: auto;
+  max-height: min(48vh, 380px);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.groupListCreate::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.groupRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 8px;
+  margin-bottom: 6px;
+  border-radius: 10px;
+  min-height: 44px;
+}
+
+.groupRow:hover {
+  background: #f7f7f7;
+}
+
+.groupRowLink {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+  padding: 10px 6px;
+  border-radius: 10px;
+}
+
+.groupRowLink:hover {
+  background: #f0f7f7;
+}
+
+.groupTitle {
+  flex: 1;
+  font-size: 13px;
+  line-height: 1.45;
+  padding-top: 2px;
+}
+
+.checkbox {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  accent-color: #5f9ea0;
+}
+
+.navArrow {
+  flex-shrink: 0;
+  color: #5f9ea0;
+  font-size: 14px;
+}
+
+.errorText {
+  color: #c0392b;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.emptyGroups {
+  margin: 8px 6px;
+  font-size: 12px;
+  color: #888;
+}
+
+.sectionCount {
+  font-size: 12px;
+  color: #666;
+  flex-shrink: 0;
+  margin: 0 0 8px;
+  padding-bottom: 4px;
+}

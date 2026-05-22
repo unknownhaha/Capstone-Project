@@ -24,7 +24,7 @@ const projectSectionSchema = new mongoose.Schema({
     required: true,
   },
 
-
+  selectedGroups: [String],
 
   criteria: [projectCriteriaSchema],
 
@@ -60,6 +60,12 @@ const projectSchema = new mongoose.Schema(
       trim: true,
       required: true,
       maxlength: 30,
+    },
+
+    description: {
+      type: String,
+      trim: true,
+      default: "",
     },
 
     surveyDate: {

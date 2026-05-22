@@ -2,20 +2,20 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { connectDB } from "@/lib/db";
 import Project from "@/lib/model/project";
+import { findSectionForCriteriaId } from "@/lib/project-sections";
 
 export async function PATCH(
   req: NextRequest,
   {
     params,
   }: {
-    params: Promise<{ projectId: string; criteriaId: string }>;
+    params: Promise<{ projectId: string; critiriaId: string }>;
   }
 ) {
   try {
-    const { projectId, criteriaId } = await params;
-    const { score } = await req.json();
+    const { projectId, critiriaId } = await params;
+    const { score, note } = await req.json();
 
-   
     if (![0, 1, 2].includes(score)) {
       return NextResponse.json({ error: "Invalid score" }, { status: 400 });
     }
@@ -32,37 +32,34 @@ export async function PATCH(
       return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }
 
-   
     if (project.userId.toString() !== session.user.id) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    const sectionCode = criteriaId.split("-")[0];
-
-    const section = project.sections.find(
-      (s: any) => s.code === sectionCode
-    );
+    const section = findSectionForCriteriaId(project.sections, critiriaId);
 
     if (!section) {
       return NextResponse.json({ error: "Section not found" }, { status: 404 });
     }
 
-    const item = section.items.find(
-      (i: any) => i.criteriaId === criteriaId
+    const criterion = section.criteria.find(
+      (c) => c.criteriaId === critiriaId
     );
 
-    if (item) {
-      
-      item.score = score;
+    if (criterion) {
+      criterion.score = score;
+      if (note !== undefined) criterion.note = note;
     } else {
-      
-      section.items.push({ criteriaId, score });
+      section.criteria.push({
+        criteriaId: critiriaId,
+        score,
+        ...(note !== undefined ? { note } : {}),
+      });
     }
 
     await project.save();
 
     return NextResponse.json({ success: true });
-
   } catch (err) {
     console.error(err);
     return NextResponse.json(

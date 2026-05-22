@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { connectDB } from "@/lib/db";
 import Project from "@/lib/model/project";
+import { buildProjectSection } from "@/lib/project-sections";
 
 export async function POST(
   req: NextRequest,
@@ -31,7 +32,6 @@ export async function POST(
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-   
     const exists = project.sections.some((s: any) => s.code === code);
 
     if (exists) {
@@ -41,11 +41,15 @@ export async function POST(
       );
     }
 
-  
-    project.sections.push({
-      code,
-      items: []
-    });
+    let section;
+    try {
+      section = buildProjectSection(code);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Invalid section";
+      return NextResponse.json({ error: message }, { status: 400 });
+    }
+
+    project.sections.push(section);
 
     await project.save();
 

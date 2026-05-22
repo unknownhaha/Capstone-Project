@@ -7,6 +7,7 @@ import { redirect } from "next/navigation";
 export async function loginAction(formData: FormData) {
   const email    = formData.get("email")    as string;
   const password = formData.get("password") as string;
+  const callbackUrl = (formData.get("callbackUrl") as string) || "/allproject";
 
   try {
     await signIn("credentials", {
@@ -26,5 +27,5 @@ export async function loginAction(formData: FormData) {
     throw err;
   }
 
-  redirect("/allproject"); 
+  redirect(callbackUrl.startsWith("/") ? callbackUrl : "/allproject");
 }
