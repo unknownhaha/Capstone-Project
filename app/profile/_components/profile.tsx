@@ -8,10 +8,12 @@ import AppSidebar from "@/app/allproject/_components/AppSidebar";
 import { signOut, useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 
+
+
 export type UserData = {
-  firstName: string;
-  lastName: string;
-  profileImg: string;
+  firstName : string;
+  lastName : string;
+  profileImg : string;
   email: string;
   phone: string;
   address: string;
@@ -20,7 +22,7 @@ export type UserData = {
   department: string;
   location: string;
 };
-
+export const id = "680f1a1a1a1a1a1a1a1a1a01";
 export default function Profile() {
   const [isEdit, setEdit] = useState<boolean>(false);
   const [preData, setPre] = useState<UserData | null>(null);
@@ -28,98 +30,99 @@ export default function Profile() {
   const [openMenu, setOpenMenu] = useState(false);
   const { data: session, status } = useSession();
 
-  useEffect(() => {
-    if (status === "loading") return;
-    if (status === "unauthenticated" || !session?.user?.id) return;
 
-    const userId = session.user.id;
-
+  
+   useEffect(() => {
+    
+    /*if (!session) return;*/
+    
+    const userId = session?.user?.id || id;
     const fetchData = async () => {
-      try {
-        const res = await fetch(`/api/users/${userId}`, {
-          method: "GET",
-          credentials: "include",
-        });
-        if (!res.ok) throw new Error(`Error: ${res.status}`);
+        try {
+            const res = await fetch(`/api/users/${userId}`, {
+                method: "GET",
+                credentials: "include", 
+            });
 
-        const data = await res.json();
-        const mapped: UserData = {
-          firstName: data.user.firstName ?? "",
-          lastName: data.user.lastName ?? "",
-          profileImg: data.user.profileImg ?? "",
-          email: data.user.contact?.email ?? "",
-          phone: data.user.contact?.phone ?? "",
-          address: data.user.contact?.address ?? "",
-          jobTitle: data.user.organization?.jobTitle ?? "",
-          organization: data.user.organization?.workPlace ?? "",
-          department: data.user.organization?.department ?? "",
-          location: data.user.organization?.workAddress ?? "",
-        };
-        setPre(mapped);
-        setNew(mapped);
-      } catch (err) {
-        console.error("Fetch error:", err);
-      }
+            if (!res.ok) {
+                throw new Error(`Error: ${res.status}`);
+            }
+
+            const data = await res.json();
+            const mapped = {
+                firstName: data.user.firstName,
+                lastName: data.user.lastName,
+                profileImg: data.user.profileImg,
+                email: data.user.contact.email,
+                phone: data.user.contact.phone,
+                address: data.user.contact.address,
+                jobTitle: data.user.organization.jobTitle,
+                organization: data.user.organization.workPlace,
+                department: data.user.organization.department,
+                location: data.user.organization.workAddress,
+            };
+            setPre(mapped);
+            setNew(mapped);
+            console.log(data);
+            
+        } catch (err) {
+            console.error("Fetch error:", err);
+        }
     };
 
     fetchData();
-  }, [session, status]);
+}, [session]);
+  if (status === "loading") return null;
+    const handleChange = (field: string, value: string) => {
+        setNew((prev: any) => ({
+            ...prev,
+            [field]: value
+        }));
+    };
+    const handleReset = () => {
+        setNew(preData);
+        setEdit(false);
+};
+const handleConfirm = async () => {
+     const userId = session?.user?.id || id;
+  try {
+    if(!userId) return;
+    const res = await fetch(`/api/users/${ userId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newData),
+    });
 
-  const handleChange = (field: string, value: string) => {
-    setNew((prev) => (prev ? { ...prev, [field]: value } : prev));
-  };
+    if (!res.ok) throw new Error("Failed to update");
 
-  const handleReset = () => {
-    setNew(preData);
+    const updated = await res.json();
+
+    const mapped = {
+        firstName: updated.user.firstName,
+        lastName: updated.user.lastName,
+        profileImg: updated.user.profileImg,
+        email: updated.user.contact.email,
+        phone: updated.user.contact.phone,
+        address: updated.user.contact.address,
+        jobTitle: updated.user.organization?.jobTitle,
+        organization: updated.user.organization?.workPlace,
+        department: updated.user.organization?.department,
+        location: updated.user.organization?.workAddress,
+    };
+
+    setPre(mapped);
+    setNew(mapped);
     setEdit(false);
-  };
-
-  const handleConfirm = async () => {
-    const userId = session?.user?.id;
-    if (!userId || !newData) return;
-
-    try {
-      const res = await fetch(`/api/users/${userId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newData),
-      });
-
-      if (!res.ok) throw new Error("Failed to update");
-
-      const updated = await res.json();
-      const mapped: UserData = {
-        firstName: updated.user.firstName ?? "",
-        lastName: updated.user.lastName ?? "",
-        profileImg: updated.user.profileImg ?? "",
-        email: updated.user.contact?.email ?? "",
-        phone: updated.user.contact?.phone ?? "",
-        address: updated.user.contact?.address ?? "",
-        jobTitle: updated.user.organization?.jobTitle ?? "",
-        organization: updated.user.organization?.workPlace ?? "",
-        department: updated.user.organization?.department ?? "",
-        location: updated.user.organization?.workAddress ?? "",
-      };
-
-      setPre(mapped);
-      setNew(mapped);
-      setEdit(false);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
+    
+  } catch (err) {
+    console.error(err);
+  }
+};
   const handleLogout = async () => {
     await signOut({ callbackUrl: "/login" });
   };
-
-  if (status === "loading") {
-    return (
-      <PhoneShell title="Profile" subtitle="Your account" scrollable>
-        <p className={style.loading}>Loading profile...</p>
-      </PhoneShell>
-    );
-  }
 
   return (
     <PhoneShell
@@ -175,8 +178,16 @@ export default function Profile() {
                 title="Contact"
                 theme="light"
                 field={[
-                  { label: "Email", value: newData.email || "", key: "email" },
-                  { label: "Phone", value: newData.phone || "", key: "phone" },
+                  {
+                    label: "Email",
+                    value: newData.email || "",
+                    key: "email",
+                  },
+                  {
+                    label: "Phone",
+                    value: newData.phone || "",
+                    key: "phone",
+                  },
                   {
                     label: "Address",
                     value: newData.address || "",
