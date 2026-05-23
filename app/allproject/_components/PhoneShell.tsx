@@ -9,6 +9,7 @@ type PhoneShellProps = {
   onMenuClick?: () => void;
   showMenu?: boolean;
   headerRight?: React.ReactNode;
+  scrollable?: boolean;
 };
 
 export default function PhoneShell({
@@ -18,10 +19,13 @@ export default function PhoneShell({
   onMenuClick,
   showMenu = true,
   headerRight,
+  scrollable = false,
 }: PhoneShellProps) {
   return (
-    <div className={styles.container}>
-      <div className={styles.phone}>
+    <div
+      className={`${styles.container} ${scrollable ? styles.containerScrollable : ""}`}
+    >
+      <div className={`${styles.phone} ${scrollable ? styles.phoneScrollable : ""}`}>
         <div className={styles.header}>
           <div>
             <h2>{title}</h2>

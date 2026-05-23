@@ -15,6 +15,12 @@ const projectCriteriaSchema = new mongoose.Schema({
   },
 
   note: String,
+
+  /** @deprecated use imgs — kept for older records */
+  img: String,
+
+  /** User-captured inspection photos (UploadThing URLs) */
+  imgs: { type: [String], default: [] },
 });
 
 
@@ -61,6 +67,9 @@ const projectSchema = new mongoose.Schema(
       required: true,
       maxlength: 30,
     },
+
+    /** User-uploaded cover shown on the project card */
+    coverImg: String,
 
     description: {
       type: String,

@@ -25,3 +25,25 @@
 .container h2 {
     margin-top : 1rem;
 }
+
+.light .line {
+    width: 100%;
+    background-color: #e5e5e5;
+}
+
+.light .input {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    background-color: #f0f4f4;
+    color: #1a2e30;
+    border: 1px solid #e0e0e0;
+}
+
+.light .labels {
+    color: #333;
+}
+
+.light h2 {
+    color: #1a2e30;
+}

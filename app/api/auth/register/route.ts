@@ -5,9 +5,12 @@ import User from "@/lib/model/user";
 
 export async function POST(req: NextRequest) {
   try {
-    const { firstName, lastName, email, password } = await req.json();
+    const body = await req.json();
+    const firstName = String(body.firstName ?? "").trim();
+    const lastName = String(body.lastName ?? "").trim();
+    const email = String(body.email ?? "").trim().toLowerCase();
+    const password = String(body.password ?? "");
 
-    
     if (!firstName || !lastName || !email || !password) {
       return NextResponse.json(
         { error: "All fields are required" },

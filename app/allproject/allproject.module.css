@@ -27,10 +27,23 @@
   flex-direction: column;
 }
 
-.sidebar,
 .createBox,
 .inspectionBox {
-  z-index: 999;
+  z-index: 30;
+}
+
+/* Profile and other long pages: grow with content, scroll the page */
+.containerScrollable {
+  height: auto;
+  min-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.phoneScrollable {
+  height: auto;
+  min-height: 100vh;
+  overflow: visible;
 }
 
 /* ===== HEADER ===== */
@@ -144,16 +157,6 @@
   transform: scale(0.97);
 }
 
-.thumb {
-  width: 100%;
-  aspect-ratio: 1.2;
-
-  background: #5b5555;
-  border-radius: 14px;
-
-  margin-bottom: 10px;
-}
-
 .cardInfo h4 {
   margin: 0;
   font-size: 15px;
@@ -210,32 +213,6 @@
 .allproject-module__1Mld2a__checkItem{
   color: black;
 }
-/* ===== SIDEBAR ===== */
-.sidebar {
-  position: absolute;
-  top: 0;
-  right: -75%;
-
-  width: 70%;
-  height: 100%;
-
-  background: white;
-
-  z-index: 20;
-
-  transition: 0.3s;
-
-  padding: 20px;
-}
-
-.showSidebar {
-  right: 0;
-}
-
-.menuItem {
-  padding: 14px 0;
-  border-bottom: 1px solid #ccc;
-}
 
 /* ===== CREATE BOX ===== */
 .createBox {
@@ -280,7 +257,7 @@
 
   background: #f3f3f3;
 
-  z-index: 50;
+  z-index: 55;
 
   border-radius: 0;
 

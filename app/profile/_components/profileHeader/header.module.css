@@ -12,19 +12,17 @@
   margin-left: 1rem;
   width: 10rem;
   padding-right : 2px;
-  color: white;
+  color: #1a2e30;
 }
 .name input {
-    
-   background-color: transparent;
-  border: none;           
-  border-bottom: 1px solid white; 
-  outline: none;               
-   font-size: 16px;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #b0b0b0;
+  outline: none;
+  font-size: 16px;
   height: 1.5rem;
   width: 7rem;
- 
-  color: white;
+  color: #1a2e30;
 }
 .imgWrapper {
     position: relative; 
@@ -36,7 +34,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid #ffffff99;
+    border: 2px solid #5f9ea0;
 }
 .imgWrapper > div,
 .imgWrapper form {

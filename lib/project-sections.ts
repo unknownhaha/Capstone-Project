@@ -144,6 +144,12 @@ export function findSectionForCriteriaId(
   sections: ProjectSection[],
   criteriaId: string
 ): ProjectSection | undefined {
+  for (const section of sections) {
+    if (section.criteria.some((c) => c.criteriaId === criteriaId)) {
+      return section;
+    }
+  }
+
   const sorted = [...sections].sort((a, b) => b.code.length - a.code.length);
 
   return sorted.find(

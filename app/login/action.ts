@@ -4,17 +4,31 @@ import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
 import { redirect } from "next/navigation";
 
+function signInFailed(result: unknown) {
+  if (typeof result !== "string" || !result) return true;
+  return result.includes("error=");
+}
+
 export async function loginAction(formData: FormData) {
-  const email    = formData.get("email")    as string;
-  const password = formData.get("password") as string;
-  const callbackUrl = (formData.get("callbackUrl") as string) || "/allproject";
+  const email = String(formData.get("email") ?? "").trim().toLowerCase();
+  const password = String(formData.get("password") ?? "");
+  const callbackUrl = String(formData.get("callbackUrl") ?? "/allproject");
+
+  if (!email || !password) {
+    return { error: "Email and password are required." };
+  }
 
   try {
-    await signIn("credentials", {
+    const result = await signIn("credentials", {
       email,
       password,
-      redirect: false,   
+      redirect: false,
+      redirectTo: callbackUrl,
     });
+
+    if (signInFailed(result)) {
+      return { error: "Invalid email or password." };
+    }
   } catch (err) {
     if (err instanceof AuthError) {
       switch (err.type) {
@@ -24,8 +38,9 @@ export async function loginAction(formData: FormData) {
           return { error: "Something went wrong. Try again." };
       }
     }
+
     throw err;
   }
 
-  redirect(callbackUrl.startsWith("/") ? callbackUrl : "/allproject");
+  redirect(callbackUrl);
 }

@@ -7,8 +7,33 @@ import { findCatalogGroup } from "@/lib/standards/catalog";
 import PhoneShell from "../../../_components/PhoneShell";
 import InspectionItemRow from "../../../_components/InspectionItemRow";
 import { useRequireAuth } from "../../../_components/useRequireAuth";
-import type { ApiProject } from "../../../_components/project-utils";
+import {
+  getCriterionImages,
+  type ApiProject,
+} from "../../../_components/project-utils";
 import itemStyles from "../../../_components/items.module.css";
+
+function patchCriterionImgs(
+  project: ApiProject,
+  itemId: string,
+  imgs: string[]
+): ApiProject {
+  return {
+    ...project,
+    sections: project.sections.map((section) => ({
+      ...section,
+      criteria: section.criteria.map((criterion) =>
+        criterion.criteriaId === itemId
+          ? {
+              ...criterion,
+              imgs,
+              img: imgs[imgs.length - 1],
+            }
+          : criterion
+      ),
+    })),
+  };
+}
 
 export default function CriteriaItemsPage() {
   const { projectId, criteriaGroupId } = useParams<{
@@ -21,6 +46,8 @@ export default function CriteriaItemsPage() {
   const [project, setProject] = useState<ApiProject | null>(null);
   const [loading, setLoading] = useState(true);
   const [savingId, setSavingId] = useState<string | null>(null);
+  const [savingNoteId, setSavingNoteId] = useState<string | null>(null);
+  const [uploadingId, setUploadingId] = useState<string | null>(null);
 
   const catalogMatch = findCatalogGroup(groupId);
 
@@ -39,13 +66,80 @@ export default function CriteriaItemsPage() {
     loadProject();
   }, [isAuthenticated, projectId, loadProject]);
 
-  const getScore = (itemId: string): number | null => {
+  const getCriterion = (itemId: string) => {
     if (!project) return null;
     for (const section of project.sections) {
       const found = section.criteria.find((c) => c.criteriaId === itemId);
-      if (found) return found.score;
+      if (found) return found;
     }
     return null;
+  };
+
+  const getScore = (itemId: string): number | null =>
+    getCriterion(itemId)?.score ?? null;
+
+  const getInspectionImgs = (itemId: string): string[] => {
+    const criterion = getCriterion(itemId);
+    return criterion ? getCriterionImages(criterion) : [];
+  };
+
+  const getUserNote = (itemId: string): string | null =>
+    getCriterion(itemId)?.note ?? null;
+
+  const handleNoteChange = async (itemId: string, note: string) => {
+    setSavingNoteId(itemId);
+
+    try {
+      const res = await fetch(
+        `/api/project/${projectId}/critiria/${encodeURIComponent(itemId)}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ note }),
+        }
+      );
+
+      if (res.ok) {
+        await loadProject();
+      }
+    } finally {
+      setSavingNoteId(null);
+    }
+  };
+
+  const handleImagesChange = async (itemId: string, imgs: string[]) => {
+    setUploadingId(itemId);
+    const snapshot = project;
+    setProject((prev) => (prev ? patchCriterionImgs(prev, itemId, imgs) : prev));
+
+    try {
+      const res = await fetch(
+        `/api/project/${projectId}/critiria/${encodeURIComponent(itemId)}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ imgs }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (res.ok && Array.isArray(data.imgs)) {
+        setProject((prev) =>
+          prev ? patchCriterionImgs(prev, itemId, data.imgs) : prev
+        );
+      } else {
+        setProject(snapshot);
+        console.error("Failed to save images:", data);
+      }
+    } catch (err) {
+      setProject(snapshot);
+      console.error(err);
+    } finally {
+      setUploadingId(null);
+    }
   };
 
   const handleScoreChange = async (itemId: string, score: number) => {
@@ -143,8 +237,14 @@ export default function CriteriaItemsPage() {
                   key={item.item_id}
                   item={item}
                   score={getScore(item.item_id)}
+                  userNote={getUserNote(item.item_id)}
+                  inspectionImgs={getInspectionImgs(item.item_id)}
                   saving={savingId === item.item_id}
+                  savingNote={savingNoteId === item.item_id}
+                  uploading={uploadingId === item.item_id}
                   onScoreChange={handleScoreChange}
+                  onNoteChange={handleNoteChange}
+                  onImagesChange={handleImagesChange}
                 />
               ))}
             </div>

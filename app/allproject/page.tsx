@@ -5,9 +5,10 @@ import Link from "next/link";
 import styles from "./allproject.module.css";
 import PhoneShell from "./_components/PhoneShell";
 import CreateProjectModal from "./_components/CreateProjectModal";
+import AppSidebar from "./_components/AppSidebar";
 import { useRequireAuth } from "./_components/useRequireAuth";
-import type { ApiProject } from "./_components/project-utils";
-
+import ProjectCard from "./_components/ProjectCard";
+import { type ApiProject } from "./_components/project-utils";
 export default function AllProjectPage() {
   const { status, isAuthenticated } = useRequireAuth();
   const [openMenu, setOpenMenu] = useState(false);
@@ -46,28 +47,31 @@ export default function AllProjectPage() {
   }
 
   return (
-    <PhoneShell title="My Project" subtitle="Inspection Dashboard" onMenuClick={() => setOpenMenu(true)}>
-      {(openMenu || openCreate) && (
+    <PhoneShell
+      title="My Project"
+      subtitle="Inspection Dashboard"
+      onMenuClick={() => {
+        setOpenCreate(false);
+        setOpenMenu(true);
+      }}
+    >
+      <AppSidebar open={openMenu} onClose={() => setOpenMenu(false)} />
+
+      {openCreate && (
         <div
           className={styles.overlay}
-          onClick={() => {
-            setOpenMenu(false);
-            setOpenCreate(false);
-          }}
+          onClick={() => setOpenCreate(false)}
         />
       )}
 
-      <div className={`${styles.sidebar} ${openMenu ? styles.showSidebar : ""}`}>
-        <h3>Menu</h3>
-        <Link href="/profile" className={styles.menuItem}>
-          Profile
-        </Link>
-        <div className={styles.menuItem}>Reports</div>
-        <div className={styles.menuItem}>Settings</div>
-      </div>
-
       <div className={styles.top}>
-        <div className={styles.addBox} onClick={() => setOpenCreate(true)}>
+        <div
+          className={styles.addBox}
+          onClick={() => {
+            setOpenMenu(false);
+            setOpenCreate(true);
+          }}
+        >
           +
         </div>
         <Link href="/profile" className={styles.profile} />
@@ -92,30 +96,26 @@ export default function AllProjectPage() {
           </p>
         )}
 
-        {projects.map((project) => {
-          const totalItems = project.sections.reduce(
-            (sum, s) => sum + s.criteria.length,
-            0
-          );
-
-          return (
-            <Link
-              key={project._id}
-              href={`/allproject/${project._id}`}
-              className={styles.card}
-            >
-              <div className={styles.thumb} />
-              <div className={styles.cardInfo}>
-                <h4>{project.projectName}</h4>
-                <span>{totalItems} Checkpoints</span>
-              </div>
-              <div className={styles.status}>
-                {Math.round(project.completionRate ?? 0)}% Done
-              </div>
-            </Link>
-          );
-        })}
-      </div>
+        {projects.map((project) => (
+          <ProjectCard
+            key={project._id}
+            project={project}
+            onUpdate={(updated) =>
+              setProjects((prev) =>
+                prev.map((p) =>
+                  String(p._id) === String(updated._id)
+                    ? { ...p, ...updated, _id: String(updated._id) }
+                    : p
+                )
+              )
+            }
+            onDelete={(projectId) =>
+              setProjects((prev) =>
+                prev.filter((p) => String(p._id) !== String(projectId))
+              )
+            }
+          />
+        ))}      </div>
 
       <CreateProjectModal open={openCreate} onClose={() => setOpenCreate(false)} />
     </PhoneShell>

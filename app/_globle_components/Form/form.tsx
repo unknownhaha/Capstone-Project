@@ -10,13 +10,14 @@ interface Prop {
     title : string;
     field : Field[];
     isEdit: boolean; 
-    onChange: (field: string, value: string) => void; 
+    onChange: (field: string, value: string) => void;
+    theme?: "dark" | "light";
 }
 
 
-export default function Form({ title, field, isEdit, onChange }: Prop) {
+export default function Form({ title, field, isEdit, onChange, theme = "dark" }: Prop) {
   return (
-    <div className={style.container}>
+    <div className={`${style.container} ${theme === "light" ? style.light : ""}`}>
       <h2>{title}</h2>
     <div className={style.line}></div>
       {field.map((item) => (

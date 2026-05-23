@@ -21,7 +21,9 @@ export async function GET(
     if (project.userId.toString() !== session.user.id)
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
-    return NextResponse.json(project);
+    return NextResponse.json(
+      typeof project.toObject === "function" ? project.toObject() : project
+    );
   } catch (err) {
     console.error(err);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
@@ -47,12 +49,24 @@ export async function PATCH(
     if (project.userId.toString() !== session.user.id)
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
-    
-    project.sections = body.sections ?? project.sections;
+    if (body.coverImg !== undefined) {
+      project.coverImg = body.coverImg;
+    }
+
+    if (body.sections !== undefined) {
+      project.sections = body.sections;
+    }
 
     await project.save();
 
-    return NextResponse.json(project);
+    const saved =
+      typeof project.toObject === "function" ? project.toObject() : project;
+
+    return NextResponse.json({
+      ...saved,
+      _id: saved._id?.toString?.() ?? saved._id,
+      coverImg: saved.coverImg ?? body.coverImg ?? project.coverImg,
+    });
   } catch (err) {
     console.error(err);
     return NextResponse.json({ error: "Server error" }, { status: 500 });

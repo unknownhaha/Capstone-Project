@@ -46,6 +46,7 @@ type RawItem = {
   source_text?: string;
   notes?: string | null;
   img?: string;
+  reference_images?: unknown[];
 };
 
 type RawCriteriaNode = {
@@ -68,13 +69,30 @@ type FlatCriterion = {
   group?: { key?: string; label?: string };
 };
 
+function resolveItemImage(raw: RawItem): string | undefined {
+  if (raw.img) return raw.img;
+
+  if (!Array.isArray(raw.reference_images) || raw.reference_images.length === 0) {
+    return undefined;
+  }
+
+  const first = raw.reference_images[0];
+  if (typeof first === "string" && first.trim()) return first;
+  if (first && typeof first === "object" && "url" in first) {
+    const url = (first as { url?: string }).url;
+    if (url?.trim()) return url;
+  }
+
+  return undefined;
+}
+
 function normalizeItem(raw: RawItem, fallbackId: string, fallbackLabel: string): CatalogItem {
   return {
     item_id: raw.item_id ?? fallbackId,
     display_text: raw.display_text ?? fallbackLabel,
     source_text: raw.source_text ?? "",
     notes: raw.notes ?? null,
-    img: raw.img,
+    img: resolveItemImage(raw),
   };
 }
 
@@ -84,11 +102,12 @@ function normalizeGroup(node: RawCriteriaNode): CatalogGroup | null {
   const title = node.title ?? node.label ?? node.id;
   let items: CatalogItem[] = [];
 
-  if (node.items?.length) {
+  if (Array.isArray(node.items)) {
+    if (node.items.length === 0) return null;
     items = node.items.map((item) =>
       normalizeItem(item, item.item_id ?? node.id!, item.display_text ?? title)
     );
-  } else {
+  } else if (node.label) {
     items = [
       normalizeItem(
         {
@@ -97,14 +116,31 @@ function normalizeGroup(node: RawCriteriaNode): CatalogGroup | null {
           source_text: node.source_text ?? node.ref,
           notes: node.notes,
           img: node.img,
+          reference_images: (node as RawItem).reference_images,
         },
         node.id,
         title
       ),
     ];
+  } else {
+    return null;
   }
 
   return { id: node.id, title, items };
+}
+
+/** Scope-only groups (e.g. "ทั่วไป") are not field-verification checklists. */
+function isSelectableGroup(group: CatalogGroup, sectionTitle: string): boolean {
+  if (group.title === "ทั่วไป") return false;
+  if (group.title === sectionTitle) return false;
+  return group.items.length > 0;
+}
+
+function filterSelectableGroups(
+  groups: CatalogGroup[],
+  sectionTitle: string
+): CatalogGroup[] {
+  return groups.filter((g) => isSelectableGroup(g, sectionTitle));
 }
 
 function isCriteriaGroup(node: RawCriteriaNode): boolean {
@@ -151,7 +187,10 @@ function collectFlatCriteriaGroups(
     });
   }
 
-  return Array.from(byGroup.values());
+  return filterSelectableGroups(
+    Array.from(byGroup.values()),
+    getSectionTitle(standard, sectionCode)
+  );
 }
 
 function deepCollectGroups(
@@ -209,6 +248,7 @@ function buildCatalogSection(standard: Record<string, unknown>): CatalogSection 
     groups.sort((a, b) =>
       a.id.localeCompare(b.id, undefined, { numeric: true })
     );
+    groups = filterSelectableGroups(groups, title);
   }
 
   return { code, title, groups };
@@ -217,6 +257,20 @@ function buildCatalogSection(standard: Record<string, unknown>): CatalogSection 
 export const STANDARDS_CATALOG: CatalogSection[] = STANDARD_SOURCES.map((standard) =>
   buildCatalogSection(standard as Record<string, unknown>)
 );
+
+const CATALOG_ITEM_BY_ID = new Map<string, CatalogItem>();
+
+for (const section of STANDARDS_CATALOG) {
+  for (const group of section.groups) {
+    for (const item of group.items) {
+      CATALOG_ITEM_BY_ID.set(item.item_id, item);
+    }
+  }
+}
+
+export function findCatalogItem(itemId: string) {
+  return CATALOG_ITEM_BY_ID.get(itemId);
+}
 
 export function findCatalogSection(sectionCode: string) {
   return STANDARDS_CATALOG.find((section) => section.code === sectionCode);

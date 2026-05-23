@@ -75,7 +75,7 @@ export default function ProjectInspectionPage() {
       subtitle={project.institution?.address ?? "Inspection Form"}
       showMenu={false}
       headerRight={
-        <Link href="/allproject" style={{ color: "white", fontSize: 14 }}>
+        <Link href="/allproject" style={{ color: "white", fontSize: 24, marginBottom: 15 }}>
           ✕
         </Link>
       }

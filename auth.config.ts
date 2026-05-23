@@ -1,18 +1,11 @@
 import type { NextAuthConfig } from "next-auth";
-import Credentials from "next-auth/providers/credentials";
 
 export const authConfig = {
+  trustHost: true,
+  useSecureCookies: process.env.NODE_ENV === "production",
   pages: { signIn: "/login" },
-  providers: [
-    Credentials({
-      credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
-      },
-     
-      async authorize() { return null; },
-    }),
-  ],
+  session: { strategy: "jwt" },
+  providers: [],
   callbacks: {
     async jwt({ token, user }) {
       if (user) token.id = user.id;
