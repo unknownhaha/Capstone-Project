@@ -50,16 +50,16 @@ export default function Profile() {
 
             const data = await res.json();
             const mapped = {
-                firstName: data.user.firstName,
-                lastName: data.user.lastName,
-                profileImg: data.user.profileImg,
-                email: data.user.contact.email,
-                phone: data.user.contact.phone,
-                address: data.user.contact.address,
-                jobTitle: data.user.organization.jobTitle,
-                organization: data.user.organization.workPlace,
-                department: data.user.organization.department,
-                location: data.user.organization.workAddress,
+              firstName: data?.user?.firstName ?? "",
+              lastName: data?.user?.lastName ?? "",
+              profileImg: data?.user?.profileImg ?? "",
+              email: data?.user?.contact?.email ?? "",
+              phone: data?.user?.contact?.phone ?? "",
+              address: data?.user?.contact?.address ?? "",
+              jobTitle: data?.user?.organization?.jobTitle ?? "",
+              organization: data?.user?.organization?.workPlace ?? "",
+              department: data?.user?.organization?.department ?? "",
+              location: data?.user?.organization?.workAddress ?? "",
             };
             setPre(mapped);
             setNew(mapped);

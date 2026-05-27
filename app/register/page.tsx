@@ -78,7 +78,8 @@ export default function RegisterPage() {
           return;
         }
 
-        router.push("/login");
+        // Redirect to OTP verification page
+        router.push(`/verify?email=${encodeURIComponent(data.email)}`);
       } catch {
         setError("Something went wrong. Please try again.");
       }
