@@ -120,6 +120,13 @@
   margin: 0 8px;
 }
 
+.gridMessage {
+  color: white;
+  grid-column: 1 / -1;
+  text-align: center;
+  margin: 0;
+}
+
 /* ===== GRID ===== */
 .grid {
   display: grid;

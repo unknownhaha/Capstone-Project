@@ -64,7 +64,7 @@ function LoginForm() {
         email,
         password,
         redirect: false,
-        redirectTo: callbackUrl,
+        callbackUrl,
       });
 
       if (result?.error || !result?.ok) {
@@ -79,8 +79,16 @@ function LoginForm() {
 
       router.replace(path);
       router.refresh();
-    } catch {
-      setError("Something went wrong. Try again.");
+    } catch (err) {
+      console.error("Login error:", err);
+      const msg = err instanceof Error ? err.message : "";
+      if (msg.includes("<!DOCTYPE") || msg.includes("is not valid JSON")) {
+        setError(
+          "Auth server error. Stop all dev servers, run npm run dev once, and open http://localhost:3000/login"
+        );
+      } else {
+        setError("Something went wrong. Try again.");
+      }
     } finally {
       setIsPending(false);
     }

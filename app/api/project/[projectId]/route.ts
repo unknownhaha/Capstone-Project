@@ -2,6 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { connectDB } from "@/lib/db";
 import Project from "@/lib/model/project";
+import {
+  canDeleteProject,
+  canEditProject,
+  canViewProject,
+  isOwner,
+} from "@/lib/project-access";
+import { serializeProjectForUser } from "@/lib/project-serialize";
 
 export async function GET(
   req: NextRequest,
@@ -18,11 +25,11 @@ export async function GET(
     const project = await Project.findById(projectId);
     if (!project) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-    if (project.userId.toString() !== session.user.id)
+    if (!canViewProject(project, session.user.id))
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
     return NextResponse.json(
-      typeof project.toObject === "function" ? project.toObject() : project
+      serializeProjectForUser(project, session.user.id)
     );
   } catch (err) {
     console.error(err);
@@ -46,10 +53,13 @@ export async function PATCH(
     const project = await Project.findById(projectId);
     if (!project) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-    if (project.userId.toString() !== session.user.id)
+    if (!canEditProject(project, session.user.id))
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
     if (body.coverImg !== undefined) {
+      if (!isOwner(project, session.user.id)) {
+        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      }
       project.coverImg = body.coverImg;
     }
 
@@ -88,7 +98,7 @@ export async function DELETE(
     const project = await Project.findById(projectId);
     if (!project) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-    if (project.userId.toString() !== session.user.id)
+    if (!canDeleteProject(project, session.user.id))
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
     await Project.findByIdAndDelete(projectId);

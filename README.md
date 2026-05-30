@@ -1,4 +1,8 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Capstone — Accessibility Inspection App
+
+Next.js app for inspecting buildings against Thai standard **มยผ. 6301** (scores, notes, photos, reference figures).
+
+**For developers and AI agents:** read [`docs/AI_PROJECT_GUIDE.md`](docs/AI_PROJECT_GUIDE.md) for architecture, APIs, and conventions before changing code.
 
 ## Getting Started
 

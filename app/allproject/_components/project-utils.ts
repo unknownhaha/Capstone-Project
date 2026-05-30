@@ -8,6 +8,8 @@ export type ApiProject = {
   description?: string;
   institution?: { address?: string };
   completionRate?: number;
+  role?: "owner" | "editor";
+  collaborationEnabled?: boolean;
   sections: {
     code: string;
     selectedGroups?: string[];
@@ -20,6 +22,17 @@ export type ApiProject = {
     }[];
   }[];
 };
+
+export function filterProjects(projects: ApiProject[], query: string): ApiProject[] {
+  const normalized = query.trim().toLowerCase();
+  if (!normalized) return projects;
+
+  return projects.filter((project) => {
+    const name = project.projectName?.toLowerCase() ?? "";
+    const address = project.institution?.address?.toLowerCase() ?? "";
+    return name.includes(normalized) || address.includes(normalized);
+  });
+}
 
 export function getCriterionImages(criterion: {
   img?: string;

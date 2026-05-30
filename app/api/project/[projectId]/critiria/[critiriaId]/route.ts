@@ -3,10 +3,13 @@ import { auth } from "@/auth";
 import { connectDB } from "@/lib/db";
 import Project from "@/lib/model/project";
 import { findSectionForCriteriaId } from "@/lib/project-sections";
+import { canEditProject } from "@/lib/project-access";
 
 function normalizeImageUrls(imgs: unknown): string[] {
   if (!Array.isArray(imgs)) return [];
-  return imgs.filter((url): url is string => typeof url === "string" && url.trim());
+  return imgs.filter(
+    (url): url is string => typeof url === "string" && url.trim().length > 0
+  );
 }
 
 export async function PATCH(
@@ -50,7 +53,7 @@ export async function PATCH(
       return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }
 
-    if (project.userId.toString() !== session.user.id) {
+    if (!canEditProject(project, session.user.id)) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 

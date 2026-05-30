@@ -6,6 +6,7 @@ import residence from "@/lib/standards/ที่พักอาศัยแล�
 import occupation from "@/lib/standards/การครอบครองพิเศษ.json";
 import signage from "@/lib/standards/ป้ายสัญลักษณ์.json";
 import facilities from "@/lib/standards/อย่ายุ่งกับอันนี้.json";
+import figureMap from "@/lib/standards/figure-map.json";
 import { getSectionCode } from "@/lib/project-sections";
 
 /** All 8 main standard sections in display order */
@@ -26,6 +27,7 @@ export type CatalogItem = {
   source_text: string;
   notes: string | null;
   img?: string;
+  imgCaption?: string;
 };
 
 export type CatalogGroup = {
@@ -44,6 +46,7 @@ type RawItem = {
   item_id?: string;
   display_text?: string;
   source_text?: string;
+  source_clause?: string;
   notes?: string | null;
   img?: string;
   reference_images?: unknown[];
@@ -66,33 +69,116 @@ type FlatCriterion = {
   id: string;
   label?: string;
   ref?: string;
+  items?: RawItem[];
   group?: { key?: string; label?: string };
 };
 
-function resolveItemImage(raw: RawItem): string | undefined {
-  if (raw.img) return raw.img;
+type FigureMapEntry = {
+  file: string;
+  caption?: string;
+  clauses?: string[];
+};
 
-  if (!Array.isArray(raw.reference_images) || raw.reference_images.length === 0) {
-    return undefined;
+type FigureRef = {
+  file: string;
+  caption?: string;
+};
+
+function normalizeClause(value: string): string {
+  return value.trim().replace(/\s+/g, "");
+}
+
+const CLAUSE_TO_FIGURE = new Map<string, FigureRef>();
+const FIGURE_BY_NUM = new Map<string, FigureRef>();
+
+for (const entry of Object.values(figureMap.figures as Record<string, FigureMapEntry>)) {
+  if (!entry.file) continue;
+  const ref: FigureRef = {
+    file: entry.file,
+    caption: entry.caption?.trim() || undefined,
+  };
+  const numKey = entry.file.match(/figure_(\d+)\.png$/i)?.[1];
+  if (numKey) {
+    FIGURE_BY_NUM.set(String(parseInt(numKey, 10)), ref);
+  }
+  for (const clause of entry.clauses ?? []) {
+    CLAUSE_TO_FIGURE.set(normalizeClause(clause), ref);
+  }
+}
+
+function resolveFigureAssetPath(value: string): string | undefined {
+  const trimmed = value.trim();
+  const match = trimmed.match(/^figure[_-]?(\d+)$/i);
+  if (match) {
+    const num = parseInt(match[1], 10);
+    return `/standards/figures/figure_${String(num).padStart(2, "0")}.png`;
+  }
+  if (trimmed.startsWith("/standards/figures/")) return trimmed;
+  return undefined;
+}
+
+function lookupFigureByKey(value: string): FigureRef | undefined {
+  const path = resolveFigureAssetPath(value);
+  if (!path) return undefined;
+  const num = path.match(/figure_(\d+)\.png$/i)?.[1];
+  if (num && FIGURE_BY_NUM.has(String(parseInt(num, 10)))) {
+    return FIGURE_BY_NUM.get(String(parseInt(num, 10)));
+  }
+  return { file: path };
+}
+
+function lookupClauseFigure(clause?: string): FigureRef | undefined {
+  if (!clause?.trim()) return undefined;
+
+  const normalized = normalizeClause(clause);
+  const direct = CLAUSE_TO_FIGURE.get(normalized);
+  if (direct) return direct;
+
+  const withoutParen = normalized.replace(/\([^)]*\)$/, "");
+  if (withoutParen !== normalized) {
+    const parent = CLAUSE_TO_FIGURE.get(withoutParen);
+    if (parent) return parent;
   }
 
-  const first = raw.reference_images[0];
-  if (typeof first === "string" && first.trim()) return first;
-  if (first && typeof first === "object" && "url" in first) {
-    const url = (first as { url?: string }).url;
-    if (url?.trim()) return url;
+  let parts = withoutParen.split(".");
+  while (parts.length > 1) {
+    parts = parts.slice(0, -1);
+    const candidate = CLAUSE_TO_FIGURE.get(parts.join("."));
+    if (candidate) return candidate;
   }
 
   return undefined;
 }
 
+function resolveItemFigure(raw: RawItem): FigureRef | undefined {
+  if (raw.img) {
+    return lookupFigureByKey(raw.img) ?? { file: raw.img };
+  }
+
+  if (Array.isArray(raw.reference_images) && raw.reference_images.length > 0) {
+    const first = raw.reference_images[0];
+    if (typeof first === "string" && first.trim()) {
+      return lookupFigureByKey(first) ?? { file: first };
+    }
+    if (first && typeof first === "object" && "url" in first) {
+      const url = (first as { url?: string }).url;
+      if (url?.trim()) return { file: url };
+    }
+  }
+
+  return lookupClauseFigure(raw.source_clause);
+}
+
+
 function normalizeItem(raw: RawItem, fallbackId: string, fallbackLabel: string): CatalogItem {
+  const figure = resolveItemFigure(raw);
   return {
     item_id: raw.item_id ?? fallbackId,
     display_text: raw.display_text ?? fallbackLabel,
     source_text: raw.source_text ?? "",
     notes: raw.notes ?? null,
-    img: resolveItemImage(raw),
+    img: figure?.file,
+    imgCaption: figure?.caption,
   };
 }
 
@@ -179,11 +265,15 @@ function collectFlatCriteriaGroups(
       byGroup.set(groupId, { id: groupId, title: groupTitle, items: [] });
     }
 
+    const figure = lookupClauseFigure(c.ref ?? c.id);
+
     byGroup.get(groupId)!.items.push({
       item_id: c.id,
       display_text: c.label ?? c.id,
       source_text: c.ref ?? "",
       notes: null,
+      img: figure?.file,
+      imgCaption: figure?.caption,
     });
   }
 

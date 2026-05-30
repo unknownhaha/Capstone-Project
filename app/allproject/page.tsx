@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import styles from "./allproject.module.css";
 import PhoneShell from "./_components/PhoneShell";
@@ -8,13 +8,22 @@ import CreateProjectModal from "./_components/CreateProjectModal";
 import AppSidebar from "./_components/AppSidebar";
 import { useRequireAuth } from "./_components/useRequireAuth";
 import ProjectCard from "./_components/ProjectCard";
-import { type ApiProject } from "./_components/project-utils";
+import { filterProjects, type ApiProject } from "./_components/project-utils";
+
 export default function AllProjectPage() {
   const { status, isAuthenticated } = useRequireAuth();
   const [openMenu, setOpenMenu] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
   const [projects, setProjects] = useState<ApiProject[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
+
+  const visibleProjects = useMemo(
+    () => filterProjects(projects, searchQuery),
+    [projects, searchQuery]
+  );
+
+  const hasSearchQuery = searchQuery.trim().length > 0;
 
   useEffect(() => {
     if (!isAuthenticated) return;
@@ -78,44 +87,57 @@ export default function AllProjectPage() {
       </div>
 
       <div className={styles.search}>
-        <span>🔍</span>
-        <input placeholder="Search Project..." />
-        <span>⚙️</span>
+        <span aria-hidden>🔍</span>
+        <input
+          type="search"
+          placeholder="Search Project..."
+          aria-label="Search projects by name or location"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <span aria-hidden>⚙️</span>
       </div>
 
       <div className={styles.grid}>
         {loading && (
-          <p style={{ color: "white", gridColumn: "1 / -1", textAlign: "center" }}>
-            Loading projects...
-          </p>
+          <p className={styles.gridMessage}>Loading projects...</p>
         )}
 
         {!loading && projects.length === 0 && (
-          <p style={{ color: "white", gridColumn: "1 / -1", textAlign: "center" }}>
+          <p className={styles.gridMessage}>
             No projects yet. Tap + to create one.
           </p>
         )}
 
-        {projects.map((project) => (
-          <ProjectCard
-            key={project._id}
-            project={project}
-            onUpdate={(updated) =>
-              setProjects((prev) =>
-                prev.map((p) =>
-                  String(p._id) === String(updated._id)
-                    ? { ...p, ...updated, _id: String(updated._id) }
-                    : p
+        {!loading &&
+          projects.length > 0 &&
+          visibleProjects.length === 0 &&
+          hasSearchQuery && (
+            <p className={styles.gridMessage}>No projects match your search.</p>
+          )}
+
+        {!loading &&
+          visibleProjects.map((project) => (
+            <ProjectCard
+              key={project._id}
+              project={project}
+              onUpdate={(updated) =>
+                setProjects((prev) =>
+                  prev.map((p) =>
+                    String(p._id) === String(updated._id)
+                      ? { ...p, ...updated, _id: String(updated._id) }
+                      : p
+                  )
                 )
-              )
-            }
-            onDelete={(projectId) =>
-              setProjects((prev) =>
-                prev.filter((p) => String(p._id) !== String(projectId))
-              )
-            }
-          />
-        ))}      </div>
+              }
+              onDelete={(projectId) =>
+                setProjects((prev) =>
+                  prev.filter((p) => String(p._id) !== String(projectId))
+                )
+              }
+            />
+          ))}
+      </div>
 
       <CreateProjectModal open={openCreate} onClose={() => setOpenCreate(false)} />
     </PhoneShell>

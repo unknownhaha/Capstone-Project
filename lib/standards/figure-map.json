@@ -1,0 +1,564 @@
+{
+  "count": 71,
+  "figures": {
+    "1": {
+      "figure": 1,
+      "page": 17,
+      "clauses": [
+        "3.1.1.2"
+      ],
+      "caption": "รูปที่ 1 ขนาดมาตรฐานของพื้นที่สำหรับเก้าอี้ล้อ",
+      "file": "/standards/figures/figure_01.png"
+    },
+    "2": {
+      "figure": 2,
+      "page": 18,
+      "clauses": [
+        "3.1.2.2"
+      ],
+      "caption": "รูปที่ 2 ขนาดขั้นต่ำของพื้นที่หมุนตัวกลับได้สำหรับเก้าอี้ล้อ",
+      "file": "/standards/figures/figure_02.png"
+    },
+    "3": {
+      "figure": 3,
+      "page": 19,
+      "clauses": [
+        "3.1.3.4"
+      ],
+      "caption": "รูปที่ 3 ตำแหน่งของพื้นที่สำหรับเก้าอี้ล้อ",
+      "file": "/standards/figures/figure_03.png"
+    },
+    "4": {
+      "figure": 4,
+      "page": 20,
+      "clauses": [
+        "3.1.3.5"
+      ],
+      "caption": "รูปที่ 4 พื้นที่สำหรับเก้าอี้ล้อที่อยู่ในซอก",
+      "file": "/standards/figures/figure_04.png"
+    },
+    "5": {
+      "figure": 5,
+      "page": 21,
+      "clauses": [],
+      "caption": "รูปที่ 5 ช่องว่างสำหรับเท้าและเข่า",
+      "file": "/standards/figures/figure_05.png"
+    },
+    "6": {
+      "figure": 6,
+      "page": 22,
+      "clauses": [
+        "3.1.5.1"
+      ],
+      "caption": "รูปที่ 6 ข้อจำกัดของสิ่งกีดขวาง",
+      "file": "/standards/figures/figure_06.png"
+    },
+    "7": {
+      "figure": 7,
+      "page": 23,
+      "clauses": [
+        "3.1.5.2"
+      ],
+      "caption": "รูปที่ 7 ข้อจำกัดของสิ่งกีดขวางที่อยู่บนเสา",
+      "file": "/standards/figures/figure_07.png"
+    },
+    "8": {
+      "figure": 8,
+      "page": 24,
+      "clauses": [
+        "3.1.5.3"
+      ],
+      "caption": "รูปที่ 8 การป้องกันสิ่งกีดขวางเหนือศีรษะที่อยู่ต่ำ",
+      "file": "/standards/figures/figure_08.png"
+    },
+    "9": {
+      "figure": 9,
+      "page": 24,
+      "clauses": [
+        "3.1.5.3"
+      ],
+      "caption": "รูปที่ 9 การเอื้อมไปด้านหน้าแบบไม่มีสิ่งกีดขวาง",
+      "file": "/standards/figures/figure_09.png"
+    },
+    "10": {
+      "figure": 10,
+      "page": 25,
+      "clauses": [],
+      "caption": "รูปที่ 10 การเอื้อมไปด้านหน้าแบบมีสิ่งกีดขวาง",
+      "file": "/standards/figures/figure_10.png"
+    },
+    "11": {
+      "figure": 11,
+      "page": 26,
+      "clauses": [],
+      "caption": "รูปที่ 11 การเอื้อมไปด้านข้างแบบไม่มีสิ่งกีดขวาง",
+      "file": "/standards/figures/figure_11.png"
+    },
+    "12": {
+      "figure": 12,
+      "page": 26,
+      "clauses": [],
+      "caption": "รูปที่ 12 การเอื้อมไปด้านข้างแบบมีสิ่งกีดขวาง",
+      "file": "/standards/figures/figure_12.png"
+    },
+    "13": {
+      "figure": 13,
+      "page": 28,
+      "clauses": [],
+      "caption": "รูปที่ 13 ความกว้างของเส้นทางเข้าถึงที่จุดเลี้ยวกลับ",
+      "file": "/standards/figures/figure_13.png"
+    },
+    "14": {
+      "figure": 14,
+      "page": 29,
+      "clauses": [
+        "3.2.4.2"
+      ],
+      "caption": "รูปที่ 14 ช่องเปิดบนพื้น",
+      "file": "/standards/figures/figure_14.png"
+    },
+    "15": {
+      "figure": 15,
+      "page": 29,
+      "clauses": [
+        "3.2.5.1"
+      ],
+      "caption": "รูปที่ 15 พื้นต่างระดับที่มีความต่างระดับกันไม่เกิน 20 มิลลิเมตร",
+      "file": "/standards/figures/figure_15.png"
+    },
+    "16": {
+      "figure": 16,
+      "page": 31,
+      "clauses": [],
+      "caption": "รูปที่ 16 ชานพักของทางลาด",
+      "file": "/standards/figures/figure_16.png"
+    },
+    "17": {
+      "figure": 17,
+      "page": 32,
+      "clauses": [
+        "3.2.6.7"
+      ],
+      "caption": "รูปที่ 17 การป้องกันการตกที่ขอบของทางลาด",
+      "file": "/standards/figures/figure_17.png"
+    },
+    "18": {
+      "figure": 18,
+      "page": 33,
+      "clauses": [
+        "3.2.7.3"
+      ],
+      "caption": "รูปที่ 18 ลักษณะด้านลาดของทางลาด",
+      "file": "/standards/figures/figure_18.png"
+    },
+    "19": {
+      "figure": 19,
+      "page": 34,
+      "clauses": [
+        "3.2.7.9"
+      ],
+      "caption": "รูปที่ 19 (ต่อ) ทางลาดตัดคันหินแบบทแยง",
+      "file": "/standards/figures/figure_19.png"
+    },
+    "20": {
+      "figure": 20,
+      "page": 36,
+      "clauses": [
+        "3.2.7.10"
+      ],
+      "caption": "รูปที่ 20 เกาะกลางถนน",
+      "file": "/standards/figures/figure_20.png"
+    },
+    "21": {
+      "figure": 21,
+      "page": 37,
+      "clauses": [],
+      "caption": "รูปที่ 21 ปุ่มเรียก สัญญาณแสง และ ตัวอักษรหรือสัญลักษณ์ต่างสัมผัสของลิฟต์",
+      "file": "/standards/figures/figure_21.png"
+    },
+    "22": {
+      "figure": 22,
+      "page": 39,
+      "clauses": [],
+      "caption": "รูปที่ 22 (ต่อ) ขนาดขั้นต่ำของห้องลิฟต์",
+      "file": "/standards/figures/figure_22.png"
+    },
+    "23": {
+      "figure": 23,
+      "page": 41,
+      "clauses": [],
+      "caption": "รูปที่ 23 ปุ่มควบคุมลิฟต์",
+      "file": "/standards/figures/figure_23.png"
+    },
+    "24": {
+      "figure": 24,
+      "page": 43,
+      "clauses": [
+        "3.2.10.1"
+      ],
+      "caption": "รูปที่ 24 ลูกตั้งและลูกนอนของบันไดที่เข้าถึงได้",
+      "file": "/standards/figures/figure_24.png"
+    },
+    "25": {
+      "figure": 25,
+      "page": 44,
+      "clauses": [
+        "3.2.10.2"
+      ],
+      "caption": "รูปที่ 25 จมูกบันได",
+      "file": "/standards/figures/figure_25.png"
+    },
+    "26": {
+      "figure": 26,
+      "page": 45,
+      "clauses": [
+        "3.2.11.3"
+      ],
+      "caption": "รูปที่ 26 ความสูงของราวจับ",
+      "file": "/standards/figures/figure_26.png"
+    },
+    "27": {
+      "figure": 27,
+      "page": 45,
+      "clauses": [
+        "3.2.11.4"
+      ],
+      "caption": "รูปที่ 27 ช่องว่างระหว่างราวจับกับผนัง",
+      "file": "/standards/figures/figure_27.png"
+    },
+    "28": {
+      "figure": 28,
+      "page": 46,
+      "clauses": [
+        "3.2.11.6"
+      ],
+      "caption": "รูปที่ 28 รูปตัดราวจับ",
+      "file": "/standards/figures/figure_28.png"
+    },
+    "29": {
+      "figure": 29,
+      "page": 47,
+      "clauses": [],
+      "caption": "รูปที่ 29 ส่วนยื่นของราวจับด้านบนและด้านล่างของทางลาด",
+      "file": "/standards/figures/figure_29.png"
+    },
+    "30": {
+      "figure": 30,
+      "page": 48,
+      "clauses": [],
+      "caption": "รูปที่ 30 ส่วนยื่นของราวจับด้านบนของบันได",
+      "file": "/standards/figures/figure_30.png"
+    },
+    "31": {
+      "figure": 31,
+      "page": 48,
+      "clauses": [],
+      "caption": "รูปที่ 31 ส่วนยื่นของราวจับด้านล่างของบันได",
+      "file": "/standards/figures/figure_31.png"
+    },
+    "32": {
+      "figure": 32,
+      "page": 49,
+      "clauses": [],
+      "caption": "รูปที่ 32 ความกว้างสุทธิของช่องประตู",
+      "file": "/standards/figures/figure_32.png"
+    },
+    "33": {
+      "figure": 33,
+      "page": 51,
+      "clauses": [],
+      "caption": "รูปที่ 33 ที่ว่างสำหรับการเคลื่อนผ่าน ที่ประตูบานสวิง",
+      "file": "/standards/figures/figure_33.png"
+    },
+    "34": {
+      "figure": 34,
+      "page": 54,
+      "clauses": [],
+      "caption": "รูปที่ 34 ที่ว่างสำหรับการเคลื่อนผ่าน ที่ประตูบานเลื่อนและประตูบานเฟี้ยม",
+      "file": "/standards/figures/figure_34.png"
+    },
+    "35": {
+      "figure": 35,
+      "page": 55,
+      "clauses": [],
+      "caption": "รูปที่ 35 ระยะห่างของประตูสองบานซึ่งต่อเนื่องกัน",
+      "file": "/standards/figures/figure_35.png"
+    },
+    "36": {
+      "figure": 36,
+      "page": 57,
+      "clauses": [
+        "3.4.2.2"
+      ],
+      "caption": "รูปที่ 36 ช่องทางเข้าถึงที่จอดรถ",
+      "file": "/standards/figures/figure_36.png"
+    },
+    "37": {
+      "figure": 37,
+      "page": 62,
+      "clauses": [],
+      "caption": "รูปที่ 37 ตำแหน่งของส้วมในหน่วยพักอาศัยชนิด ก",
+      "file": "/standards/figures/figure_37.png"
+    },
+    "38": {
+      "figure": 38,
+      "page": 63,
+      "clauses": [],
+      "caption": "รูปที่ 38 ที่ว่างสำหรับเก้าอี้ล้อในส้วม",
+      "file": "/standards/figures/figure_38.png"
+    },
+    "39": {
+      "figure": 39,
+      "page": 64,
+      "clauses": [],
+      "caption": "รูปที่ 39 ที่เตรียมอาหาร",
+      "file": "/standards/figures/figure_39.png"
+    },
+    "40": {
+      "figure": 40,
+      "page": 73,
+      "clauses": [
+        "3.6.2.2"
+      ],
+      "caption": "รูปที่ 40 ความกว้างของพื้นที่สำหรับเก้าอี้ล้อในพื้นที่ประชุมและชุมนุม",
+      "file": "/standards/figures/figure_40.png"
+    },
+    "41": {
+      "figure": 41,
+      "page": 74,
+      "clauses": [
+        "3.6.2.3"
+      ],
+      "caption": "รูปที่ 41 ความลึกของพื้นที่สำหรับเก้าอี้ล้อในพื้นที่ประชุมและชุมนุม",
+      "file": "/standards/figures/figure_41.png"
+    },
+    "42": {
+      "figure": 42,
+      "page": 77,
+      "clauses": [
+        "3.7.4.2"
+      ],
+      "caption": "รูปที่ 42 ขนาดที่ว่างรอบส้วม",
+      "file": "/standards/figures/figure_42.png"
+    },
+    "43": {
+      "figure": 43,
+      "page": 78,
+      "clauses": [
+        "3.7.4.3"
+      ],
+      "caption": "รูปที่ 43 ความสูงของส้วม",
+      "file": "/standards/figures/figure_43.png"
+    },
+    "44": {
+      "figure": 44,
+      "page": 78,
+      "clauses": [
+        "3.7.4.3"
+      ],
+      "caption": "รูปที่ 44 ราวจับบนผนังด้านข้างสำหรับส้วม",
+      "file": "/standards/figures/figure_44.png"
+    },
+    "45": {
+      "figure": 45,
+      "page": 79,
+      "clauses": [],
+      "caption": "รูปที่ 45 ราวจับบนผนังด้านหลังสำหรับส้วม",
+      "file": "/standards/figures/figure_45.png"
+    },
+    "46": {
+      "figure": 46,
+      "page": 80,
+      "clauses": [
+        "3.7.4.6"
+      ],
+      "caption": "รูปที่ 46 ตำแหน่งที่แขวนกระดาษชำระ",
+      "file": "/standards/figures/figure_46.png"
+    },
+    "47": {
+      "figure": 47,
+      "page": 81,
+      "clauses": [],
+      "caption": "รูปที่ 47 ห้องส้วมสำหรับเก้าอี้ล้อ",
+      "file": "/standards/figures/figure_47.png"
+    },
+    "48": {
+      "figure": 48,
+      "page": 82,
+      "clauses": [],
+      "caption": "รูปที่ 48 ประตูห้องส้วม",
+      "file": "/standards/figures/figure_48.png"
+    },
+    "49": {
+      "figure": 49,
+      "page": 84,
+      "clauses": [],
+      "caption": "รูปที่ 49 ราวจับสำหรับอ่างอาบน้าแบบมีที่นั่งถาวร",
+      "file": "/standards/figures/figure_49.png"
+    },
+    "50": {
+      "figure": 50,
+      "page": 85,
+      "clauses": [],
+      "caption": "รูปที่ 50 ราวจับสำหรับอ่างอาบน้าแบบไม่มีที่นั่งถาวร",
+      "file": "/standards/figures/figure_50.png"
+    },
+    "51": {
+      "figure": 51,
+      "page": 86,
+      "clauses": [
+        "3.7.7.4"
+      ],
+      "caption": "รูปที่ 51 ตำแหน่งของจุดควบคุมอ่างอาบน้า",
+      "file": "/standards/figures/figure_51.png"
+    },
+    "52": {
+      "figure": 52,
+      "page": 87,
+      "clauses": [],
+      "caption": "รูปที่ 52 ห้องอาบน้าแบบนั่งเก้าอี้ล้อเข้าห้องไม่ได้",
+      "file": "/standards/figures/figure_52.png"
+    },
+    "53": {
+      "figure": 53,
+      "page": 88,
+      "clauses": [],
+      "caption": "รูปที่ 53 ห้องอาบน้าแบบนั่งเก้าอี้ล้อเข้าห้องได้แบบมาตรฐาน",
+      "file": "/standards/figures/figure_53.png"
+    },
+    "54": {
+      "figure": 54,
+      "page": 89,
+      "clauses": [],
+      "caption": "รูปที่ 54 ราวจับในห้องอาบน้าแบบนั่งเก้าอี้ล้อเข้าห้องไม่ได้",
+      "file": "/standards/figures/figure_54.png"
+    },
+    "55": {
+      "figure": 55,
+      "page": 89,
+      "clauses": [],
+      "caption": "รูปที่ 55 (ต่อ) ราวจับในห้องอาบน้าแบบนั่งเก้าอี้ล้อเข้าห้องได้",
+      "file": "/standards/figures/figure_55.png"
+    },
+    "56": {
+      "figure": 56,
+      "page": 91,
+      "clauses": [
+        "3.7.9.1"
+      ],
+      "caption": "รูปที่ 56 ขนาดของราวจับ",
+      "file": "/standards/figures/figure_56.png"
+    },
+    "57": {
+      "figure": 57,
+      "page": 93,
+      "clauses": [
+        "3.7.9.2"
+      ],
+      "caption": "รูปที่ 57 ช่องว่างและระยะห่างของราวจับ",
+      "file": "/standards/figures/figure_57.png"
+    },
+    "58": {
+      "figure": 58,
+      "page": 94,
+      "clauses": [
+        "3.7.10.1"
+      ],
+      "caption": "รูปที่ 58 ที่นั่งบนอ่างอาบน้า",
+      "file": "/standards/figures/figure_58.png"
+    },
+    "59": {
+      "figure": 59,
+      "page": 95,
+      "clauses": [],
+      "caption": "รูปที่ 59 ที่นั่งสี่เหลี่ยมในห้องอาบน้า",
+      "file": "/standards/figures/figure_59.png"
+    },
+    "60": {
+      "figure": 60,
+      "page": 96,
+      "clauses": [],
+      "caption": "รูปที่ 60 ที่นั่งแบบหักมุมในห้องอาบน้า",
+      "file": "/standards/figures/figure_60.png"
+    },
+    "61": {
+      "figure": 61,
+      "page": 98,
+      "clauses": [],
+      "caption": "รูปที่ 61 ตำแหน่งของอุปกรณ์ติดผนังและเพดาน",
+      "file": "/standards/figures/figure_61.png"
+    },
+    "62": {
+      "figure": 62,
+      "page": 102,
+      "clauses": [],
+      "caption": "รูปที่ 62 ตัวอย่างแผ่นพื้นผิวต่างสัมผัส",
+      "file": "/standards/figures/figure_62.png"
+    },
+    "63": {
+      "figure": 63,
+      "page": 106,
+      "clauses": [
+        "3.7.19.1"
+      ],
+      "caption": "รูปที่ 63 ความสูงของเคานเตอร์คิดเงิน",
+      "file": "/standards/figures/figure_63.png"
+    },
+    "64": {
+      "figure": 64,
+      "page": 107,
+      "clauses": [],
+      "caption": "รูปที่ 64 (ต่อ) ที่เปลี่ยนผ้าอ้อมเด็ก",
+      "file": "/standards/figures/figure_64.png"
+    },
+    "65": {
+      "figure": 65,
+      "page": 110,
+      "clauses": [],
+      "caption": "รูปที่ 65 ความสูงของตัวอักษร",
+      "file": "/standards/figures/figure_65.png"
+    },
+    "66": {
+      "figure": 66,
+      "page": 111,
+      "clauses": [],
+      "caption": "รูปที่ 66 ตำแหน่งป้าย (ที่มีตัวอักษรต่างสัมผัส) บริเวณประตู",
+      "file": "/standards/figures/figure_66.png"
+    },
+    "67": {
+      "figure": 67,
+      "page": 116,
+      "clauses": [],
+      "caption": "รูปที่ 67 ขนาดรูปภาพ",
+      "file": "/standards/figures/figure_67.png"
+    },
+    "68": {
+      "figure": 68,
+      "page": 117,
+      "clauses": [],
+      "caption": "รูปที่ 68 สัญลักษณ์ของการเข้าถึงสากล",
+      "file": "/standards/figures/figure_68.png"
+    },
+    "69": {
+      "figure": 69,
+      "page": 117,
+      "clauses": [],
+      "caption": "รูปที่ 69 สัญลักษณ์สากลโทรพิมพ์แบบ TTY",
+      "file": "/standards/figures/figure_69.png"
+    },
+    "70": {
+      "figure": 70,
+      "page": 118,
+      "clauses": [],
+      "caption": "รูปที่ 70 โทรศัพท์แบบควบคุมระดับเสียง",
+      "file": "/standards/figures/figure_70.png"
+    },
+    "71": {
+      "figure": 71,
+      "page": 118,
+      "clauses": [],
+      "caption": "รูปที่ 71 สัญลักษณ์สากลของการเข้าถึงสำหรับผู้สูญเสียการได้ยิน",
+      "file": "/standards/figures/figure_71.png"
+    }
+  }
+}

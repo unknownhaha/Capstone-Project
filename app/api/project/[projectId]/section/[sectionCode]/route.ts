@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { connectDB } from "@/lib/db";
 import Project from "@/lib/model/project";
+import { canEditProject } from "@/lib/project-access";
 
 export async function DELETE(
   req: NextRequest,
@@ -26,7 +27,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }
 
-    if (project.userId.toString() !== session.user.id) {
+    if (!canEditProject(project, session.user.id)) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 

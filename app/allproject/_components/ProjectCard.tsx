@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import ProjectCardThumb from "./ProjectCardThumb";
 import { useUploadThing } from "./inspection-upload";
 import { type ApiProject } from "./project-utils";
+import ShareProjectDialog from "./ShareProjectDialog";
 import styles from "./project-card.module.css";
 
 type ProjectCardProps = {
@@ -27,7 +28,9 @@ export default function ProjectCard({
 }: ProjectCardProps) {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
   const [busy, setBusy] = useState(false);
+  const isOwner = project.role !== "editor";
   const [coverImg, setCoverImg] = useState(project.coverImg ?? "");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { startUpload, isUploading } = useUploadThing("projectCoverImg");
@@ -122,6 +125,7 @@ export default function ProjectCard({
 
   return (
     <div className={`${styles.card} ${cardBusy ? styles.cardBusy : ""}`}>
+      {isOwner && (
       <div className={styles.cardToolbar}>
         <div className={styles.menuWrap}>
           <button
@@ -147,29 +151,48 @@ export default function ProjectCard({
                 onClick={() => setMenuOpen(false)}
               />
               <div className={styles.cardMenu} role="menu">
-                <button
-                  type="button"
-                  className={styles.menuItem}
-                  role="menuitem"
-                  disabled={cardBusy}
-                  onClick={openCoverPicker}
-                >
-                  {isUploading ? "Uploading..." : "Upload cover photo"}
-                </button>
-                <button
-                  type="button"
-                  className={`${styles.menuItem} ${styles.menuItemDanger}`}
-                  role="menuitem"
-                  disabled={cardBusy}
-                  onClick={handleDelete}
-                >
-                  Delete project
-                </button>
+                {isOwner && (
+                  <button
+                    type="button"
+                    className={styles.menuItem}
+                    role="menuitem"
+                    disabled={cardBusy}
+                    onClick={() => {
+                      setMenuOpen(false);
+                      setShareOpen(true);
+                    }}
+                  >
+                    Share project
+                  </button>
+                )}
+                {isOwner && (
+                  <button
+                    type="button"
+                    className={styles.menuItem}
+                    role="menuitem"
+                    disabled={cardBusy}
+                    onClick={openCoverPicker}
+                  >
+                    {isUploading ? "Uploading..." : "Upload cover photo"}
+                  </button>
+                )}
+                {isOwner && (
+                  <button
+                    type="button"
+                    className={`${styles.menuItem} ${styles.menuItemDanger}`}
+                    role="menuitem"
+                    disabled={cardBusy}
+                    onClick={handleDelete}
+                  >
+                    Delete project
+                  </button>
+                )}
               </div>
             </>
           )}
         </div>
       </div>
+      )}
 
       <input
         ref={fileInputRef}
@@ -190,11 +213,27 @@ export default function ProjectCard({
         <div className={styles.cardInfo}>
           <h4>{project.projectName}</h4>
           <span>{totalItems} Checkpoints</span>
+          {!isOwner && (
+            <span className={styles.sharedBadge}>Shared with you</span>
+          )}
         </div>
         <div className={styles.status}>
           {Math.round(project.completionRate ?? 0)}% Done
         </div>
       </button>
+
+      <ShareProjectDialog
+        open={shareOpen}
+        projectId={String(project._id)}
+        collaborationEnabled={Boolean(project.collaborationEnabled)}
+        onClose={() => setShareOpen(false)}
+        onCollaborationEnabled={() => {
+          onUpdate({
+            ...project,
+            collaborationEnabled: true,
+          });
+        }}
+      />
     </div>
   );
 }

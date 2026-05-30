@@ -116,6 +116,30 @@ const projectSchema = new mongoose.Schema(
       default: "draft",
     },
 
+    collaborationEnabled: {
+      type: Boolean,
+      default: false,
+    },
+
+    members: [
+      {
+        userId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+          required: true,
+        },
+        role: {
+          type: String,
+          enum: ["editor"],
+          default: "editor",
+        },
+        joinedAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
+
     sections: [projectSectionSchema],
 
     
@@ -192,6 +216,7 @@ projectSchema.pre("save", function () {
 projectSchema.index({ userId: 1, status: 1 });
 projectSchema.index({ userId: 1, createdAt: -1 });
 projectSchema.index({ standardKey: 1 });
+projectSchema.index({ "members.userId": 1 });
 
 
 

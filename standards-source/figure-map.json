@@ -1,0 +1,560 @@
+{
+  "count": 71,
+  "figures": {
+    "1": {
+      "figure": 1,
+      "page": 17,
+      "caption": "รูปที่  1",
+      "clauses": [
+        "3.1.1.2"
+      ],
+      "file": "/standards/figures/figure_01.png"
+    },
+    "2": {
+      "figure": 2,
+      "page": 18,
+      "caption": "รูปที่  2",
+      "clauses": [
+        "3.1.2.2"
+      ],
+      "file": "/standards/figures/figure_02.png"
+    },
+    "3": {
+      "figure": 3,
+      "page": 19,
+      "caption": "รูปที่  3",
+      "clauses": [
+        "3.1.3.4"
+      ],
+      "file": "/standards/figures/figure_03.png"
+    },
+    "4": {
+      "figure": 4,
+      "page": 20,
+      "caption": "รูปที่  4",
+      "clauses": [
+        "3.1.3.5"
+      ],
+      "file": "/standards/figures/figure_04.png"
+    },
+    "5": {
+      "figure": 5,
+      "page": 21,
+      "caption": "รูปที่  5",
+      "clauses": [],
+      "file": "/standards/figures/figure_05.png"
+    },
+    "6": {
+      "figure": 6,
+      "page": 22,
+      "caption": "รูปที่  6",
+      "clauses": [
+        "3.1.5.1"
+      ],
+      "file": "/standards/figures/figure_06.png"
+    },
+    "7": {
+      "figure": 7,
+      "page": 23,
+      "caption": "รูปที่  7",
+      "clauses": [
+        "3.1.5.2"
+      ],
+      "file": "/standards/figures/figure_07.png"
+    },
+    "8": {
+      "figure": 8,
+      "page": 24,
+      "caption": "รูปที่  8",
+      "clauses": [
+        "3.1.5.3"
+      ],
+      "file": "/standards/figures/figure_08.png"
+    },
+    "9": {
+      "figure": 9,
+      "page": 24,
+      "caption": "รูปที่  9",
+      "clauses": [],
+      "file": "/standards/figures/figure_09.png"
+    },
+    "10": {
+      "figure": 10,
+      "page": 25,
+      "caption": "รูปที่  10",
+      "clauses": [],
+      "file": "/standards/figures/figure_10.png"
+    },
+    "11": {
+      "figure": 11,
+      "page": 26,
+      "caption": "รูปที่  11",
+      "clauses": [],
+      "file": "/standards/figures/figure_11.png"
+    },
+    "12": {
+      "figure": 12,
+      "page": 26,
+      "caption": "รูปที่  12",
+      "clauses": [],
+      "file": "/standards/figures/figure_12.png"
+    },
+    "13": {
+      "figure": 13,
+      "page": 28,
+      "caption": "รูปที่  13",
+      "clauses": [],
+      "file": "/standards/figures/figure_13.png"
+    },
+    "14": {
+      "figure": 14,
+      "page": 29,
+      "caption": "รูปที่  14",
+      "clauses": [
+        "3.2.4.2"
+      ],
+      "file": "/standards/figures/figure_14.png"
+    },
+    "15": {
+      "figure": 15,
+      "page": 29,
+      "caption": "รูปที่  15",
+      "clauses": [
+        "3.2.5.1"
+      ],
+      "file": "/standards/figures/figure_15.png"
+    },
+    "16": {
+      "figure": 16,
+      "page": 31,
+      "caption": "รูปที่  16",
+      "clauses": [],
+      "file": "/standards/figures/figure_16.png"
+    },
+    "17": {
+      "figure": 17,
+      "page": 32,
+      "caption": "รูปที่  17",
+      "clauses": [
+        "3.2.6.7"
+      ],
+      "file": "/standards/figures/figure_17.png"
+    },
+    "18": {
+      "figure": 18,
+      "page": 33,
+      "caption": "รูปที่  18",
+      "clauses": [
+        "3.2.7.3"
+      ],
+      "file": "/standards/figures/figure_18.png"
+    },
+    "19": {
+      "figure": 19,
+      "page": 34,
+      "caption": "รูปที่  19",
+      "clauses": [
+        "3.2.7.9"
+      ],
+      "file": "/standards/figures/figure_19.png"
+    },
+    "20": {
+      "figure": 20,
+      "page": 36,
+      "caption": "รูปที่  20",
+      "clauses": [
+        "3.2.7.10"
+      ],
+      "file": "/standards/figures/figure_20.png"
+    },
+    "21": {
+      "figure": 21,
+      "page": 37,
+      "caption": "รูปที่  21",
+      "clauses": [],
+      "file": "/standards/figures/figure_21.png"
+    },
+    "22": {
+      "figure": 22,
+      "page": 39,
+      "caption": "รูปที่  22",
+      "clauses": [],
+      "file": "/standards/figures/figure_22.png"
+    },
+    "23": {
+      "figure": 23,
+      "page": 41,
+      "caption": "รูปที่  23",
+      "clauses": [],
+      "file": "/standards/figures/figure_23.png"
+    },
+    "24": {
+      "figure": 24,
+      "page": 43,
+      "caption": "รูปที่  24",
+      "clauses": [
+        "3.2.10.1"
+      ],
+      "file": "/standards/figures/figure_24.png"
+    },
+    "25": {
+      "figure": 25,
+      "page": 44,
+      "caption": "รูปที่  25",
+      "clauses": [
+        "3.2.10.2"
+      ],
+      "file": "/standards/figures/figure_25.png"
+    },
+    "26": {
+      "figure": 26,
+      "page": 45,
+      "caption": "รูปที่  26",
+      "clauses": [
+        "3.2.11.3"
+      ],
+      "file": "/standards/figures/figure_26.png"
+    },
+    "27": {
+      "figure": 27,
+      "page": 45,
+      "caption": "รูปที่  27",
+      "clauses": [
+        "3.2.11.4"
+      ],
+      "file": "/standards/figures/figure_27.png"
+    },
+    "28": {
+      "figure": 28,
+      "page": 46,
+      "caption": "รูปที่  28",
+      "clauses": [
+        "3.2.11.6"
+      ],
+      "file": "/standards/figures/figure_28.png"
+    },
+    "29": {
+      "figure": 29,
+      "page": 47,
+      "caption": "รูปที่  29",
+      "clauses": [],
+      "file": "/standards/figures/figure_29.png"
+    },
+    "30": {
+      "figure": 30,
+      "page": 48,
+      "caption": "รูปที่  30",
+      "clauses": [],
+      "file": "/standards/figures/figure_30.png"
+    },
+    "31": {
+      "figure": 31,
+      "page": 48,
+      "caption": "รูปที่  31",
+      "clauses": [],
+      "file": "/standards/figures/figure_31.png"
+    },
+    "32": {
+      "figure": 32,
+      "page": 49,
+      "caption": "รูปที่  32",
+      "clauses": [],
+      "file": "/standards/figures/figure_32.png"
+    },
+    "33": {
+      "figure": 33,
+      "page": 51,
+      "caption": "รูปที่  33",
+      "clauses": [],
+      "file": "/standards/figures/figure_33.png"
+    },
+    "34": {
+      "figure": 34,
+      "page": 54,
+      "caption": "รูปที่  34",
+      "clauses": [],
+      "file": "/standards/figures/figure_34.png"
+    },
+    "35": {
+      "figure": 35,
+      "page": 55,
+      "caption": "รูปที่  35",
+      "clauses": [],
+      "file": "/standards/figures/figure_35.png"
+    },
+    "36": {
+      "figure": 36,
+      "page": 57,
+      "caption": "รูปที่  36",
+      "clauses": [
+        "3.4.2.2"
+      ],
+      "file": "/standards/figures/figure_36.png"
+    },
+    "37": {
+      "figure": 37,
+      "page": 62,
+      "caption": "รูปที่  37",
+      "clauses": [],
+      "file": "/standards/figures/figure_37.png"
+    },
+    "38": {
+      "figure": 38,
+      "page": 63,
+      "caption": "รูปที่  38",
+      "clauses": [],
+      "file": "/standards/figures/figure_38.png"
+    },
+    "39": {
+      "figure": 39,
+      "page": 64,
+      "caption": "รูปที่  39",
+      "clauses": [],
+      "file": "/standards/figures/figure_39.png"
+    },
+    "40": {
+      "figure": 40,
+      "page": 73,
+      "caption": "รูปที่  40",
+      "clauses": [
+        "3.6.2.2"
+      ],
+      "file": "/standards/figures/figure_40.png"
+    },
+    "41": {
+      "figure": 41,
+      "page": 74,
+      "caption": "รูปที่  41",
+      "clauses": [
+        "3.6.2.3"
+      ],
+      "file": "/standards/figures/figure_41.png"
+    },
+    "42": {
+      "figure": 42,
+      "page": 77,
+      "caption": "รูปที่  42",
+      "clauses": [
+        "3.7.4.2"
+      ],
+      "file": "/standards/figures/figure_42.png"
+    },
+    "43": {
+      "figure": 43,
+      "page": 78,
+      "caption": "รูปที่  43",
+      "clauses": [
+        "3.7.4.3"
+      ],
+      "file": "/standards/figures/figure_43.png"
+    },
+    "44": {
+      "figure": 44,
+      "page": 78,
+      "caption": "รูปที่  44",
+      "clauses": [],
+      "file": "/standards/figures/figure_44.png"
+    },
+    "45": {
+      "figure": 45,
+      "page": 79,
+      "caption": "รูปที่  45",
+      "clauses": [],
+      "file": "/standards/figures/figure_45.png"
+    },
+    "46": {
+      "figure": 46,
+      "page": 80,
+      "caption": "รูปที่  46",
+      "clauses": [
+        "3.7.4.6"
+      ],
+      "file": "/standards/figures/figure_46.png"
+    },
+    "47": {
+      "figure": 47,
+      "page": 81,
+      "caption": "รูปที่  47",
+      "clauses": [],
+      "file": "/standards/figures/figure_47.png"
+    },
+    "48": {
+      "figure": 48,
+      "page": 82,
+      "caption": "รูปที่  48",
+      "clauses": [],
+      "file": "/standards/figures/figure_48.png"
+    },
+    "49": {
+      "figure": 49,
+      "page": 84,
+      "caption": "รูปที่  49",
+      "clauses": [],
+      "file": "/standards/figures/figure_49.png"
+    },
+    "50": {
+      "figure": 50,
+      "page": 85,
+      "caption": "รูปที่  50",
+      "clauses": [],
+      "file": "/standards/figures/figure_50.png"
+    },
+    "51": {
+      "figure": 51,
+      "page": 86,
+      "caption": "รูปที่  51",
+      "clauses": [
+        "3.7.7.4"
+      ],
+      "file": "/standards/figures/figure_51.png"
+    },
+    "52": {
+      "figure": 52,
+      "page": 87,
+      "caption": "รูปที่  52",
+      "clauses": [],
+      "file": "/standards/figures/figure_52.png"
+    },
+    "53": {
+      "figure": 53,
+      "page": 88,
+      "caption": "รูปที่  53",
+      "clauses": [],
+      "file": "/standards/figures/figure_53.png"
+    },
+    "54": {
+      "figure": 54,
+      "page": 89,
+      "caption": "รูปที่  54",
+      "clauses": [],
+      "file": "/standards/figures/figure_54.png"
+    },
+    "55": {
+      "figure": 55,
+      "page": 89,
+      "caption": "รูปที่  55",
+      "clauses": [],
+      "file": "/standards/figures/figure_55.png"
+    },
+    "56": {
+      "figure": 56,
+      "page": 91,
+      "caption": "รูปที่  56",
+      "clauses": [
+        "3.7.9.1"
+      ],
+      "file": "/standards/figures/figure_56.png"
+    },
+    "57": {
+      "figure": 57,
+      "page": 93,
+      "caption": "รูปที่  57",
+      "clauses": [
+        "3.7.9.2"
+      ],
+      "file": "/standards/figures/figure_57.png"
+    },
+    "58": {
+      "figure": 58,
+      "page": 94,
+      "caption": "รูปที่  58",
+      "clauses": [
+        "3.7.10.1"
+      ],
+      "file": "/standards/figures/figure_58.png"
+    },
+    "59": {
+      "figure": 59,
+      "page": 95,
+      "caption": "รูปที่  59",
+      "clauses": [],
+      "file": "/standards/figures/figure_59.png"
+    },
+    "60": {
+      "figure": 60,
+      "page": 96,
+      "caption": "รูปที่  60",
+      "clauses": [],
+      "file": "/standards/figures/figure_60.png"
+    },
+    "61": {
+      "figure": 61,
+      "page": 98,
+      "caption": "รูปที่  61",
+      "clauses": [],
+      "file": "/standards/figures/figure_61.png"
+    },
+    "62": {
+      "figure": 62,
+      "page": 102,
+      "caption": "รูปที่  62",
+      "clauses": [],
+      "file": "/standards/figures/figure_62.png"
+    },
+    "63": {
+      "figure": 63,
+      "page": 106,
+      "caption": "รูปที่  63",
+      "clauses": [
+        "3.7.19.1"
+      ],
+      "file": "/standards/figures/figure_63.png"
+    },
+    "64": {
+      "figure": 64,
+      "page": 107,
+      "caption": "รูปที่  64",
+      "clauses": [],
+      "file": "/standards/figures/figure_64.png"
+    },
+    "65": {
+      "figure": 65,
+      "page": 110,
+      "caption": "รูปที่  65",
+      "clauses": [],
+      "file": "/standards/figures/figure_65.png"
+    },
+    "66": {
+      "figure": 66,
+      "page": 111,
+      "caption": "รูปที่  66",
+      "clauses": [],
+      "file": "/standards/figures/figure_66.png"
+    },
+    "67": {
+      "figure": 67,
+      "page": 116,
+      "caption": "รูปที่  67",
+      "clauses": [],
+      "file": "/standards/figures/figure_67.png"
+    },
+    "68": {
+      "figure": 68,
+      "page": 117,
+      "caption": "รูปที่  68",
+      "clauses": [],
+      "file": "/standards/figures/figure_68.png"
+    },
+    "69": {
+      "figure": 69,
+      "page": 117,
+      "caption": "รูปที่  69",
+      "clauses": [],
+      "file": "/standards/figures/figure_69.png"
+    },
+    "70": {
+      "figure": 70,
+      "page": 118,
+      "caption": "รูปที่  70",
+      "clauses": [],
+      "file": "/standards/figures/figure_70.png"
+    },
+    "71": {
+      "figure": 71,
+      "page": 118,
+      "caption": "รูปที่  71",
+      "clauses": [],
+      "file": "/standards/figures/figure_71.png"
+    }
+  }
+}

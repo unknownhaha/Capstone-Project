@@ -29,6 +29,8 @@ export type ProjectCriterion = {
   criteriaId: string;
   score: number | null;
   note?: string;
+  img?: string;
+  imgs?: string[];
 };
 
 export type ProjectSection = {

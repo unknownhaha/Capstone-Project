@@ -149,11 +149,14 @@ export default function InspectionItemRow({
               <span className={styles.detailLabel}>ภาพอ้างอิง</span>
               <img
                 src={item.img}
-                alt={item.display_text}
+                alt={item.imgCaption ?? item.display_text}
                 className={`${styles.itemImage} ${styles.clickableImage}`}
                 referrerPolicy="no-referrer"
                 onClick={() => setPreviewUrl(item.img!)}
               />
+              {item.imgCaption && (
+                <p className={styles.imgCaption}>{item.imgCaption}</p>
+              )}
             </div>
           )}
 

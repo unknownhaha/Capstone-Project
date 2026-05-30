@@ -14,29 +14,33 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) return null;
+        try {
+          if (!credentials?.email || !credentials?.password) return null;
 
-        const email = String(credentials.email).trim().toLowerCase();
-        const password = String(credentials.password);
+          const email = String(credentials.email).trim().toLowerCase();
+          const password = String(credentials.password);
 
-        await connectDB();
+          await connectDB();
 
-        const user = await User.findOne({
-          "contact.email": email,
-        }).select("+password");
+          const user = await User.findOne({
+            "contact.email": email,
+          }).select("+password");
 
-        if (!user?.password) return null;
+          if (!user?.password) return null;
 
-        const isValid = await bcrypt.compare(password, user.password);
+          const isValid = await bcrypt.compare(password, user.password);
+          if (!isValid) return null;
 
-        if (!isValid) return null;
-
-        return {
-          id: user._id.toString(),
-          email: user.contact.email,
-          name: `${user.firstName} ${user.lastName}`,
-          image: user.profileImg ?? null,
-        };
+          return {
+            id: user._id.toString(),
+            email: user.contact.email,
+            name: `${user.firstName} ${user.lastName}`,
+            image: user.profileImg ?? null,
+          };
+        } catch (error) {
+          console.error("[auth] credentials authorize failed:", error);
+          return null;
+        }
       },
     }),
   ],
