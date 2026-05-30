@@ -6,6 +6,7 @@ export interface IUser {
   password: string;
   profileImg?: string;
   projects? : Types.ObjectId[];
+  isEmailVerified: boolean;
   contact: {
     email: string;
     phone?: string;
@@ -49,6 +50,7 @@ const userSchema = new mongoose.Schema<IUser>({
   },
 
   profileImg: String,
+  isEmailVerified: { type: Boolean, default: false },
   projects :  [{
     type : mongoose.Schema.Types.ObjectId,
     ref : "Project"

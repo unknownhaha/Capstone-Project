@@ -194,6 +194,13 @@ function LoginForm() {
               Create account
             </Link>
           </p>
+
+          <p className={styles.signup} style={{ marginTop: 12, fontSize: 13 }}>
+            Need to verify your email?{" "}
+            <Link href="/verify" className={styles.signupLink}>
+              Enter OTP
+            </Link>
+          </p>
         </div>
       </div>
     </div>
