@@ -204,11 +204,38 @@ export default function CriteriaItemsPage() {
   };
 
   const handleScoreChange = async (itemId: string, score: number) => {
+    const previousScore = getScore(itemId);
     setSavingId(itemId);
+    setProject((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        sections: prev.sections.map((section) => ({
+          ...section,
+          criteria: section.criteria.map((c) =>
+            c.criteriaId === itemId ? { ...c, score } : c
+          ),
+        })),
+      };
+    });
 
     try {
-      if (await patchCriterion(itemId, { score })) {
-        await loadProject();
+      const ok = await patchCriterion(itemId, { score });
+      if (!ok) {
+        setProject((prev) => {
+          if (!prev) return prev;
+          return {
+            ...prev,
+            sections: prev.sections.map((section) => ({
+              ...section,
+              criteria: section.criteria.map((c) =>
+                c.criteriaId === itemId
+                  ? { ...c, score: previousScore ?? undefined }
+                  : c
+              ),
+            })),
+          };
+        });
       }
     } finally {
       setSavingId(null);

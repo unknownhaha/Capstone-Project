@@ -109,23 +109,21 @@ export default function InspectionItemRow({
 
         <div className={styles.scoreGroup}>
           {SCORES.map((s) => (
-            <label key={s.value} title={`Score ${s.value}`}>
-              <input
-                type="radio"
-                name={`score-${item.item_id}`}
-                className={styles.scoreRadio}
-                checked={score === s.value}
-                disabled={busy}
-                onChange={() => onScoreChange(item.item_id, s.value)}
-              />
-              <span
-                className={`${styles.scoreLabel} ${s.className} ${
-                  score === s.value ? styles.scoreLabelActive : ""
-                }`}
-              >
-                {s.label}
-              </span>
-            </label>
+            <button
+              key={s.value}
+              type="button"
+              title={`Score ${s.value}`}
+              disabled={busy}
+              tabIndex={-1}
+              aria-pressed={score === s.value}
+              className={`${styles.scoreLabel} ${s.className} ${
+                score === s.value ? styles.scoreLabelActive : ""
+              }`}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => onScoreChange(item.item_id, s.value)}
+            >
+              {s.label}
+            </button>
           ))}
         </div>
       </div>

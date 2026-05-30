@@ -11,15 +11,30 @@ This is the machine learning backend for your building inspection app.
 ### Installation & Setup
 
 ```bash
-# 1. Install dependencies
+cd ml-service
+
+# 1. Create a virtual environment (recommended — fixes Pylance import warnings)
+python -m venv .venv
+
+# Windows
+.venv\Scripts\activate
+
+# macOS / Linux
+# source .venv/bin/activate
+
+# 2. Install dependencies
 pip install -r requirements.txt
 
-# 2. Train the model (generates models/ folder)
+# 3. Train the model (generates models/ folder)
 python train_model.py
 
-# 3. Start the Flask API server
+# 4. Start the Flask API server
 python app.py
 ```
+
+**Cursor / VS Code:** Select the interpreter  
+`ml-service/.venv/Scripts/python.exe` (Windows) or `ml-service/.venv/bin/python` (Mac/Linux)  
+so Pylance resolves `pandas`, `numpy`, `sklearn`, and `joblib`.
 
 Server will be available at: **http://localhost:5000**
 
