@@ -1,9 +1,9 @@
 "use client";
 import "./verify.moudule.css";
-import { useRef, useState, useTransition } from "react";
+import { Suspense, useRef, useState, useTransition } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 
-export default function VerifyPage() {
+function VerifyForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const email = searchParams.get("email") || "";
@@ -160,3 +160,18 @@ export default function VerifyPage() {
   );
 }
 
+function VerifyFallback() {
+  return (
+    <div className="container">
+      <p style={{ color: "white", textAlign: "center", marginTop: 40 }}>Loading...</p>
+    </div>
+  );
+}
+
+export default function VerifyPage() {
+  return (
+    <Suspense fallback={<VerifyFallback />}>
+      <VerifyForm />
+    </Suspense>
+  );
+}

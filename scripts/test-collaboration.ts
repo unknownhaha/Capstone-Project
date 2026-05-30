@@ -101,7 +101,8 @@ async function runDbIntegrationTests() {
       collaborationEnabled: false,
       members: [],
     });
-    projectId = project._id.toString();
+    const createdProjectId = project._id.toString();
+    projectId = createdProjectId;
 
     assert("new project starts solo", !project.collaborationEnabled);
     assert("outsider cannot view", !canViewProject(project, teammateId));
@@ -109,7 +110,7 @@ async function runDbIntegrationTests() {
     project.collaborationEnabled = true;
     await project.save();
 
-    const invite = await getOrCreateInvite(projectId, ownerId);
+    const invite = await getOrCreateInvite(createdProjectId, ownerId);
     inviteToken = invite.token;
     assert("invite token created", Boolean(inviteToken));
     assert("invite not expired", invite.expiresAt > new Date());

@@ -1,0 +1,96 @@
+/**
+ * Pre-merge validation (no database required).
+ * Run: npx tsx scripts/validate-premerge.ts
+ */
+import fs from "fs";
+import path from "path";
+import {
+  canDeleteProject,
+  canEditProject,
+  canShareProject,
+  canViewProject,
+  getProjectRole,
+  isMember,
+  isOwner,
+} from "../lib/project-access";
+
+let passed = 0;
+let failed = 0;
+
+function assert(name: string, condition: boolean) {
+  if (condition) {
+    passed += 1;
+    console.log(`  PASS  ${name}`);
+  } else {
+    failed += 1;
+    console.error(`  FAIL  ${name}`);
+  }
+}
+
+function fileExists(rel: string) {
+  return fs.existsSync(path.join(process.cwd(), rel));
+}
+
+function fileIncludes(rel: string, needle: string) {
+  const content = fs.readFileSync(path.join(process.cwd(), rel), "utf8");
+  return content.includes(needle);
+}
+
+console.log("\n[1] Required files exist");
+const requiredFiles = [
+  "lib/project-access.ts",
+  "lib/project-serialize.ts",
+  "lib/model/project-invite.ts",
+  "app/api/join/[token]/route.ts",
+  "app/api/project/[projectId]/collaboration/route.ts",
+  "app/api/project/[projectId]/invite/route.ts",
+  "app/allproject/_components/ShareProjectDialog.tsx",
+  "app/join/[token]/page.tsx",
+  "app/allproject/_components/AddCriteriaModal.tsx",
+  "app/api/project/[projectId]/add-groups/route.ts",
+  "app/api/auth/verify-otp/route.ts",
+  "lib/email.ts",
+  ".env.example",
+];
+
+for (const f of requiredFiles) {
+  assert(`exists: ${f}`, fileExists(f));
+}
+
+console.log("\n[2] Access control unit tests");
+const ownerId = "aaaaaaaaaaaaaaaaaaaaaaaa";
+const editorId = "bbbbbbbbbbbbbbbbbbbbbbbb";
+const project = {
+  userId: ownerId,
+  members: [{ userId: editorId, role: "editor" as const }],
+};
+
+assert("owner can share", canShareProject(project, ownerId));
+assert("editor cannot share", !canShareProject(project, editorId));
+assert("editor can edit", canEditProject(project, editorId));
+assert("outsider cannot view", !canViewProject(project, "cccccccccccccccccccccccc"));
+assert("roles", getProjectRole(project, ownerId) === "owner" && getProjectRole(project, editorId) === "editor");
+
+console.log("\n[3] API routes use shared access helpers");
+assert("add-groups uses canEditProject", fileIncludes("app/api/project/[projectId]/add-groups/route.ts", "canEditProject"));
+assert("project GET uses canViewProject", fileIncludes("app/api/project/[projectId]/route.ts", "canViewProject"));
+assert("critiria uses canEditProject", fileIncludes("app/api/project/[projectId]/critiria/[critiriaId]/route.ts", "canEditProject"));
+assert("list merges members query", fileIncludes("app/api/project/route.ts", "members.userId"));
+
+console.log("\n[4] Login keeps callbackUrl + OTP link");
+assert("login uses callbackUrl in signIn", fileIncludes("app/login/page.tsx", "callbackUrl,"));
+assert("login has OTP link", fileIncludes("app/login/page.tsx", 'href="/verify"'));
+assert("login avoids redirectTo", !fileIncludes("app/login/page.tsx", "redirectTo: callbackUrl"));
+
+console.log("\n[5] UI collaboration rules");
+assert("ProjectCard checks editor role", fileIncludes("app/allproject/_components/ProjectCard.tsx", 'project.role !== "editor"'));
+assert("search filter exists", fileIncludes("app/allproject/_components/project-utils.ts", "filterProjects"));
+assert("gridMessage style exists", fileIncludes("app/allproject/allproject.module.css", ".gridMessage"));
+assert("project page gates add criteria", fileIncludes("app/allproject/[projectId]/page.tsx", 'project.role === "editor"'));
+
+console.log("\n[6] Email uses environment variables");
+assert("email reads EMAIL_USER", fileIncludes("lib/email.ts", "EMAIL_USER"));
+assert("email has no hardcoded gmail pass", !fileIncludes("lib/email.ts", "dviz xyqt"));
+
+console.log(`\nResult: ${passed} passed, ${failed} failed`);
+process.exit(failed > 0 ? 1 : 0);
