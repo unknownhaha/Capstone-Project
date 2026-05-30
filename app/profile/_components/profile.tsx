@@ -74,10 +74,14 @@ export default function Profile() {
 }, [session]);
   if (status === "loading") return null;
     const handleChange = (field: string, value: string) => {
-        setNew((prev: any) => ({
-            ...prev,
-            [field]: value
-        }));
+        setNew((prev) =>
+            prev
+              ? {
+                  ...prev,
+                  [field]: value,
+                }
+              : prev
+        );
     };
     const handleReset = () => {
         setNew(preData);

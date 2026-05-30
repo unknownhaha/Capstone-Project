@@ -3,6 +3,18 @@
 import { useState } from 'react';
 import styles from './ml-assessment.module.css';
 
+interface MLPrediction {
+  risk_level: string;
+  risk_class: number;
+  risk_score: number;
+  probabilities: {
+    low_risk: number;
+    medium_risk: number;
+    high_risk: number;
+  };
+  confidence: number;
+}
+
 interface MLAssessmentProps {
   inspectionData: {
     building_age: number;
@@ -20,20 +32,8 @@ interface MLAssessmentProps {
     number_of_violations: number;
     previous_repairs: number;
   };
-  onResult?: (prediction: any) => void;
+  onResult?: (prediction: MLPrediction) => void;
   compact?: boolean;
-}
-
-interface MLPrediction {
-  risk_level: string;
-  risk_class: number;
-  risk_score: number;
-  probabilities: {
-    low_risk: number;
-    medium_risk: number;
-    high_risk: number;
-  };
-  confidence: number;
 }
 
 export default function MLAssessment({ 

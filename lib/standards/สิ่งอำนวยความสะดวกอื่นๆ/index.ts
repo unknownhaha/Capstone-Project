@@ -20,7 +20,7 @@ import s19 from "./ห้องอาบน้ำแบบฝักบัว.jso
 import s20 from "./อ่างล้างหน้า.json";
 import s21 from "./อ่างอาบน้ำ.json";
 
-export default [
+const facilitiesStandards = [
   s1,
   s2,
   s3,
@@ -43,3 +43,5 @@ export default [
   s20,
   s21,
 ];
+
+export default facilitiesStandards;

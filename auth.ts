@@ -1,9 +1,15 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import { CredentialsSignin } from "next-auth";
 import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/db";
 import User from "@/lib/model/user";
 import { authConfig } from "@/auth.config";
+import { isLegacyUser } from "@/lib/auth-otp";
+
+class EmailNotVerifiedError extends CredentialsSignin {
+  code = "email_not_verified";
+}
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
@@ -24,12 +30,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
           const user = await User.findOne({
             "contact.email": email,
-          }).select("+password");
+          }).select("+password isEmailVerified createdAt");
 
           if (!user?.password) return null;
 
           const isValid = await bcrypt.compare(password, user.password);
           if (!isValid) return null;
+
+          const mustVerify = user.isEmailVerified === false;
+          if (mustVerify && !isLegacyUser(user.createdAt)) {
+            throw new EmailNotVerifiedError();
+          }
 
           return {
             id: user._id.toString(),
@@ -38,6 +49,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             image: user.profileImg ?? null,
           };
         } catch (error) {
+          if (error instanceof CredentialsSignin) {
+            throw error;
+          }
           console.error("[auth] credentials authorize failed:", error);
           return null;
         }

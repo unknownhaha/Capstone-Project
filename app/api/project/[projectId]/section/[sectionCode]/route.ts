@@ -33,7 +33,7 @@ export async function DELETE(
 
     // ✅ remove section
     project.sections = project.sections.filter(
-      (s: any) => s.code !== sectionCode
+      (s: { code: string }) => s.code !== sectionCode
     );
 
     await project.save();

@@ -5,13 +5,10 @@
 import fs from "fs";
 import path from "path";
 import {
-  canDeleteProject,
   canEditProject,
   canShareProject,
   canViewProject,
   getProjectRole,
-  isMember,
-  isOwner,
 } from "../lib/project-access";
 
 let passed = 0;
@@ -79,7 +76,7 @@ assert("list merges members query", fileIncludes("app/api/project/route.ts", "me
 
 console.log("\n[4] Login keeps callbackUrl + OTP link");
 assert("login uses callbackUrl in signIn", fileIncludes("app/login/page.tsx", "callbackUrl,"));
-assert("login has OTP link", fileIncludes("app/login/page.tsx", 'href="/verify"'));
+assert("login has OTP link", fileIncludes("app/login/page.tsx", '"/verify"'));
 assert("login avoids redirectTo", !fileIncludes("app/login/page.tsx", "redirectTo: callbackUrl"));
 
 console.log("\n[5] UI collaboration rules");

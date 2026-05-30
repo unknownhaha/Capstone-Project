@@ -31,6 +31,7 @@ export type ProjectCriterion = {
   note?: string;
   img?: string;
   imgs?: string[];
+  updatedAt?: Date | string;
 };
 
 export type ProjectSection = {

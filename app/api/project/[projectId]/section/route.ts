@@ -33,7 +33,9 @@ export async function POST(
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    const exists = project.sections.some((s: any) => s.code === code);
+    const exists = project.sections.some(
+      (s: { code: string }) => s.code === code
+    );
 
     if (exists) {
       return NextResponse.json(

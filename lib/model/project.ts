@@ -21,6 +21,9 @@ const projectCriteriaSchema = new mongoose.Schema({
 
   /** User-captured inspection photos (UploadThing URLs) */
   imgs: { type: [String], default: [] },
+
+  /** Last edit time for optimistic concurrency on PATCH */
+  updatedAt: { type: Date, default: Date.now },
 });
 
 
@@ -104,7 +107,7 @@ const projectSchema = new mongoose.Schema(
 
       arrangementNote: {
         type: String,
-        required: function (this: any) {
+        required: function (this: { arrangement?: string }) {
           return this.arrangement === "other";
         },
       },
@@ -166,14 +169,25 @@ projectSchema.pre("save", function () {
   let projectAnswered = 0;
   let projectTotalCriteria = 0;
 
-  this.sections.forEach((section: any) => {
+  type CriteriaDoc = { score?: number | null | undefined };
+  type SectionDoc = {
+    criteria: CriteriaDoc[];
+    totalScore?: number;
+    maxScore?: number;
+    scorePercent?: number;
+    totalCriteria?: number;
+    answeredCriteria?: number;
+    completionRate?: number;
+  };
+
+  this.sections.forEach((section: SectionDoc) => {
     let sectionScore = 0;
     let sectionAnswered = 0;
 
     const sectionTotal = section.criteria.length;
     const sectionMax = sectionTotal * 2;
 
-    section.criteria.forEach((c: any) => {
+    section.criteria.forEach((c: CriteriaDoc) => {
       if (c.score !== null && c.score !== undefined) {
         sectionScore += c.score;
         sectionAnswered++;

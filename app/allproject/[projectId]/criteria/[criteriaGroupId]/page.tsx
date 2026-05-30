@@ -48,6 +48,7 @@ export default function CriteriaItemsPage() {
   const [savingId, setSavingId] = useState<string | null>(null);
   const [savingNoteId, setSavingNoteId] = useState<string | null>(null);
   const [uploadingId, setUploadingId] = useState<string | null>(null);
+  const [conflictMsg, setConflictMsg] = useState<string | null>(null);
 
   const catalogMatch = findCatalogGroup(groupId);
 
@@ -86,21 +87,65 @@ export default function CriteriaItemsPage() {
   const getUserNote = (itemId: string): string | null =>
     getCriterion(itemId)?.note ?? null;
 
+  const patchCriterion = async (
+    itemId: string,
+    body: Record<string, unknown>
+  ): Promise<boolean> => {
+    const criterion = getCriterion(itemId);
+    const payload = {
+      ...body,
+      ...(criterion?.updatedAt
+        ? { expectedUpdatedAt: criterion.updatedAt }
+        : {}),
+    };
+
+    const res = await fetch(
+      `/api/project/${projectId}/critiria/${encodeURIComponent(itemId)}`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(payload),
+      }
+    );
+
+    if (res.status === 409) {
+      setConflictMsg(
+        "Updated by another inspector — refresh and try again."
+      );
+      await loadProject();
+      return false;
+    }
+
+    if (!res.ok) return false;
+
+    const data = await res.json();
+    if (data.updatedAt) {
+      setProject((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          sections: prev.sections.map((section) => ({
+            ...section,
+            criteria: section.criteria.map((c) =>
+              c.criteriaId === itemId
+                ? { ...c, updatedAt: data.updatedAt }
+                : c
+            ),
+          })),
+        };
+      });
+    }
+
+    setConflictMsg(null);
+    return true;
+  };
+
   const handleNoteChange = async (itemId: string, note: string) => {
     setSavingNoteId(itemId);
 
     try {
-      const res = await fetch(
-        `/api/project/${projectId}/critiria/${encodeURIComponent(itemId)}`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({ note }),
-        }
-      );
-
-      if (res.ok) {
+      if (await patchCriterion(itemId, { note })) {
         await loadProject();
       }
     } finally {
@@ -114,22 +159,38 @@ export default function CriteriaItemsPage() {
     setProject((prev) => (prev ? patchCriterionImgs(prev, itemId, imgs) : prev));
 
     try {
+      const criterion = getCriterion(itemId);
       const res = await fetch(
         `/api/project/${projectId}/critiria/${encodeURIComponent(itemId)}`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
-          body: JSON.stringify({ imgs }),
+          body: JSON.stringify({
+            imgs,
+            ...(criterion?.updatedAt
+              ? { expectedUpdatedAt: criterion.updatedAt }
+              : {}),
+          }),
         }
       );
 
       const data = await res.json();
 
+      if (res.status === 409) {
+        setConflictMsg(
+          "Updated by another inspector — refresh and try again."
+        );
+        setProject(snapshot);
+        await loadProject();
+        return;
+      }
+
       if (res.ok && Array.isArray(data.imgs)) {
         setProject((prev) =>
           prev ? patchCriterionImgs(prev, itemId, data.imgs) : prev
         );
+        setConflictMsg(null);
       } else {
         setProject(snapshot);
         console.error("Failed to save images:", data);
@@ -146,17 +207,7 @@ export default function CriteriaItemsPage() {
     setSavingId(itemId);
 
     try {
-      const res = await fetch(
-        `/api/project/${projectId}/critiria/${encodeURIComponent(itemId)}`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({ score }),
-        }
-      );
-
-      if (res.ok) {
+      if (await patchCriterion(itemId, { score })) {
         await loadProject();
       }
     } finally {
@@ -230,6 +281,22 @@ export default function CriteriaItemsPage() {
             <h1 className={itemStyles.groupHeading}>
               {catalogMatch.group.title}
             </h1>
+
+            {conflictMsg && (
+              <p
+                role="alert"
+                style={{
+                  margin: "0 0 12px",
+                  padding: "10px 12px",
+                  background: "#fff3cd",
+                  color: "#664d03",
+                  borderRadius: "8px",
+                  fontSize: "13px",
+                }}
+              >
+                {conflictMsg}
+              </p>
+            )}
 
             <div className={itemStyles.itemsList}>
               {items.map((item) => (

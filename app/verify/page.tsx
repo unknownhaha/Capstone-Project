@@ -107,7 +107,7 @@ function VerifyForm() {
 
         <h2>Verify Code</h2>
         <p className="desc">
-          We've sent you a one-time code to {email}. Enter it below to verify your email.
+          We&apos;ve sent you a one-time code to {email}. Enter it below to verify your email.
         </p>
 
         {error && (

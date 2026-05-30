@@ -12,6 +12,19 @@ function normalizeImageUrls(imgs: unknown): string[] {
   );
 }
 
+function toIsoString(value: unknown): string | null {
+  if (!value) return null;
+  const date = value instanceof Date ? value : new Date(String(value));
+  if (Number.isNaN(date.getTime())) return null;
+  return date.toISOString();
+}
+
+function datesConflict(expected: string, actual: unknown): boolean {
+  const actualIso = toIsoString(actual);
+  if (!actualIso) return false;
+  return new Date(expected).getTime() !== new Date(actualIso).getTime();
+}
+
 export async function PATCH(
   req: NextRequest,
   {
@@ -22,7 +35,7 @@ export async function PATCH(
 ) {
   try {
     const { projectId, critiriaId } = await params;
-    const { score, note, img, imgs } = await req.json();
+    const { score, note, img, imgs, expectedUpdatedAt } = await req.json();
 
     if (score !== undefined && ![0, 1, 2].includes(score)) {
       return NextResponse.json({ error: "Invalid score" }, { status: 400 });
@@ -69,8 +82,23 @@ export async function PATCH(
         criteriaId: critiriaId,
         score: score ?? null,
         imgs: [],
+        updatedAt: new Date(),
       });
       criterion = section.criteria[section.criteria.length - 1];
+    }
+
+    if (
+      expectedUpdatedAt &&
+      criterion.updatedAt &&
+      datesConflict(String(expectedUpdatedAt), criterion.updatedAt)
+    ) {
+      return NextResponse.json(
+        {
+          error: "Criterion was updated by someone else",
+          updatedAt: toIsoString(criterion.updatedAt),
+        },
+        { status: 409 }
+      );
     }
 
     if (score !== undefined) criterion.score = score;
@@ -88,6 +116,8 @@ export async function PATCH(
       criterion.img = img || undefined;
     }
 
+    criterion.updatedAt = new Date();
+
     project.markModified("sections");
     await project.save();
 
@@ -102,6 +132,7 @@ export async function PATCH(
       success: true,
       imgs: savedImgs,
       img: savedImgs[savedImgs.length - 1] ?? null,
+      updatedAt: toIsoString(saved?.updatedAt),
     });
   } catch (err) {
     console.error(err);

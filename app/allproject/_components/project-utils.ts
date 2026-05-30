@@ -20,6 +20,7 @@ export type ApiProject = {
       note?: string;
       img?: string;
       imgs?: string[];
+      updatedAt?: string;
     }[];
   }[];
 };

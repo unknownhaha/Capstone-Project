@@ -42,9 +42,14 @@ function LoginForm() {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [show, setShow] = useState(false);
+  const [lastEmail, setLastEmail] = useState("");
 
   useEffect(() => {
     const authError = searchParams.get("error");
+    if (authError === "email_not_verified") {
+      setError("Please verify your email before logging in.");
+      return;
+    }
     if (authError === "CredentialsSignin") {
       setError("Invalid email or password.");
     }
@@ -58,6 +63,7 @@ function LoginForm() {
     const formData = new FormData(e.currentTarget);
     const email = String(formData.get("email") ?? "").trim().toLowerCase();
     const password = String(formData.get("password") ?? "");
+    setLastEmail(email);
 
     try {
       const result = await signIn("credentials", {
@@ -68,7 +74,12 @@ function LoginForm() {
       });
 
       if (result?.error || !result?.ok) {
-        setError("Invalid email or password.");
+        const code = (result as { code?: string })?.code;
+        if (code === "email_not_verified") {
+          setError("Please verify your email before logging in.");
+        } else {
+          setError("Invalid email or password.");
+        }
         return;
       }
 
@@ -197,7 +208,14 @@ function LoginForm() {
 
           <p className={styles.signup} style={{ marginTop: 12, fontSize: 13 }}>
             Need to verify your email?{" "}
-            <Link href="/verify" className={styles.signupLink}>
+            <Link
+              href={
+                lastEmail
+                  ? `/verify?email=${encodeURIComponent(lastEmail)}`
+                  : "/verify"
+              }
+              className={styles.signupLink}
+            >
               Enter OTP
             </Link>
           </p>

@@ -126,7 +126,7 @@ Capstone-Project/
 - `projectName`, `description`, `institution.address` (location from create form)
 - `coverImg` — optional card thumbnail (UploadThing); **owner-only** PATCH
 - `sections[]` — each has `code`, `selectedGroups`, `criteria[]`
-- Each **criterion**: `criteriaId`, `score` (0|1|2|null), `note`, `imgs[]` (and legacy `img`)
+- Each **criterion**: `criteriaId`, `score` (0|1|2|null), `note`, `imgs[]` (and legacy `img`), `updatedAt` (concurrency on PATCH)
 - Pre-save hook recalculates section/project totals and `completionRate`
 
 ### Standards catalog (`lib/standards/catalog.ts`)
@@ -163,7 +163,7 @@ flowchart TD
 4. **Section page**: lists sections/groups for navigation.
 5. **Criteria page**: `InspectionItemRow` — score, notes, inspection photos, reference image (ภาพอ้างอิง) + lightbox.
 
-**Multi-user editing:** last-write-wins on PATCH (no real-time sync). Two editors on the same criterion may overwrite each other.
+**Multi-user editing:** criterion PATCH uses `updatedAt` + optional `expectedUpdatedAt`. If another inspector saved first, API returns **409** and the criteria page shows: “Updated by another inspector — refresh and try again.” Without a conflict, last save wins (no real-time sync). Best practice: split sections by inspector to avoid editing the same `criteriaId` at once.
 
 ---
 
@@ -174,7 +174,7 @@ flowchart TD
 | `GET /api/project` | Returns only `session.user.id` projects |
 | `PATCH /api/project/[id]` | Supports `coverImg`, `sections`; use `toObject()` in responses |
 | `PATCH .../critiria/[critiriaId]` | **Spelled critiria** in path — changing breaks clients |
-| Criterion PATCH | Body: `score`, `note`, `img`, `imgs`; uses `markModified("sections")` on save |
+| Criterion PATCH | Body: `score`, `note`, `img`, `imgs`, optional `expectedUpdatedAt`; returns `updatedAt`; **409** on conflict |
 
 Always use `credentials: "include"` on client `fetch` for authenticated routes.
 

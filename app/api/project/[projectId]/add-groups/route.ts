@@ -2,7 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { connectDB } from "@/lib/db";
 import Project from "@/lib/model/project";
-import { buildProjectSectionsFromSelection } from "@/lib/project-sections";
+import {
+  buildProjectSectionsFromSelection,
+  type ProjectCriterion,
+  type ProjectSection,
+} from "@/lib/project-sections";
 import { canEditProject } from "@/lib/project-access";
 
 export async function POST(
@@ -39,12 +43,16 @@ export async function POST(
 
     // Merge sections: if section exists, add missing criteria and selectedGroups; otherwise push
     for (const ns of newSections) {
-      const exist = project.sections.find((s: any) => s.code === ns.code);
+      const exist = project.sections.find(
+        (s: ProjectSection) => s.code === ns.code
+      );
       if (exist) {
         // merge selectedGroups
         exist.selectedGroups = Array.from(new Set([...(exist.selectedGroups ?? []), ...(ns.selectedGroups ?? [])]));
 
-        const existingIds = new Set(exist.criteria.map((c: any) => c.criteriaId));
+        const existingIds = new Set(
+          exist.criteria.map((c: ProjectCriterion) => c.criteriaId)
+        );
         for (const c of ns.criteria) {
           if (!existingIds.has(c.criteriaId)) {
             exist.criteria.push({ criteriaId: c.criteriaId, score: null });

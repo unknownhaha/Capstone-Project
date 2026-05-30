@@ -60,7 +60,7 @@ export async function PUT(
     const body = await req.json();
 
    
-    const updateFields: any = {
+    const updateFields: Record<string, string> = {
       ...(body.email !== undefined && { "contact.email": body.email }),
       ...(body.phone !== undefined && { "contact.phone": body.phone }),
       ...(body.address !== undefined && { "contact.address": body.address }),
