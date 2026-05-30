@@ -94,8 +94,77 @@
 }
 
 .profile {
-  background: #ddd;
+  /* Progress donut chart background: 75% progress example */
+  background: conic-gradient(#57cc99 75%, rgba(255, 255, 255, 0.2) 0);
   border-radius: 50%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border: 4px solid rgba(255, 255, 255, 0.1); /* Adds a subtle glass-like outer border */
+}
+
+/* Inner cutout to make it look like a donut ring */
+.profile::before {
+  content: "";
+  position: absolute;
+  inset: 8px; /* Thinner ring to give more room for text */
+  background: #65a1a3; /* Blends roughly with your phone's gradient background */
+  border-radius: 50%;
+  z-index: 1;
+  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.15); /* Adds a 3D inner depth effect */
+}
+
+/* Content inside the progress circle */
+.profileContent {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+}
+
+.profileContent h3 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.profileContent span {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.9;
+}
+
+.profileDivider {
+  width: 50%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  margin: 6px 0;
+}
+
+.profileStats {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.profileStats p {
+  margin: 0;
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.profileStats p strong {
+  display: block;
+  font-size: 11px;
+  color: white;
 }
 
 /* ===== SEARCH ===== */
@@ -631,21 +700,25 @@
   transform: translateX(-50%);
   background: rgba(0,0,0,0.85);
   color: white;
-  padding: 6px 8px;
+  padding: 4px 6px;
   border-radius: 8px;
-  font-size: 12px;
+  font-size: 10px;
+  max-width: 350px;
+  text-align: center;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
   transition: opacity 0.12s ease, visibility 0.12s ease, transform 0.12s ease;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   z-index: 60;
 }
 .addCriteriaBtn:hover .addCriteriaTooltip,
-.addCriteriaBtn:focus .addCriteriaTooltip {
+.addCriteriaBtn:focus-visible .addCriteriaTooltip {
   opacity: 1;
   visibility: visible;
-  transform: translateX(-50%) translateY(-4px);
+  transform: translateX(-50%) translateY(0);
 }
 
 /* Floating action button near section list */
@@ -669,17 +742,22 @@
 }
 .fabAddTooltip {
   position: fixed;
-  right: 86px;
-  bottom: 110px;
+  right: 18px;
+  bottom: 160px;
   background: rgba(0,0,0,0.85);
   color: white;
-  padding: 6px 8px;
+  padding: 4px 6px;
   border-radius: 8px;
-  font-size: 12px;
+  font-size: 10px;
+  max-width: 350px;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   opacity: 0;
   transition: opacity 0.12s ease;
   pointer-events: none;
   z-index: 60;
 }
 .fabAdd:hover + .fabAddTooltip,
-.fabAdd:focus + .fabAddTooltip { opacity: 1 }
+.fabAdd:focus-visible + .fabAddTooltip { opacity: 1 }
