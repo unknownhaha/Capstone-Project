@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/db";
 import User from "@/lib/model/user";
 import OTP from "@/lib/model/otp";
-import { sendOTPEmail } from "@/lib/email";
+import { OTP_EMAIL_NOT_CONFIGURED, sendOTPEmail } from "@/lib/email";
 
 export async function POST(req: NextRequest) {
   try {
@@ -54,11 +54,21 @@ export async function POST(req: NextRequest) {
       expiresAt,
     });
 
-    // Send OTP email
-    await sendOTPEmail(email, otpCode);
+    const emailResult = await sendOTPEmail(email, otpCode);
 
     return NextResponse.json(
-      { message: "User created. Please verify your email with the OTP sent to your inbox.", email },
+      {
+        message: emailResult.success
+          ? "User created. Please verify your email with the OTP sent to your inbox."
+          : "Account created, but the verification email could not be sent. Use Resend on the verify page.",
+        email,
+        emailSent: emailResult.success,
+        emailError: emailResult.success
+          ? undefined
+          : typeof emailResult.error === "string"
+            ? emailResult.error
+            : OTP_EMAIL_NOT_CONFIGURED,
+      },
       { status: 201 }
     );
 

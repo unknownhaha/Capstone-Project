@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import User from "@/lib/model/user";
 import OTP from "@/lib/model/otp";
-import { sendOTPEmail } from "@/lib/email";
+import { sendOTPEmail, OTP_EMAIL_SEND_FAILED } from "@/lib/email";
 
 export async function POST(req: NextRequest) {
   try {
@@ -47,8 +47,18 @@ export async function POST(req: NextRequest) {
       expiresAt,
     });
 
-    // Send new OTP email
-    await sendOTPEmail(email, otpCode);
+    const emailResult = await sendOTPEmail(email, otpCode);
+    if (!emailResult.success) {
+      return NextResponse.json(
+        {
+          error:
+            typeof emailResult.error === "string"
+              ? emailResult.error
+              : OTP_EMAIL_SEND_FAILED,
+        },
+        { status: 503 }
+      );
+    }
 
     return NextResponse.json(
       { message: "New OTP sent to your email", success: true },

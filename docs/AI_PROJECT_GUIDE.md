@@ -59,6 +59,8 @@ Optional:
 
 See [`.env.example`](../.env.example) for a template.
 
+**OTP email troubleshooting:** Mail is sent from `EMAIL_USER` to the address entered at register. Use a Gmail **App Password** in `EMAIL_PASS`. If send fails, the API returns `emailSent: false` or resend returns 503; check the server terminal for `OTP email skipped` or `Error sending OTP email`. Ask recipients to check spam.
+
 `lib/db.ts` throws at **connect time** if `MONGO_URI` is missing (not at import).
 
 ---

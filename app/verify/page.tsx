@@ -7,6 +7,7 @@ function VerifyForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const email = searchParams.get("email") || "";
+  const emailFailed = searchParams.get("emailFailed") === "1";
   const inputs = useRef<(HTMLInputElement | null)[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -109,6 +110,23 @@ function VerifyForm() {
         <p className="desc">
           We&apos;ve sent you a one-time code to {email}. Enter it below to verify your email.
         </p>
+
+        {emailFailed && !error && (
+          <div
+            style={{
+              padding: "10px",
+              background: "#fff3cd",
+              color: "#664d03",
+              borderRadius: "8px",
+              marginBottom: "16px",
+              fontSize: "14px",
+            }}
+          >
+            Your account was created, but the verification email could not be sent.
+            Ask whoever runs the app to set EMAIL_USER and EMAIL_PASS in .env, then tap
+            Resend Code below.
+          </div>
+        )}
 
         {error && (
           <div style={{ padding: "10px", background: "#f8d7da", color: "#721c24", borderRadius: "8px", marginBottom: "16px", fontSize: "14px" }}>

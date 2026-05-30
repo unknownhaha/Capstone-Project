@@ -129,9 +129,19 @@ export async function POST_RESEND(req: NextRequest) {
       expiresAt,
     });
 
-    // Send new OTP email
-    const { sendOTPEmail } = await import("@/lib/email");
-    await sendOTPEmail(email, otpCode);
+    const { sendOTPEmail, OTP_EMAIL_SEND_FAILED } = await import("@/lib/email");
+    const emailResult = await sendOTPEmail(email, otpCode);
+    if (!emailResult.success) {
+      return NextResponse.json(
+        {
+          error:
+            typeof emailResult.error === "string"
+              ? emailResult.error
+              : OTP_EMAIL_SEND_FAILED,
+        },
+        { status: 503 }
+      );
+    }
 
     return NextResponse.json(
       { message: "New OTP sent to your email", success: true },

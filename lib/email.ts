@@ -12,13 +12,19 @@ function getEmailConfig() {
   return { user, pass, from };
 }
 
+export const OTP_EMAIL_NOT_CONFIGURED =
+  "Email is not configured on the server. Add EMAIL_USER and EMAIL_PASS to .env (Gmail app password).";
+
+export const OTP_EMAIL_SEND_FAILED =
+  "Could not send email. Check Gmail app password and spam folder, then try Resend.";
+
 export async function sendOTPEmail(email: string, code: string) {
   const config = getEmailConfig();
   if (!config) {
     console.error(
       "OTP email skipped: set EMAIL_USER and EMAIL_PASS in .env (see .env.example)"
     );
-    return { success: false, error: "Email not configured" };
+    return { success: false, error: OTP_EMAIL_NOT_CONFIGURED };
   }
 
   const transporter = nodemailer.createTransport({
@@ -47,6 +53,6 @@ export async function sendOTPEmail(email: string, code: string) {
     return { success: true };
   } catch (error) {
     console.error("Error sending OTP email:", error);
-    return { success: false, error };
+    return { success: false, error: OTP_EMAIL_SEND_FAILED };
   }
 }

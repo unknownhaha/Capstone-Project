@@ -78,8 +78,11 @@ export default function RegisterPage() {
           return;
         }
 
-        // Redirect to OTP verification page
-        router.push(`/verify?email=${encodeURIComponent(data.email)}`);
+        const verifyUrl = new URLSearchParams({ email: data.email });
+        if (data.emailSent === false) {
+          verifyUrl.set("emailFailed", "1");
+        }
+        router.push(`/verify?${verifyUrl.toString()}`);
       } catch {
         setError("Something went wrong. Please try again.");
       }
