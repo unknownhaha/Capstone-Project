@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import { connectDB } from "@/lib/db";
 import Project from "@/lib/model/project";
 import { buildProjectSectionsFromSelection } from "@/lib/project-sections";
+import { canEditProject } from "@/lib/project-access";
 
 export async function POST(
   req: NextRequest,
@@ -33,7 +34,7 @@ export async function POST(
     const project = await Project.findById(projectId);
     if (!project) return NextResponse.json({ error: "Project not found" }, { status: 404 });
 
-    if (project.userId.toString() !== session.user.id)
+    if (!canEditProject(project, session.user.id))
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
     // Merge sections: if section exists, add missing criteria and selectedGroups; otherwise push

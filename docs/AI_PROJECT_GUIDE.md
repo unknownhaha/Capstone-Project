@@ -50,7 +50,14 @@ AUTH_SECRET=        # Auth.js / NextAuth secret
 UPLOADTHING_TOKEN=  # UploadThing API token
 ```
 
-Optional for production: `AUTH_URL` (e.g. `http://localhost:3000`).
+Optional:
+
+- `AUTH_URL` — e.g. `http://localhost:3000` (invite link base URL)
+- `EMAIL_SERVICE` — default `gmail`
+- `EMAIL_USER` / `EMAIL_PASS` — SMTP credentials for OTP mail (`lib/email.ts`)
+- `EMAIL_FROM` — sender address (defaults to `EMAIL_USER`)
+
+See [`.env.example`](../.env.example) for a template.
 
 `lib/db.ts` throws at **connect time** if `MONGO_URI` is missing (not at import).
 

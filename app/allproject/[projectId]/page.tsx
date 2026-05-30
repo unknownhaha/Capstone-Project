@@ -70,6 +70,10 @@ export default function ProjectInspectionPage() {
   }
 
   const sectionViews = buildSectionViews(project);
+  const canEdit =
+    project.role === "owner" ||
+    project.role === "editor" ||
+    project.role === undefined;
 
   return (
       <PhoneShell
@@ -78,16 +82,20 @@ export default function ProjectInspectionPage() {
         showMenu={false}
         headerRight={
           <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-            <button
-              type="button"
-              onClick={() => setOpenAdd(true)}
-              className={styles.addCriteriaBtn}
-              aria-label="Add criteria"
-            >
-              <span className={styles.addCriteriaIcon}>＋</span>
-              <span className={styles.addCriteriaBadge}>{Math.round(project.totalCriteria ?? 0)}</span>
-              <span className={styles.addCriteriaTooltip}>Add new criteria</span>
-            </button>
+            {canEdit && (
+              <button
+                type="button"
+                onClick={() => setOpenAdd(true)}
+                className={styles.addCriteriaBtn}
+                aria-label="Add criteria"
+              >
+                <span className={styles.addCriteriaIcon}>＋</span>
+                <span className={styles.addCriteriaBadge}>
+                  {Math.round(project.totalCriteria ?? 0)}
+                </span>
+                <span className={styles.addCriteriaTooltip}>Add new criteria</span>
+              </button>
+            )}
             <Link href="/allproject" style={{ color: "white", fontSize: 24, marginBottom: 15 }}>
               ✕
             </Link>
@@ -128,25 +136,38 @@ export default function ProjectInspectionPage() {
           projectId={projectId}
           sections={sectionViews}
         />
-        <button className={styles.fabAdd} onClick={() => setOpenAdd(true)} aria-label="Add criteria">＋</button>
-        <div className={styles.fabAddTooltip}>Add new criteria</div>
-        <AddCriteriaModal
-          open={openAdd}
-          onClose={() => setOpenAdd(false)}
-          projectId={projectId!}
-          onAdded={() => {
-            // reload project
-            setLoading(true);
-            (async () => {
-              try {
-                const res = await fetch(`/api/project/${projectId}`, { credentials: "include" });
-                if (res.ok) setProject(await res.json());
-              } finally {
-                setLoading(false);
-              }
-            })();
-          }}
-        />
+        {canEdit && (
+          <>
+            <button
+              className={styles.fabAdd}
+              onClick={() => setOpenAdd(true)}
+              aria-label="Add criteria"
+            >
+              ＋
+            </button>
+            <div className={styles.fabAddTooltip}>Add new criteria</div>
+          </>
+        )}
+        {canEdit && (
+          <AddCriteriaModal
+            open={openAdd}
+            onClose={() => setOpenAdd(false)}
+            projectId={projectId!}
+            onAdded={() => {
+              setLoading(true);
+              (async () => {
+                try {
+                  const res = await fetch(`/api/project/${projectId}`, {
+                    credentials: "include",
+                  });
+                  if (res.ok) setProject(await res.json());
+                } finally {
+                  setLoading(false);
+                }
+              })();
+            }}
+          />
+        )}
       </div>
     </PhoneShell>
   );

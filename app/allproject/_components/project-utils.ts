@@ -10,6 +10,7 @@ export type ApiProject = {
   completionRate?: number;
   role?: "owner" | "editor";
   collaborationEnabled?: boolean;
+  totalCriteria?: number;
   sections: {
     code: string;
     selectedGroups?: string[];
