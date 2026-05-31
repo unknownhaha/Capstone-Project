@@ -325,6 +325,7 @@
   overflow-y: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  align-content: start;
 }
 
 /* Must follow .grid — overrides 2-column layout when empty */

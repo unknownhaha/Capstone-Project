@@ -10,7 +10,7 @@ const f = createUploadthing();
 
 export const uploadRouter = {
   profileImg: f({
-    image: { maxFileSize: "4MB" },
+    image: { maxFileSize: "8MB" },
   })
     .middleware(async () => {
       const session = await auth();
@@ -24,7 +24,7 @@ export const uploadRouter = {
         await connectDB();
 
         const userId = metadata.userId;
-        const imageUrl = file.url ?? file.ufsUrl;
+        const imageUrl = file.ufsUrl ?? file.url ?? (file as any).appUrl ?? (file as any).fileUrl;
 
         if (!imageUrl) {
           return;
@@ -48,7 +48,7 @@ export const uploadRouter = {
     }),
 
   inspectionImg: f({
-    image: { maxFileSize: "8MB", maxFileCount: 10 },
+    image: { maxFileSize: "16MB", maxFileCount: 10 },
   })
     .middleware(async () => {
       const session = await auth();
@@ -58,11 +58,11 @@ export const uploadRouter = {
       return { userId: session.user.id };
     })
     .onUploadComplete(async ({ file }) => {
-      return { url: file.url ?? file.ufsUrl };
+      return { url: file.ufsUrl ?? file.url ?? (file as any).appUrl ?? (file as any).fileUrl };
     }),
 
   projectCoverImg: f({
-    image: { maxFileSize: "4MB", maxFileCount: 1 },
+    image: { maxFileSize: "16MB", maxFileCount: 1 },
   })
     .middleware(async () => {
       const session = await auth();
@@ -72,7 +72,7 @@ export const uploadRouter = {
       return { userId: session.user.id };
     })
     .onUploadComplete(async ({ file }) => {
-      return { url: file.url ?? file.ufsUrl };
+      return { url: file.ufsUrl ?? file.url ?? (file as any).appUrl ?? (file as any).fileUrl };
     }),
 } satisfies FileRouter;
 
