@@ -25,6 +25,25 @@ export default function AllProjectPage() {
 
   const hasSearchQuery = searchQuery.trim().length > 0;
 
+  // Log projects to see what fields actually exist! Check your browser's Developer Tools console.
+  console.log("PROJECT DATA:", projects);
+
+  // Calculate average progress across all projects
+  const totalProgress = projects.reduce((sum, p) => {
+    const completionRate = Number((p as any).completionRate || 0);
+    return sum + completionRate;
+  }, 0);
+  
+  const progressPercentage = projects.length === 0 ? 0 : Math.round(totalProgress / projects.length);
+  
+  // Count Done and Active projects
+  const doneCount = projects.filter(p => {
+    const completionRate = Number((p as any).completionRate || 0);
+    return completionRate >= 100;
+  }).length;
+  
+  const activeCount = projects.length - doneCount;
+
   useEffect(() => {
     if (!isAuthenticated) return;
 
@@ -83,7 +102,22 @@ export default function AllProjectPage() {
         >
           +
         </div>
-        <Link href="/profile" className={styles.profile} />
+        <Link 
+          href="/profile" 
+          className={styles.profile}
+          style={{ background: `conic-gradient(#57cc99 ${progressPercentage}%, rgba(255, 255, 255, 0.2) 0)` }}
+        >
+          <div className={styles.profileContent}>
+            <h3>{progressPercentage}%</h3>
+            <span>Completed</span>
+            <hr className={styles.profileDivider} />
+            <div className={styles.profileStats}>
+              <p><strong>{projects.length}</strong> All</p>
+              <p><strong>{doneCount}</strong> Done</p>
+              <p><strong>{activeCount}</strong> Active</p>
+            </div>
+          </div>
+        </Link>
       </div>
 
       <div className={styles.search}>
