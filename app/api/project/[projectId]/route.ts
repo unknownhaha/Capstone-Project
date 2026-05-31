@@ -10,6 +10,7 @@ import {
 } from "@/lib/project-access";
 import { serializeProjectForUser } from "@/lib/project-serialize";
 import { validateProjectPatchBody } from "@/lib/project-patch";
+import { canMarkProjectComplete, getIncompleteCompletionMessage } from "@/lib/project-complete";
 
 export async function GET(
   req: NextRequest,
@@ -81,7 +82,23 @@ export async function PATCH(
     }
 
     if (body.status !== undefined) {
-      project.status = body.status;
+      const nextStatus = String(body.status);
+
+      if (nextStatus === "completed") {
+        if (!canMarkProjectComplete(project)) {
+          return NextResponse.json(
+            { error: getIncompleteCompletionMessage() },
+            { status: 400 }
+          );
+        }
+        project.completedAt = new Date();
+      }
+
+      if (nextStatus === "draft") {
+        project.completedAt = null;
+      }
+
+      project.status = nextStatus;
     }
 
     if (body.buildingType !== undefined) {
@@ -96,14 +113,9 @@ export async function PATCH(
 
     await project.save();
 
-    const saved =
-      typeof project.toObject === "function" ? project.toObject() : project;
-
-    return NextResponse.json({
-      ...saved,
-      _id: saved._id?.toString?.() ?? saved._id,
-      coverImg: saved.coverImg ?? body.coverImg ?? project.coverImg,
-    });
+    return NextResponse.json(
+      serializeProjectForUser(project, session.user.id)
+    );
   } catch (err) {
     console.error(err);
     return NextResponse.json({ error: "Server error" }, { status: 500 });

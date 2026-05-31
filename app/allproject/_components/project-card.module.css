@@ -144,6 +144,11 @@
   color: #333;
 }
 
+.statusDone {
+  background: #57cc99;
+  color: #fff;
+}
+
 .sharedBadge {
   display: block;
   max-width: 100%;

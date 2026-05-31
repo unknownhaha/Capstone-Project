@@ -233,8 +233,14 @@ export default function ProjectCard({
           <h4>{project.projectName}</h4>
           <span>{totalItems} Checkpoints</span>
         </div>
-        <div className={styles.status}>
-          {Math.round(project.completionRate ?? 0)}% Done
+        <div
+          className={`${styles.status} ${
+            project.status === "completed" ? styles.statusDone : ""
+          }`}
+        >
+          {project.status === "completed"
+            ? "Completed"
+            : `${Math.round(project.completionRate ?? 0)}% progress`}
         </div>
       </button>
 

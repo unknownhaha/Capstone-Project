@@ -40,6 +40,7 @@ export function serializeProjectForUser(
     ...raw,
     _id: String(raw._id ?? ""),
     role,
+    status: raw.status === "completed" ? "completed" : "draft",
     collaborationEnabled: Boolean(raw.collaborationEnabled),
     ...(ownerFirstName ? { ownerFirstName } : {}),
   };

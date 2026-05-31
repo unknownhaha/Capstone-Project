@@ -33,21 +33,15 @@ export default function AllProjectPage() {
 
   const hasSearchQuery = searchQuery.trim().length > 0;
 
-  // Calculate average progress across all projects
-  const totalProgress = projects.reduce((sum, p) => {
-    const completionRate = Number((p as any).completionRate || 0);
-    return sum + completionRate;
-  }, 0);
-  
-  const progressPercentage = projects.length === 0 ? 0 : Math.round(totalProgress / projects.length);
-  
-  // Count Done and Active projects
-  const doneCount = projects.filter(p => {
-    const completionRate = Number((p as any).completionRate || 0);
-    return completionRate >= 100;
-  }).length;
-  
+  const doneCount = projects.filter((p) => p.status === "completed").length;
   const activeCount = projects.length - doneCount;
+  const progressPercentage =
+    projects.length === 0
+      ? 0
+      : Math.round(
+          projects.reduce((sum, p) => sum + (p.completionRate ?? 0), 0) /
+            projects.length
+        );
 
   useEffect(() => {
     if (!isAuthenticated) return;
@@ -65,6 +59,15 @@ export default function AllProjectPage() {
     };
 
     load();
+
+    const refreshOnVisible = () => {
+      if (document.visibilityState === "visible") {
+        load();
+      }
+    };
+
+    document.addEventListener("visibilitychange", refreshOnVisible);
+    return () => document.removeEventListener("visibilitychange", refreshOnVisible);
   }, [isAuthenticated]);
 
   function tryOpenCreate() {
@@ -125,11 +128,11 @@ export default function AllProjectPage() {
           style={{
             background: `conic-gradient(#57cc99 ${progressPercentage}%, rgba(255, 255, 255, 0.2) 0)`,
           }}
-          aria-label={`Overall completion ${progressPercentage} percent`}
+          aria-label={`Overall inspection progress ${progressPercentage} percent`}
         >
           <div className={styles.profileContent}>
             <h3>{progressPercentage}%</h3>
-            <span>Completed</span>
+            <span>Overall Progress</span>
             <hr className={styles.profileDivider} />
             <div className={styles.profileStats}>
               <p><strong>{projects.length}</strong> All</p>

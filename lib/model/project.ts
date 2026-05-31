@@ -119,6 +119,11 @@ const projectSchema = new mongoose.Schema(
       default: "draft",
     },
 
+    completedAt: {
+      type: Date,
+      default: null,
+    },
+
     collaborationEnabled: {
       type: Boolean,
       default: false,
