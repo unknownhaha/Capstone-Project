@@ -222,6 +222,52 @@
   cursor: wait;
 }
 
+.shareSecondaryBtn {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px;
+  border: 1px solid #2d6a6a;
+  border-radius: 10px;
+  background: #fff;
+  color: #2d6a6a;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.shareSecondaryBtn:hover:not(:disabled) {
+  background: #f0f7f7;
+}
+
+.shareSecondaryBtn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.shareDangerBtn {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  background: #fdecea;
+  color: #c62828;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.shareDangerBtn:hover:not(:disabled) {
+  background: #f9d5d2;
+}
+
+.shareDangerBtn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
 .shareCancelBtn {
   display: block;
   width: 100%;

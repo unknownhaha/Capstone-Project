@@ -1,37 +1,107 @@
 import { NextResponse } from "next/server";
 
-export function middleware() {
-  return NextResponse.next();
-}
-/*
-import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+
 import { getToken } from "next-auth/jwt";
 
+import { isPublicApiPath } from "@/lib/api-public-paths";
+
+
+
+const PUBLIC_PAGE_EXACT = ["/login", "/register", "/verify"] as const;
+
+
+
+function isPublicPagePath(pathname: string): boolean {
+
+  if (PUBLIC_PAGE_EXACT.includes(pathname as (typeof PUBLIC_PAGE_EXACT)[number])) {
+
+    return true;
+
+  }
+
+  if (pathname.startsWith("/join/")) {
+
+    return true;
+
+  }
+
+  return false;
+
+}
+
+
+
 export async function middleware(request: NextRequest) {
-  const token = await getToken({ req: request });
+
+  const token = await getToken({
+
+    req: request,
+
+    secret: process.env.AUTH_SECRET,
+
+  });
+
   const { pathname } = request.nextUrl;
 
- 
-  const publicRoutes = ["/", "/login", "/register"];
 
-  if (publicRoutes.includes(pathname)) {
-   
-    if (token && pathname === "/login") {
-      return NextResponse.redirect(new URL("/profile", request.url));
+
+  if (pathname.startsWith("/api/")) {
+    if (isPublicApiPath(pathname)) {
+      return NextResponse.next();
     }
+
+    if (!token) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     return NextResponse.next();
   }
 
- 
-  if (!token) {
-    return NextResponse.redirect(new URL("/login", request.url));
+
+
+  if (isPublicPagePath(pathname)) {
+
+    if (token && pathname === "/login") {
+
+      return NextResponse.redirect(new URL("/profile", request.url));
+
+    }
+
+    return NextResponse.next();
+
   }
 
+
+
+  if (!token) {
+
+    const loginUrl = new URL("/login", request.url);
+
+    const callback = pathname + request.nextUrl.search;
+
+    if (callback && callback !== "/login") {
+
+      loginUrl.searchParams.set("callbackUrl", callback);
+
+    }
+
+    return NextResponse.redirect(loginUrl);
+
+  }
+
+
+
   return NextResponse.next();
+
 }
 
 
+
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
-};*/
+
+  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+
+};
+
+

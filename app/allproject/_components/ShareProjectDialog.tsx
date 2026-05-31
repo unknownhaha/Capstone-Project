@@ -8,7 +8,7 @@ type ShareProjectDialogProps = {
   projectId: string;
   collaborationEnabled: boolean;
   onClose: () => void;
-  onCollaborationEnabled: () => void;
+  onCollaborationChange: (enabled: boolean) => void;
 };
 
 export default function ShareProjectDialog({
@@ -16,7 +16,7 @@ export default function ShareProjectDialog({
   projectId,
   collaborationEnabled,
   onClose,
-  onCollaborationEnabled,
+  onCollaborationChange,
 }: ShareProjectDialogProps) {
   const [inviteUrl, setInviteUrl] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -72,7 +72,7 @@ export default function ShareProjectDialog({
     };
   }, [open, enabled, projectId]);
 
-  async function handleEnable() {
+  async function postCollaboration(action: "enable" | "disable" | "rotate_invite") {
     setBusy(true);
     setError(null);
 
@@ -81,23 +81,48 @@ export default function ShareProjectDialog({
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "enable" }),
+        body: JSON.stringify({ action }),
       });
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error ?? "Could not enable collaboration");
-        return;
+        setError(data.error ?? "Request failed");
+        return null;
       }
 
-      setEnabled(true);
-      setInviteUrl(data.inviteUrl ?? null);
-      onCollaborationEnabled();
+      return data as { collaborationEnabled?: boolean; inviteUrl?: string | null };
     } catch {
-      setError("Could not enable collaboration");
+      setError("Request failed");
+      return null;
     } finally {
       setBusy(false);
     }
+  }
+
+  async function handleEnable() {
+    const data = await postCollaboration("enable");
+    if (!data) return;
+
+    setEnabled(true);
+    setInviteUrl(data.inviteUrl ?? null);
+    onCollaborationChange(true);
+  }
+
+  async function handleDisable() {
+    const data = await postCollaboration("disable");
+    if (!data) return;
+
+    setEnabled(false);
+    setInviteUrl(null);
+    onCollaborationChange(false);
+  }
+
+  async function handleRotateInvite() {
+    const data = await postCollaboration("rotate_invite");
+    if (!data) return;
+
+    setInviteUrl(data.inviteUrl ?? null);
+    setCopied(false);
   }
 
   async function handleCopy() {
@@ -122,7 +147,12 @@ export default function ShareProjectDialog({
         aria-label="Close share dialog"
         onClick={onClose}
       />
-      <div className={styles.shareDialog} role="dialog" aria-modal="true" aria-labelledby="share-title">
+      <div
+        className={styles.shareDialog}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="share-title"
+      >
         <h3 id="share-title" className={styles.shareTitle}>
           Share project
         </h3>
@@ -157,6 +187,22 @@ export default function ShareProjectDialog({
               onClick={handleCopy}
             >
               {copied ? "Copied!" : "Copy link"}
+            </button>
+            <button
+              type="button"
+              className={styles.shareSecondaryBtn}
+              disabled={busy}
+              onClick={handleRotateInvite}
+            >
+              {busy ? "Working…" : "Reset invite link"}
+            </button>
+            <button
+              type="button"
+              className={styles.shareDangerBtn}
+              disabled={busy}
+              onClick={handleDisable}
+            >
+              Disable collaboration
             </button>
           </>
         )}

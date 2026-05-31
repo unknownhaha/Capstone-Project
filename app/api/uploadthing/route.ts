@@ -4,57 +4,48 @@ import { auth } from "@/auth";
 import User from "@/lib/model/user";
 import { connectDB } from "@/lib/db";
 
+export const runtime = "nodejs";
+
 const f = createUploadthing();
 
 export const uploadRouter = {
   profileImg: f({
     image: { maxFileSize: "4MB" },
   })
-
-  
-  .middleware(() => {
-    return {
-      userId: "680f1a1a1a1a1a1a1a1a1a01",
-    };
-  })
-
-  .onUploadComplete(async ({ metadata, file }) => {
-    console.log("FILE FULL:", file); 
-    try {
-      await connectDB();
-
-      const userId = "680f1a1a1a1a1a1a1a1a1a01"; 
-
-    
-      const imageUrl = file.url;
-      console.log("UserId:", metadata.userId);
-      console.log("Type:", typeof metadata.userId);
-      console.log("File URL:", file.ufsUrl);
-      if (!imageUrl) {
-        console.log(" No file.url returned:", file);
-        return;
+    .middleware(async () => {
+      const session = await auth();
+      if (!session?.user?.id) {
+        throw new UploadThingError("Unauthorized");
       }
+      return { userId: session.user.id };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      try {
+        await connectDB();
 
-      const updatedUser = await User.findByIdAndUpdate(
-        userId,
-        { profileImg: imageUrl },
-        { new: true }
-      );
+        const userId = metadata.userId;
+        const imageUrl = file.url ?? file.ufsUrl;
 
-      if (!updatedUser) {
-        console.log(" User not found in DB");
-        return;
+        if (!imageUrl) {
+          return;
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(
+          userId,
+          { profileImg: imageUrl },
+          { new: true }
+        );
+
+        if (!updatedUser) {
+          console.error("[uploadthing] profileImg: user not found", userId);
+          return;
+        }
+
+        return { success: true, userId };
+      } catch (err) {
+        console.error("[uploadthing] profileImg:", err);
       }
-
-      console.log(" Upload success:", updatedUser);
-
-      return { success: true, userId };
-
-    } catch (err) {
-      console.error(" UploadThing crash:", err);
-      return;
-    }
-  }),
+    }),
 
   inspectionImg: f({
     image: { maxFileSize: "8MB", maxFileCount: 10 },

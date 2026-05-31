@@ -1,19 +1,20 @@
 .container {
-    display : flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .name {
   display: flex;
-  gap: 0.5rem; 
-   font-size: 16px;
+  gap: 0.5rem;
+  font-size: 16px;
   margin-left: 1rem;
   width: 10rem;
-  padding-right : 2px;
+  padding-right: 2px;
   color: #1a2e30;
 }
+
 .name input {
   background-color: transparent;
   border: none;
@@ -24,90 +25,126 @@
   width: 7rem;
   color: #1a2e30;
 }
+
 .imgWrapper {
-    position: relative; 
-    flex-shrink: 0;
-    width: 4rem;
-    height:4rem;
-    border-radius: 50%;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid #5f9ea0;
-}
-.imgWrapper > div,
-.imgWrapper form {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-}
-.uploadBtn input {
-    display: none;
-}
-
-.uploadBtn {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;   
-    height: 100%;  
-    background-color: rgba(0, 0, 0, 0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;  /* also fix this */
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 2;
-}
-
-
-.img{
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-}
-
-.overlay {
-    width: 5.625rem;
-    height: 5.625rem;
-}
-
-.profileContainer {
-    position: relative;
-    width: 34.375rem;
-    height: 12.5rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    
-}
-.uploadBtn {
- 
   position: relative;
+  flex-shrink: 0;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #5f9ea0;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-
-.overlay {
-  pointer-events: none;
+.imgWrapper > div,
+.imgWrapper form,
+.uploadContainer {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hide UploadThing "image (4MB)" label — project does not use Tailwind `hidden` */
+.hideAllowedContent,
+.uploadContainer [data-ut-element="allowed-content"] {
+  display: none !important;
+}
+
+.emptyButton {
+  display: block;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.uploadContainer label[data-ut-element="button"] {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  border-radius: 50%;
+}
+
+.img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
-  background-color: rgba(0, 0, 0, 0.6);
 }
+
+.uploadBtn {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition:
+    opacity 0.25s ease,
+    background-color 0.2s ease;
+  z-index: 2;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+}
+
+.uploadBtn input {
+  display: none;
+}
+
 .uploadBtn:disabled {
   pointer-events: none;
   cursor: default;
 }
 
+.overlay {
+  pointer-events: none;
+  width: 2rem;
+  height: 2rem;
+  color: #fff;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
 
 .editing .uploadBtn {
   opacity: 1;
+}
+
+.editing:hover .uploadBtn:not(:disabled) {
+  background-color: rgba(0, 0, 0, 0.72);
+}
+
+.editing:hover .overlay {
+  transform: scale(1.12);
+}
+
+.editing:hover {
+  border-color: #4d8a8c;
+  box-shadow: 0 0 0 3px rgba(95, 158, 160, 0.28);
+}
+
+.editing:active .uploadBtn:not(:disabled) {
+  background-color: rgba(0, 0, 0, 0.82);
+}
+
+.editing:active .overlay {
+  transform: scale(1.05);
 }

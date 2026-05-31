@@ -227,10 +227,10 @@ export default function ProjectCard({
         projectId={String(project._id)}
         collaborationEnabled={Boolean(project.collaborationEnabled)}
         onClose={() => setShareOpen(false)}
-        onCollaborationEnabled={() => {
+        onCollaborationChange={(collaborationEnabled) => {
           onUpdate({
             ...project,
-            collaborationEnabled: true,
+            collaborationEnabled,
           });
         }}
       />

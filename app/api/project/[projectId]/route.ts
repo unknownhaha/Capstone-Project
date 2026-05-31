@@ -9,6 +9,7 @@ import {
   isOwner,
 } from "@/lib/project-access";
 import { serializeProjectForUser } from "@/lib/project-serialize";
+import { validateProjectPatchBody } from "@/lib/project-patch";
 
 export async function GET(
   req: NextRequest,
@@ -45,6 +46,14 @@ export async function PATCH(
     const { projectId } = await params;
     const body = await req.json();
 
+    const patchError = validateProjectPatchBody(body);
+    if (patchError) {
+      return NextResponse.json(
+        { error: patchError.error },
+        { status: patchError.status }
+      );
+    }
+
     const session = await auth();
     if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
@@ -63,8 +72,26 @@ export async function PATCH(
       project.coverImg = body.coverImg;
     }
 
-    if (body.sections !== undefined) {
-      project.sections = body.sections;
+    if (body.projectName !== undefined) {
+      project.projectName = String(body.projectName).trim();
+    }
+
+    if (body.description !== undefined) {
+      project.description = String(body.description).trim();
+    }
+
+    if (body.status !== undefined) {
+      project.status = body.status;
+    }
+
+    if (body.buildingType !== undefined) {
+      project.buildingType = body.buildingType;
+    }
+
+    if (body.institution !== undefined) {
+      const inst = body.institution as { name?: string; address?: string };
+      if (inst.name !== undefined) project.institution.name = inst.name;
+      if (inst.address !== undefined) project.institution.address = inst.address;
     }
 
     await project.save();

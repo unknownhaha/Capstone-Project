@@ -89,5 +89,50 @@ console.log("\n[6] Email uses environment variables");
 assert("email reads EMAIL_USER", fileIncludes("lib/email.ts", "EMAIL_USER"));
 assert("email has no hardcoded gmail pass", !fileIncludes("lib/email.ts", "dviz xyqt"));
 
+console.log("\n[7] Production hygiene (no test hardcodes)");
+assert(
+  "profile has no test user id",
+  !fileIncludes("app/profile/_components/profile.tsx", "680f1a1a")
+);
+assert(
+  "uploadthing profileImg uses session",
+  fileIncludes("app/api/uploadthing/route.ts", "session.user.id")
+);
+assert(
+  "users GET enforces session",
+  fileIncludes("app/api/users/[id]/route.ts", "session.user.id !== id")
+);
+assert(
+  "project PATCH blocks sections replace",
+  fileIncludes("lib/project-patch.ts", "Cannot replace sections") &&
+    fileIncludes("app/api/project/[projectId]/route.ts", "validateProjectPatchBody")
+);
+assert(
+  "allproject page has no debug project log",
+  !fileIncludes("app/allproject/page.tsx", 'console.log("PROJECT DATA:"')
+);
+
+console.log("\n[8] API middleware + collaboration lifecycle");
+assert(
+  "middleware guards non-auth API",
+  fileIncludes("middleware.ts", "isPublicApiPath")
+);
+assert(
+  "uploadthing exempt from JWT middleware",
+  fileIncludes("lib/api-public-paths.ts", "/api/uploadthing")
+);
+assert(
+  "collaboration supports disable",
+  fileIncludes(
+    "app/api/project/[projectId]/collaboration/route.ts",
+    '"disable"'
+  )
+);
+assert(
+  "invite revoke helper exists",
+  fileIncludes("lib/project-invite.ts", "revokeProjectInvites")
+);
+assert("project patch validation module", fileExists("lib/project-patch.ts"));
+
 console.log(`\nResult: ${passed} passed, ${failed} failed`);
 process.exit(failed > 0 ? 1 : 0);

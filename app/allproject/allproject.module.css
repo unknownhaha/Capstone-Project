@@ -25,6 +25,7 @@
 
   display: flex;
   flex-direction: column;
+  min-height: 0;
 }
 
 .createBox,
@@ -76,14 +77,18 @@
 }
 
 .addBox,
-.profile {
+.progressRing {
   flex: 1;
   aspect-ratio: 1;
   border-radius: 20px;
 }
 
 .addBox {
-  background: rgba(255,255,255,0.3);
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
 
   display: flex;
   justify-content: center;
@@ -91,22 +96,40 @@
 
   font-size: 40px;
   cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.2s ease;
 }
 
-.profile {
-  /* Progress donut chart background: 75% progress example */
+.addBox:hover {
+  background: rgba(255, 255, 255, 0.48);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+  transform: scale(1.03);
+}
+
+.addBox:active {
+  transform: scale(0.97);
+}
+
+.addBox:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+.progressRing {
   background: conic-gradient(#57cc99 75%, rgba(255, 255, 255, 0.2) 0);
   border-radius: 50%;
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  border: 4px solid rgba(255, 255, 255, 0.1); /* Adds a subtle glass-like outer border */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 4px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Inner cutout to make it look like a donut ring */
-.profile::before {
+.progressRing::before {
   content: "";
   position: absolute;
   inset: 8px; /* Thinner ring to give more room for text */
@@ -196,15 +219,123 @@
   margin: 0;
 }
 
+/* ===== EMPTY STATE ===== */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+  padding: 28px 16px;
+  box-sizing: border-box;
+}
+
+.emptyIconWrap {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.22);
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.emptyIcon {
+  font-size: 32px;
+  line-height: 1;
+}
+
+.emptyTitle {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+
+.emptySubtitle {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.startProjectBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 22px;
+  padding: 14px 28px;
+  border: none;
+  border-radius: 999px;
+  background: #fff;
+  color: #2d6a6a;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.14),
+    0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.startProjectBtn:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.18),
+    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+  background: #f8fffe;
+}
+
+.startProjectBtn:active {
+  transform: translateY(0);
+}
+
+.startProjectBtnIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #5f9ea0;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1;
+}
+
 /* ===== GRID ===== */
 .grid {
   display: grid;
-  grid-template-columns: repeat(2,1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 14px;
-
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
+}
+
+/* Must follow .grid — overrides 2-column layout when empty */
+.grid.gridCentered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  grid-template-columns: unset;
+  min-height: 240px;
+  width: 100%;
 }
 
 .grid::-webkit-scrollbar {

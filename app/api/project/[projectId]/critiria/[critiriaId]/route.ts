@@ -4,25 +4,13 @@ import { connectDB } from "@/lib/db";
 import Project from "@/lib/model/project";
 import { findSectionForCriteriaId } from "@/lib/project-sections";
 import { canEditProject } from "@/lib/project-access";
+import { datesConflict, toIsoString } from "@/lib/criterion-concurrency";
 
 function normalizeImageUrls(imgs: unknown): string[] {
   if (!Array.isArray(imgs)) return [];
   return imgs.filter(
     (url): url is string => typeof url === "string" && url.trim().length > 0
   );
-}
-
-function toIsoString(value: unknown): string | null {
-  if (!value) return null;
-  const date = value instanceof Date ? value : new Date(String(value));
-  if (Number.isNaN(date.getTime())) return null;
-  return date.toISOString();
-}
-
-function datesConflict(expected: string, actual: unknown): boolean {
-  const actualIso = toIsoString(actual);
-  if (!actualIso) return false;
-  return new Date(expected).getTime() !== new Date(actualIso).getTime();
 }
 
 export async function PATCH(

@@ -86,7 +86,7 @@ Capstone-Project/
 │       ├── auth/register/        # POST create user
 │       ├── project/              # GET list, POST create
 │       ├── project/[projectId]/  # GET/PATCH/DELETE project
-│       ├── project/[projectId]/collaboration/  # POST enable sharing (owner)
+│       ├── project/[projectId]/collaboration/  # POST enable | disable | rotate_invite (owner)
 │       ├── project/[projectId]/invite/         # GET invite URL (owner)
 │       ├── join/[token]/         # POST accept invite (authenticated)
 │       ├── join/[token]/page.tsx # Client join flow + login redirect
@@ -161,7 +161,7 @@ flowchart TD
 
 1. **Dashboard** (`app/allproject/page.tsx`): loads `GET /api/project` (owned + shared), client-side **search** by name + address (`filterProjects` in `project-utils.ts`).
 2. **Create project**: picks criteria **groups** → `POST /api/project` → `buildProjectSectionsFromSelection`.
-3. **Share / join**: owner enables collaboration on card kebab → copies `/join/[token]` link; teammate logs in → `POST /api/join/[token]` → lands on project.
+3. **Share / join**: owner enables collaboration on card kebab → copies `/join/[token]` link; teammate logs in → `POST /api/join/[token]` → lands on project. Owner can **disable collaboration** (revokes all invite tokens) or **reset invite link** (`rotate_invite`) from the share dialog.
 4. **Section page**: lists sections/groups for navigation.
 5. **Criteria page**: `InspectionItemRow` — score, notes, inspection photos, reference image (ภาพอ้างอิง) + lightbox.
 
@@ -174,7 +174,7 @@ flowchart TD
 | Endpoint | Notes |
 |----------|--------|
 | `GET /api/project` | Returns only `session.user.id` projects |
-| `PATCH /api/project/[id]` | Supports `coverImg`, `sections`; use `toObject()` in responses |
+| `PATCH /api/project/[id]` | Allowlist: `coverImg` (owner), `projectName`, `description`, `status`, `buildingType`, `institution`. **Cannot** replace `sections` (use `add-groups` or criterion PATCH) |
 | `PATCH .../critiria/[critiriaId]` | **Spelled critiria** in path — changing breaks clients |
 | Criterion PATCH | Body: `score`, `note`, `img`, `imgs`, optional `expectedUpdatedAt`; returns `updatedAt`; **409** on conflict |
 
@@ -199,7 +199,7 @@ Avoid large unrelated refactors; match existing CSS module naming in `_component
 
 | Endpoint | Use |
 |----------|-----|
-| `profileImg` | Profile avatar (note: may have hardcoded test userId in server handler — verify before production) |
+| `profileImg` | Profile avatar (auth required; updates `session.user.id` in MongoDB) |
 | `inspectionImg` | Criteria inspection photos (auth required) |
 | `projectCoverImg` | Project card cover (auth required) |
 
@@ -215,7 +215,7 @@ Prefer `ufsUrl ?? url ?? appUrl` from upload responses.
 - `authorize()` must **try/catch** and return `null` on failure — uncaught errors return HTML and cause `Unexpected token '<'` JSON errors.
 - `AUTH_SECRET` and `trustHost: true` in `auth.config.ts`.
 - `useRequireAuth` redirects unauthenticated users to `/login?callbackUrl=...`.
-- Global route protection in `middleware.ts` is **disabled** (commented); pages rely on `useRequireAuth`.
+- `middleware.ts` redirects unauthenticated users to `/login` (public pages: `/login`, `/register`, `/verify`, `/join/*`). Non-public `/api/*` routes return **401 JSON** without a JWT (except `/api/auth/*` and `/api/uploadthing/*` — UploadThing callbacks have no session cookie; auth runs in `app/api/uploadthing/route.ts` per slug). Other handlers still call `auth()` as a second check.
 
 ---
 
@@ -257,7 +257,7 @@ Captions show in UI as `item.imgCaption` under reference image (diagram-only cro
 
 1. API path **`critiria`** is intentional legacy spelling.
 2. File **`อย่ายุ่งกับอันนี้.json`** is the facilities standard bundle (name is intentional).
-3. `profileImg` UploadThing `onUploadComplete` may still point at a placeholder `userId` — audit before deploy.
+3. `GET`/`PUT /api/users/[id]` require session and `session.user.id === id`.
 4. Only one `next dev` server on port **3000**; duplicate instances cause auth confusion.
 5. React Compiler enabled in `next.config.ts` (`reactCompiler: true`).
 
@@ -269,6 +269,8 @@ Captions show in UI as `item.imgCaption` under reference image (diagram-only cro
 npm run dev      # Development (http://localhost:3000)
 npm run build    # Production build
 npm run lint     # ESLint
+npm test         # Unit tests (lib/project-patch, concurrency, access)
+npm run validate # Pre-merge checks (scripts/validate-premerge.ts)
 ```
 
 After schema changes to Mongoose models, **restart dev server**.
