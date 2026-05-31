@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Capstone — Accessibility Inspection App</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css" />
+  <style>
+    :root {
+      --accent: #0d9488;
+      --accent-dark: #0f766e;
+    }
+    .reveal h1, .reveal h2, .reveal h3 { color: var(--accent-dark); font-weight: 700; }
+    .reveal .subtitle { color: #64748b; font-size: 0.65em; margin-top: 0.5em; }
+    .reveal table { font-size: 0.72em; margin: 0 auto; }
+    .reveal table th { background: var(--accent); color: #fff; }
+    .reveal table td, .reveal table th { padding: 0.35em 0.75em; }
+    .reveal ul { font-size: 0.85em; }
+    .reveal li { margin-bottom: 0.35em; }
+    .reveal .flow { font-size: 0.75em; text-align: left; max-width: 28em; margin: 0 auto; }
+    .reveal .flow code { background: #f1f5f9; padding: 0.1em 0.35em; border-radius: 4px; }
+    .reveal .tag { display: inline-block; background: #ccfbf1; color: var(--accent-dark); padding: 0.15em 0.5em; border-radius: 999px; font-size: 0.55em; margin: 0.1em; }
+    .reveal .footer-note { font-size: 0.45em; color: #94a3b8; margin-top: 2em; }
+    .reveal section.title-slide h1 { font-size: 1.6em; }
+    .reveal .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5em; text-align: left; font-size: 0.75em; }
+    .reveal strong { color: var(--accent-dark); }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <section class="title-slide">
+        <h1>Building Accessibility Inspection App</h1>
+        <p class="subtitle">Capstone Project — มยผ. 6301 (Inclusive Design)</p>
+        <p style="font-size: 0.55em; margin-top: 1.5em;">
+          <span class="tag">Next.js 16</span>
+          <span class="tag">MongoDB</span>
+          <span class="tag">NextAuth</span>
+          <span class="tag">UploadThing</span>
+        </p>
+        <p class="footer-note">Source: docs/AI_PROJECT_GUIDE.md</p>
+      </section>
+
+      <section>
+        <h2>Purpose</h2>
+        <ul>
+          <li>Mobile-first web app for <strong>building accessibility inspections</strong></li>
+          <li>Aligned with Thai public-sector standard <strong>มยผ. 6301</strong></li>
+          <li>Targets inclusive design for people with disabilities and older adults</li>
+          <li>UI mix of <strong>English and Thai</strong>; standards content is primarily Thai</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>What Inspectors Can Do</h2>
+        <ul>
+          <li>Register and log in</li>
+          <li>Create <strong>projects</strong> (sites/buildings) with selected criteria groups</li>
+          <li>Score each criterion: <strong>0 / 1 / 2</strong>, notes, inspection photos</li>
+          <li>View <strong>reference figures</strong> from the official standard (PDF diagrams)</li>
+          <li>Track <strong>completion %</strong> per project</li>
+          <li>Collaborate via invite links (shared editor access)</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Tech Stack</h2>
+        <table>
+          <thead><tr><th>Layer</th><th>Technology</th></tr></thead>
+          <tbody>
+            <tr><td>Framework</td><td>Next.js 16 (App Router, Turbopack dev)</td></tr>
+            <tr><td>UI</td><td>React 19, CSS Modules</td></tr>
+            <tr><td>Auth</td><td>NextAuth v5 — Credentials, JWT sessions</td></tr>
+            <tr><td>Database</td><td>MongoDB + Mongoose 9</td></tr>
+            <tr><td>Uploads</td><td>UploadThing</td></tr>
+            <tr><td>Standards</td><td>Static JSON + catalog.ts + figure-map.json</td></tr>
+            <tr><td>PDF tooling</td><td>Python + PyMuPDF (build-time only)</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>Repository Layout</h2>
+        <div class="two-col">
+          <div>
+            <p><strong>app/</strong></p>
+            <ul>
+              <li><code>allproject/</code> — main inspection UX</li>
+              <li><code>login/</code>, <code>register/</code>, <code>profile/</code></li>
+              <li><code>api/project/</code> — CRUD + criteria PATCH</li>
+              <li><code>api/uploadthing/</code></li>
+              <li><code>join/[token]/</code> — collaboration</li>
+            </ul>
+          </div>
+          <div>
+            <p><strong>lib/</strong></p>
+            <ul>
+              <li><code>model/</code> — User, Project schemas</li>
+              <li><code>project-sections.ts</code></li>
+              <li><code>standards/*.json</code> + catalog</li>
+            </ul>
+            <p><strong>public/standards/figures/</strong></p>
+            <p style="font-size: 0.9em;">figure_01.png … figure_71.png</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Domain Model — User</h2>
+        <ul>
+          <li><code>firstName</code>, <code>lastName</code>, hashed <code>password</code></li>
+          <li><code>contact.email</code> — unique, used for login</li>
+          <li><code>profileImg</code> — UploadThing URL</li>
+          <li>Optional <code>organization</code>, project refs</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Domain Model — Project</h2>
+        <ul>
+          <li><code>userId</code> — owner (never transferred)</li>
+          <li><code>members[]</code> — editors joined via invite token</li>
+          <li><code>sections[]</code> → groups → <code>criteria[]</code></li>
+          <li>Each criterion: <code>score</code> (0|1|2|null), <code>note</code>, <code>imgs[]</code></li>
+          <li>Pre-save hook recalculates <strong>completionRate</strong></li>
+        </ul>
+        <p style="font-size: 0.65em; color: #64748b;">Catalog reference images ≠ user inspection photos</p>
+      </section>
+
+      <section>
+        <h2>Standards Catalog</h2>
+        <ul>
+          <li>8 main JSON files → <code>STANDARDS_CATALOG</code></li>
+          <li>Items: <code>item_id</code>, <code>display_text</code>, <code>source_text</code>, notes</li>
+          <li>Reference images from JSON or <code>figure-map.json</code> via <code>source_clause</code></li>
+          <li>Lookups: <code>findCatalogItem</code>, <code>findCatalogGroup</code>, <code>findCatalogSection</code></li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Main User Flow</h2>
+        <div class="flow">
+          <p><strong>Login / Register</strong> → <strong>All Projects</strong> (<code>/allproject</code>)</p>
+          <p>↓ Create project (select criteria groups) → <code>POST /api/project</code></p>
+          <p>↓ Section picker → Criteria checklist</p>
+          <p>↓ Score, notes, photos + reference image (ภาพอ้างอิง)</p>
+          <p style="margin-top: 1em;"><strong>Share:</strong> owner enables collaboration → copy <code>/join/[token]</code></p>
+        </div>
+      </section>
+
+      <section>
+        <h2>API Conventions</h2>
+        <table>
+          <thead><tr><th>Endpoint</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td><code>GET /api/project</code></td><td>Owned + shared projects for session user</td></tr>
+            <tr><td><code>PATCH .../critiria/[id]</code></td><td>Legacy spelling — do not rename casually</td></tr>
+            <tr><td>Criterion PATCH</td><td>Optional <code>expectedUpdatedAt</code> → <strong>409</strong> on conflict</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size: 0.6em;">Always <code>credentials: "include"</code> on authenticated fetch</p>
+      </section>
+
+      <section>
+        <h2>UI Patterns</h2>
+        <ul>
+          <li><strong>PhoneShell</strong> — ~420px max-width, teal gradient (mobile-first)</li>
+          <li>Client components for auth, uploads, inspection rows</li>
+          <li>Project cards: owner kebab (share, cover, delete); collaborators see badge only</li>
+          <li><strong>InspectionItemRow</strong> — expandable; reference vs user photos separated</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>UploadThing</h2>
+        <table>
+          <thead><tr><th>Endpoint</th><th>Use</th></tr></thead>
+          <tbody>
+            <tr><td><code>profileImg</code></td><td>Profile avatar</td></tr>
+            <tr><td><code>inspectionImg</code></td><td>Criteria inspection photos</td></tr>
+            <tr><td><code>projectCoverImg</code></td><td>Project card cover</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size: 0.6em;">Prefer <code>ufsUrl ?? url ?? appUrl</code> from responses</p>
+      </section>
+
+      <section>
+        <h2>Auth Pitfalls (Avoid Regressions)</h2>
+        <ul>
+          <li>Client <code>signIn("credentials", { redirect: false })</code></li>
+          <li><code>authorize()</code> must try/catch — uncaught errors break JSON parsing</li>
+          <li><code>AUTH_SECRET</code> + <code>trustHost: true</code></li>
+          <li>Global middleware auth guard is <strong>disabled</strong> — pages use <code>useRequireAuth</code></li>
+          <li>Only one <code>next dev</code> on port 3000</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Reference Figures Pipeline</h2>
+        <ul>
+          <li>Source: <code>standards-source/maypho6301.pdf</code></li>
+          <li><code>python scripts/extract-pdf-figures.py</code></li>
+          <li><code>python scripts/fix-figure-captions.py</code></li>
+          <li>Output: <code>public/standards/figures/</code> + <code>figure-map.json</code></li>
+          <li>Captions shown as <code>item.imgCaption</code> under reference image</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Optional: ML Risk Assessment</h2>
+        <p style="font-size: 0.7em; text-align: left; max-width: 32em; margin: 0 auto;">
+          From <code>BUILD_SUMMARY.md</code> — separate Python service:
+        </p>
+        <ul>
+          <li><code>ml-service/</code> — Flask API on port 5000 (Random Forest)</li>
+          <li>Next.js: <code>/api/ml/predict</code>, test UI at <code>/ml-test</code></li>
+          <li>Predicts building risk (Low / Medium / High) from 14 inspection metrics</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Where to Edit (Quick Map)</h2>
+        <table>
+          <thead><tr><th>Task</th><th>Files</th></tr></thead>
+          <tbody>
+            <tr><td>Project list / search</td><td><code>allproject/page.tsx</code>, <code>project-utils.ts</code></td></tr>
+            <tr><td>Criterion UI</td><td><code>InspectionItemRow.tsx</code></td></tr>
+            <tr><td>Standards content</td><td><code>lib/standards/*.json</code></td></tr>
+            <tr><td>Auth bugs</td><td><code>auth.ts</code>, <code>login/page.tsx</code></td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>Known Quirks</h2>
+        <ul>
+          <li>API path <code>critiria</code> is intentional legacy spelling</li>
+          <li><code>อย่ายุ่งกับอันนี้.json</code> — facilities standard bundle (intentional name)</li>
+          <li>Audit <code>profileImg</code> upload handler before production deploy</li>
+          <li>React Compiler enabled in <code>next.config.ts</code></li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Commands &amp; Environment</h2>
+        <div class="two-col">
+          <div>
+            <p><strong>Run</strong></p>
+            <pre style="font-size: 0.55em;"><code>npm run dev
+npm run build
+npm run lint</code></pre>
+          </div>
+          <div>
+            <p><strong>.env</strong></p>
+            <ul style="font-size: 0.85em;">
+              <li><code>MONGO_URI</code></li>
+              <li><code>AUTH_SECRET</code></li>
+              <li><code>UPLOADTHING_TOKEN</code></li>
+              <li>Optional: SMTP for OTP email</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="title-slide">
+        <h2>Thank You</h2>
+        <p class="subtitle">Questions?</p>
+        <p class="footer-note">
+          Full guide: <code>docs/AI_PROJECT_GUIDE.md</code><br />
+          Open this deck: double-click <code>docs/presentation/capstone-project-slides.html</code><br />
+          Arrow keys / swipe to navigate · press <kbd>F</kbd> for fullscreen
+        </p>
+      </section>
+
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      slideNumber: "c/t",
+      transition: "slide",
+      width: 1100,
+      height: 700,
+    });
+  </script>
+</body>
+</html>
