@@ -40,7 +40,7 @@
           <span class="tag">NextAuth</span>
           <span class="tag">UploadThing</span>
         </p>
-        <p class="footer-note">Source: docs/AI_PROJECT_GUIDE.md</p>
+
       </section>
 
       <section>
@@ -151,26 +151,37 @@
       </section>
 
       <section>
-        <h2>API Conventions</h2>
-        <table>
-          <thead><tr><th>Endpoint</th><th>Notes</th></tr></thead>
+        <h2>API Endpoints — Projects</h2>
+        <table style="font-size: 0.54em; line-height: 1.3;">
+          <thead><tr><th>Method</th><th>Endpoint</th><th>Description</th></tr></thead>
           <tbody>
-            <tr><td><code>GET /api/project</code></td><td>Owned + shared projects for session user</td></tr>
-            <tr><td><code>PATCH .../critiria/[id]</code></td><td>Legacy spelling — do not rename casually</td></tr>
-            <tr><td>Criterion PATCH</td><td>Optional <code>expectedUpdatedAt</code> → <strong>409</strong> on conflict</td></tr>
+            <tr><td>GET/POST</td><td><code>/api/project</code></td><td>List / Create</td></tr>
+            <tr><td>GET/PATCH/DELETE</td><td><code>/api/project/[projectId]</code></td><td>Get / Update / Delete</td></tr>
+            <tr><td>POST</td><td><code>/api/project/[projectId]/add-groups</code></td><td>Add groups</td></tr>
+            <tr><td>GET/PATCH</td><td><code>/api/project/[projectId]/section/[sectionCode]</code></td><td>Get / Update section</td></tr>
+            <tr><td>PATCH</td><td><code>/api/project/[projectId]/critiria/[critiriaId]</code></td><td>Update criterion</td></tr>
+            <tr><td>POST</td><td><code>/api/project/[projectId]/invite</code></td><td>Create invite</td></tr>
           </tbody>
         </table>
-        <p style="font-size: 0.6em;">Always <code>credentials: "include"</code> on authenticated fetch</p>
+        <p style="font-size: 0.45em;">Always <code>credentials: "include"</code> on authenticated fetch. Criterion PATCH supports <code>expectedUpdatedAt</code> for conflict detection (409).</p>
       </section>
 
       <section>
-        <h2>UI Patterns</h2>
-        <ul>
-          <li><strong>PhoneShell</strong> — ~420px max-width, teal gradient (mobile-first)</li>
-          <li>Client components for auth, uploads, inspection rows</li>
-          <li>Project cards: owner kebab (share, cover, delete); collaborators see badge only</li>
-          <li><strong>InspectionItemRow</strong> — expandable; reference vs user photos separated</li>
-        </ul>
+        <h2>API Endpoints — Collaboration &amp; Auth</h2>
+        <table style="font-size: 0.54em; line-height: 1.3;">
+          <thead><tr><th>Method</th><th>Endpoint</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>GET</td><td><code>/api/project/[projectId]/collaboration</code></td><td>Get members</td></tr>
+            <tr><td>POST</td><td><code>/api/join/[token]</code></td><td>Join via invite</td></tr>
+            <tr><td>POST</td><td><code>/api/auth/register</code></td><td>Registration</td></tr>
+            <tr><td>POST</td><td><code>/api/auth/[...nextauth]</code></td><td>Auth routes</td></tr>
+            <tr><td>POST</td><td><code>/api/auth/check-email</code></td><td>Check email</td></tr>
+            <tr><td>POST</td><td><code>/api/auth/verify-otp</code></td><td>Verify OTP</td></tr>
+            <tr><td>POST</td><td><code>/api/auth/verify-otp/resend</code></td><td>Resend OTP</td></tr>
+            <tr><td>GET/PATCH</td><td><code>/api/users/[id]</code></td><td>User profile</td></tr>
+            <tr><td>POST</td><td><code>/api/uploadthing</code></td><td>Upload images</td></tr>
+          </tbody>
+        </table>
       </section>
 
       <section>
@@ -184,63 +195,6 @@
           </tbody>
         </table>
         <p style="font-size: 0.6em;">Prefer <code>ufsUrl ?? url ?? appUrl</code> from responses</p>
-      </section>
-
-      <section>
-        <h2>Auth Pitfalls (Avoid Regressions)</h2>
-        <ul>
-          <li>Client <code>signIn("credentials", { redirect: false })</code></li>
-          <li><code>authorize()</code> must try/catch — uncaught errors break JSON parsing</li>
-          <li><code>AUTH_SECRET</code> + <code>trustHost: true</code></li>
-          <li>Global middleware auth guard is <strong>disabled</strong> — pages use <code>useRequireAuth</code></li>
-          <li>Only one <code>next dev</code> on port 3000</li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>Reference Figures Pipeline</h2>
-        <ul>
-          <li>Source: <code>standards-source/maypho6301.pdf</code></li>
-          <li><code>python scripts/extract-pdf-figures.py</code></li>
-          <li><code>python scripts/fix-figure-captions.py</code></li>
-          <li>Output: <code>public/standards/figures/</code> + <code>figure-map.json</code></li>
-          <li>Captions shown as <code>item.imgCaption</code> under reference image</li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>Optional: ML Risk Assessment</h2>
-        <p style="font-size: 0.7em; text-align: left; max-width: 32em; margin: 0 auto;">
-          From <code>BUILD_SUMMARY.md</code> — separate Python service:
-        </p>
-        <ul>
-          <li><code>ml-service/</code> — Flask API on port 5000 (Random Forest)</li>
-          <li>Next.js: <code>/api/ml/predict</code>, test UI at <code>/ml-test</code></li>
-          <li>Predicts building risk (Low / Medium / High) from 14 inspection metrics</li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>Where to Edit (Quick Map)</h2>
-        <table>
-          <thead><tr><th>Task</th><th>Files</th></tr></thead>
-          <tbody>
-            <tr><td>Project list / search</td><td><code>allproject/page.tsx</code>, <code>project-utils.ts</code></td></tr>
-            <tr><td>Criterion UI</td><td><code>InspectionItemRow.tsx</code></td></tr>
-            <tr><td>Standards content</td><td><code>lib/standards/*.json</code></td></tr>
-            <tr><td>Auth bugs</td><td><code>auth.ts</code>, <code>login/page.tsx</code></td></tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section>
-        <h2>Known Quirks</h2>
-        <ul>
-          <li>API path <code>critiria</code> is intentional legacy spelling</li>
-          <li><code>อย่ายุ่งกับอันนี้.json</code> — facilities standard bundle (intentional name)</li>
-          <li>Audit <code>profileImg</code> upload handler before production deploy</li>
-          <li>React Compiler enabled in <code>next.config.ts</code></li>
-        </ul>
       </section>
 
       <section>
