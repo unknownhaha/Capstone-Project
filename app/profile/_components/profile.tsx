@@ -22,7 +22,7 @@ export type UserData = {
   department: string;
   location: string;
 };
-export const id = "680f1a1a1a1a1a1a1a1a1a01";
+
 export default function Profile() {
   const [isEdit, setEdit] = useState<boolean>(false);
   const [preData, setPre] = useState<UserData | null>(null);
@@ -33,10 +33,9 @@ export default function Profile() {
 
   
    useEffect(() => {
-    
-    /*if (!session) return;*/
-    
-    const userId = session?.user?.id || id;
+    const userId = session?.user?.id;
+    if (!userId) return;
+
     const fetchData = async () => {
         try {
             const res = await fetch(`/api/users/${userId}`, {
@@ -63,8 +62,6 @@ export default function Profile() {
             };
             setPre(mapped);
             setNew(mapped);
-            console.log(data);
-            
         } catch (err) {
             console.error("Fetch error:", err);
         }
@@ -88,14 +85,15 @@ export default function Profile() {
         setEdit(false);
 };
 const handleConfirm = async () => {
-     const userId = session?.user?.id || id;
+  const userId = session?.user?.id;
   try {
-    if(!userId) return;
-    const res = await fetch(`/api/users/${ userId}`, {
+    if (!userId) return;
+    const res = await fetch(`/api/users/${userId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify(newData),
     });
 

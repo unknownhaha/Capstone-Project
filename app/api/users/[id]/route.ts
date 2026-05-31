@@ -9,18 +9,16 @@ export async function GET(
     { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const {id} = await params;
-    /*const session = await auth();
+    const { id } = await params;
 
-    
-    if (!session) {
+    const session = await auth();
+    if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-   
     if (session.user.id !== id) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }*/
+    }
 
     await connectDB();
 
@@ -45,11 +43,19 @@ export async function PUT(
    { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    await connectDB();
-
     const { id } = await params;
 
- 
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    if (session.user.id !== id) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
+    await connectDB();
+
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json(
         { message: "Invalid user ID" },

@@ -25,9 +25,6 @@ export default function AllProjectPage() {
 
   const hasSearchQuery = searchQuery.trim().length > 0;
 
-  // Log projects to see what fields actually exist! Check your browser's Developer Tools console.
-  console.log("PROJECT DATA:", projects);
-
   // Calculate average progress across all projects
   const totalProgress = projects.reduce((sum, p) => {
     const completionRate = Number((p as any).completionRate || 0);
