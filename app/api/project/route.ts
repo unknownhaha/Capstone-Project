@@ -2,14 +2,33 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { connectDB } from "@/lib/db";
 import Project from "@/lib/model/project";
+import User from "@/lib/model/user";
 import { buildProjectSectionsFromSelection } from "@/lib/project-sections";
 import { serializeProjectForUser } from "@/lib/project-serialize";
+import { getMissingProfileFields, isProfileComplete } from "@/lib/profile-complete";
 
 export async function POST(req: NextRequest) {
   try {
     const session = await auth();
     if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    await connectDB();
+
+    const user = await User.findById(session.user.id).select("-password");
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    if (!isProfileComplete(user)) {
+      return NextResponse.json(
+        {
+          error: "Complete your profile before creating a project",
+          missingFields: getMissingProfileFields(user),
+        },
+        { status: 403 }
+      );
     }
 
     const body = await req.json();
@@ -37,8 +56,6 @@ export async function POST(req: NextRequest) {
       const message = err instanceof Error ? err.message : "Invalid selection";
       return NextResponse.json({ error: message }, { status: 400 });
     }
-
-    await connectDB();
 
     const project = await Project.create({
       userId: session.user.id,
@@ -70,7 +87,9 @@ export async function GET() {
 
     const [owned, shared] = await Promise.all([
       Project.find({ userId }).sort({ createdAt: -1 }),
-      Project.find({ "members.userId": userId }).sort({ createdAt: -1 }),
+      Project.find({ "members.userId": userId })
+        .populate("userId", "firstName lastName")
+        .sort({ createdAt: -1 }),
     ]);
 
     const seen = new Set<string>();

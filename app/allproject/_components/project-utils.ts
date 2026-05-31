@@ -9,6 +9,7 @@ export type ApiProject = {
   institution?: { address?: string };
   completionRate?: number;
   role?: "owner" | "editor";
+  ownerFirstName?: string;
   collaborationEnabled?: boolean;
   totalCriteria?: number;
   sections: {

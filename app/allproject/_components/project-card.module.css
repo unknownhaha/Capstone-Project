@@ -38,6 +38,8 @@
 .cardToolbar {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  min-height: 28px;
   margin-bottom: 6px;
 }
 
@@ -143,11 +145,17 @@
 }
 
 .sharedBadge {
-  display: inline-block;
-  margin-top: 4px;
+  display: block;
+  max-width: 100%;
+  padding: 0 2px;
   font-size: 10px;
+  line-height: 1.2;
   color: #2d6a6a;
   font-weight: 600;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .shareBackdrop {

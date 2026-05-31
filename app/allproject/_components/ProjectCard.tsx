@@ -14,6 +14,12 @@ type ProjectCardProps = {
   onDelete: (projectId: string) => void;
 };
 
+function formatSharedLabel(ownerFirstName?: string): string {
+  const name = ownerFirstName?.trim();
+  if (name) return `${name} shared with you`;
+  return "Shared with you";
+}
+
 function pickUploadUrl(file: any): string | null {
   if (!file) return null;
   // Check all possible locations depending on UploadThing version
@@ -140,33 +146,32 @@ export default function ProjectCard({
 
   return (
     <div className={`${styles.card} ${cardBusy ? styles.cardBusy : ""}`}>
-      {isOwner && (
       <div className={styles.cardToolbar}>
-        <div className={styles.menuWrap}>
-          <button
-            type="button"
-            className={styles.kebabBtn}
-            aria-label="Project options"
-            aria-expanded={menuOpen}
-            disabled={cardBusy}
-            onClick={(e) => {
-              e.stopPropagation();
-              setMenuOpen((open) => !open);
-            }}
-          >
-            ⋮
-          </button>
+        {isOwner ? (
+          <div className={styles.menuWrap}>
+            <button
+              type="button"
+              className={styles.kebabBtn}
+              aria-label="Project options"
+              aria-expanded={menuOpen}
+              disabled={cardBusy}
+              onClick={(e) => {
+                e.stopPropagation();
+                setMenuOpen((open) => !open);
+              }}
+            >
+              ⋮
+            </button>
 
-          {menuOpen && (
-            <>
-              <button
-                type="button"
-                className={styles.menuBackdrop}
-                aria-label="Close menu"
-                onClick={() => setMenuOpen(false)}
-              />
-              <div className={styles.cardMenu} role="menu">
-                {isOwner && (
+            {menuOpen && (
+              <>
+                <button
+                  type="button"
+                  className={styles.menuBackdrop}
+                  aria-label="Close menu"
+                  onClick={() => setMenuOpen(false)}
+                />
+                <div className={styles.cardMenu} role="menu">
                   <button
                     type="button"
                     className={styles.menuItem}
@@ -179,8 +184,6 @@ export default function ProjectCard({
                   >
                     Share project
                   </button>
-                )}
-                {isOwner && (
                   <button
                     type="button"
                     className={styles.menuItem}
@@ -190,8 +193,6 @@ export default function ProjectCard({
                   >
                     {isUploading ? "Uploading..." : "Upload cover photo"}
                   </button>
-                )}
-                {isOwner && (
                   <button
                     type="button"
                     className={`${styles.menuItem} ${styles.menuItemDanger}`}
@@ -201,13 +202,16 @@ export default function ProjectCard({
                   >
                     Delete project
                   </button>
-                )}
-              </div>
-            </>
-          )}
-        </div>
+                </div>
+              </>
+            )}
+          </div>
+        ) : (
+          <span className={styles.sharedBadge}>
+            {formatSharedLabel(project.ownerFirstName)}
+          </span>
+        )}
       </div>
-      )}
 
       <input
         ref={fileInputRef}
@@ -228,9 +232,6 @@ export default function ProjectCard({
         <div className={styles.cardInfo}>
           <h4>{project.projectName}</h4>
           <span>{totalItems} Checkpoints</span>
-          {!isOwner && (
-            <span className={styles.sharedBadge}>Shared with you</span>
-          )}
         </div>
         <div className={styles.status}>
           {Math.round(project.completionRate ?? 0)}% Done

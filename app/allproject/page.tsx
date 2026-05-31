@@ -4,8 +4,10 @@ import { useEffect, useMemo, useState } from "react";
 import styles from "./allproject.module.css";
 import PhoneShell from "./_components/PhoneShell";
 import CreateProjectModal from "./_components/CreateProjectModal";
+import ProfileRequiredModal from "./_components/ProfileRequiredModal";
 import AppSidebar from "./_components/AppSidebar";
 import { useRequireAuth } from "./_components/useRequireAuth";
+import { useProfileComplete } from "./_components/useProfileComplete";
 import ProjectCard from "./_components/ProjectCard";
 import { filterProjects, type ApiProject } from "./_components/project-utils";
 
@@ -13,9 +15,16 @@ export default function AllProjectPage() {
   const { status, isAuthenticated } = useRequireAuth();
   const [openMenu, setOpenMenu] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
+  const [openProfileRequired, setOpenProfileRequired] = useState(false);
   const [projects, setProjects] = useState<ApiProject[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
+  const {
+    loading: profileLoading,
+    complete: profileComplete,
+    missingFields,
+    refresh: refreshProfile,
+  } = useProfileComplete(isAuthenticated);
 
   const visibleProjects = useMemo(
     () => filterProjects(projects, searchQuery),
@@ -58,6 +67,19 @@ export default function AllProjectPage() {
     load();
   }, [isAuthenticated]);
 
+  function tryOpenCreate() {
+    setOpenMenu(false);
+
+    if (profileLoading) return;
+
+    if (!profileComplete) {
+      setOpenProfileRequired(true);
+      return;
+    }
+
+    setOpenCreate(true);
+  }
+
   if (status === "loading" || !isAuthenticated) {
     return (
       <div className={styles.container}>
@@ -93,10 +115,8 @@ export default function AllProjectPage() {
           type="button"
           className={styles.addBox}
           aria-label="Create project"
-          onClick={() => {
-            setOpenMenu(false);
-            setOpenCreate(true);
-          }}
+          disabled={profileLoading}
+          onClick={tryOpenCreate}
         >
           +
         </button>
@@ -148,20 +168,20 @@ export default function AllProjectPage() {
             </div>
             <h3 className={styles.emptyTitle}>No projects yet</h3>
             <p className={styles.emptySubtitle}>
-              Create your first site inspection 
+              {profileComplete
+                ? "Create your first site inspection"
+                : "Complete your profile to start your first inspection"}
             </p>
             <button
               type="button"
               className={styles.startProjectBtn}
-              onClick={() => {
-                setOpenMenu(false);
-                setOpenCreate(true);
-              }}
+              disabled={profileLoading}
+              onClick={tryOpenCreate}
             >
               <span className={styles.startProjectBtnIcon} aria-hidden>
                 +
               </span>
-              Start Project
+              {profileComplete ? "Start Project" : "Complete Profile"}
             </button>
           </div>
         )}
@@ -197,6 +217,15 @@ export default function AllProjectPage() {
       </div>
 
       <CreateProjectModal open={openCreate} onClose={() => setOpenCreate(false)} />
+
+      <ProfileRequiredModal
+        open={openProfileRequired}
+        missingFields={missingFields}
+        onClose={() => {
+          setOpenProfileRequired(false);
+          refreshProfile();
+        }}
+      />
     </PhoneShell>
   );
 }

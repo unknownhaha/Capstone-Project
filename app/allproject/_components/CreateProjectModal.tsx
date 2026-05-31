@@ -60,6 +60,13 @@ export default function CreateProjectModal({ open, onClose }: CreateProjectModal
       const data = await res.json();
 
       if (!res.ok) {
+        if (res.status === 403 && Array.isArray(data.missingFields)) {
+          setError(
+            data.error ??
+              "Complete your profile before creating a project."
+          );
+          return;
+        }
         setError(data.error ?? "Failed to create project");
         return;
       }
