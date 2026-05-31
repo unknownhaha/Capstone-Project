@@ -118,6 +118,10 @@ assert(
   fileIncludes("middleware.ts", "isPublicApiPath")
 );
 assert(
+  "uploadthing exempt from JWT middleware",
+  fileIncludes("lib/api-public-paths.ts", "/api/uploadthing")
+);
+assert(
   "collaboration supports disable",
   fileIncludes(
     "app/api/project/[projectId]/collaboration/route.ts",

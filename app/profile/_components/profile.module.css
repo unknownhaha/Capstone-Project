@@ -53,10 +53,20 @@
   color: white;
   font-weight: 600;
   cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.2s ease;
 }
 
 .edit:hover {
   background-color: #4d8a8c;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(95, 158, 160, 0.35);
+}
+
+.edit:active {
+  transform: translateY(0);
 }
 
 .edit2 {
@@ -74,6 +84,38 @@
   border: transparent;
   cursor: pointer;
   font-weight: 600;
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.2s ease;
+}
+
+.edit2 button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.edit2 button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.resetBtn {
+  background-color: #ef476f;
+  color: #fff;
+}
+
+.resetBtn:hover:not(:disabled) {
+  background-color: #d63d62;
+  box-shadow: 0 4px 12px rgba(239, 71, 111, 0.35);
+}
+
+.confirmBtn {
+  background-color: #2a9d5c;
+  color: #fff;
+}
+
+.confirmBtn:hover:not(:disabled) {
+  background-color: #248f52;
+  box-shadow: 0 4px 12px rgba(42, 157, 92, 0.35);
 }
 
 .loading {

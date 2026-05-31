@@ -153,15 +153,15 @@ const handleConfirm = async () => {
                 <div className={style.edit2}>
                   <button
                     type="button"
+                    className={style.resetBtn}
                     onClick={handleReset}
-                    style={{ backgroundColor: "#ef476f", color: "white" }}
                   >
                     Reset
                   </button>
                   <button
                     type="button"
+                    className={style.confirmBtn}
                     onClick={handleConfirm}
-                    style={{ backgroundColor: "#2a9d5c", color: "white" }}
                   >
                     Confirm
                   </button>

@@ -4,6 +4,8 @@ import { auth } from "@/auth";
 import User from "@/lib/model/user";
 import { connectDB } from "@/lib/db";
 
+export const runtime = "nodejs";
+
 const f = createUploadthing();
 
 export const uploadRouter = {

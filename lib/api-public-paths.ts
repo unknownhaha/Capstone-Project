@@ -1,4 +1,10 @@
-/** API routes that must work without a session (registration, sign-in, OTP). */
+/**
+ * API routes that skip the global JWT middleware check.
+ * - /api/auth/* — registration, sign-in, OTP
+ * - /api/uploadthing — UploadThing client + server callbacks; auth per slug in route handler
+ */
 export function isPublicApiPath(pathname: string): boolean {
-  return pathname.startsWith("/api/auth/");
+  if (pathname.startsWith("/api/auth/")) return true;
+  if (pathname.startsWith("/api/uploadthing")) return true;
+  return false;
 }

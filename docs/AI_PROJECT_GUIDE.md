@@ -215,7 +215,7 @@ Prefer `ufsUrl ?? url ?? appUrl` from upload responses.
 - `authorize()` must **try/catch** and return `null` on failure — uncaught errors return HTML and cause `Unexpected token '<'` JSON errors.
 - `AUTH_SECRET` and `trustHost: true` in `auth.config.ts`.
 - `useRequireAuth` redirects unauthenticated users to `/login?callbackUrl=...`.
-- `middleware.ts` redirects unauthenticated users to `/login` (public pages: `/login`, `/register`, `/verify`, `/join/*`). Non-public `/api/*` routes return **401 JSON** without a JWT (except `/api/auth/*`). Handlers still call `auth()` as a second check.
+- `middleware.ts` redirects unauthenticated users to `/login` (public pages: `/login`, `/register`, `/verify`, `/join/*`). Non-public `/api/*` routes return **401 JSON** without a JWT (except `/api/auth/*` and `/api/uploadthing/*` — UploadThing callbacks have no session cookie; auth runs in `app/api/uploadthing/route.ts` per slug). Other handlers still call `auth()` as a second check.
 
 ---
 

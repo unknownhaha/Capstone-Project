@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import Link from "next/link";
+import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./allproject.module.css";
 import PhoneShell from "./_components/PhoneShell";
 import CreateProjectModal from "./_components/CreateProjectModal";
@@ -17,6 +16,8 @@ export default function AllProjectPage() {
   const [projects, setProjects] = useState<ApiProject[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
+  const emptyGridRef = useRef<HTMLDivElement>(null);
+  const emptyStateRef = useRef<HTMLDivElement>(null);
 
   const visibleProjects = useMemo(
     () => filterProjects(projects, searchQuery),
@@ -59,6 +60,42 @@ export default function AllProjectPage() {
     load();
   }, [isAuthenticated]);
 
+  useEffect(() => {
+    if (loading || projects.length > 0) return;
+    const grid = emptyGridRef.current;
+    const empty = emptyStateRef.current;
+    if (!grid || !empty) return;
+    requestAnimationFrame(() => {
+      const gr = grid.getBoundingClientRect();
+      const er = empty.getBoundingClientRect();
+      const gridCenter = gr.left + gr.width / 2;
+      const emptyCenter = er.left + er.width / 2;
+      // #region agent log
+      fetch("http://127.0.0.1:7245/ingest/b85f2e32-bc85-4b47-a58d-0e6f007e42b4", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Debug-Session-Id": "4da6c3",
+        },
+        body: JSON.stringify({
+          sessionId: "4da6c3",
+          hypothesisId: "H1",
+          location: "allproject/page.tsx:emptyLayout",
+          message: "empty state horizontal centering",
+          data: {
+            gridDisplay: getComputedStyle(grid).display,
+            deltaPx: Math.round(emptyCenter - gridCenter),
+            gridWidth: Math.round(gr.width),
+            emptyWidth: Math.round(er.width),
+          },
+          timestamp: Date.now(),
+          runId: "post-fix",
+        }),
+      }).catch(() => {});
+      // #endregion
+    });
+  }, [loading, projects.length]);
+
   if (status === "loading" || !isAuthenticated) {
     return (
       <div className={styles.container}>
@@ -90,19 +127,23 @@ export default function AllProjectPage() {
       )}
 
       <div className={styles.top}>
-        <div
+        <button
+          type="button"
           className={styles.addBox}
+          aria-label="Create project"
           onClick={() => {
             setOpenMenu(false);
             setOpenCreate(true);
           }}
         >
           +
-        </div>
-        <Link 
-          href="/profile" 
-          className={styles.profile}
-          style={{ background: `conic-gradient(#57cc99 ${progressPercentage}%, rgba(255, 255, 255, 0.2) 0)` }}
+        </button>
+        <div
+          className={styles.progressRing}
+          style={{
+            background: `conic-gradient(#57cc99 ${progressPercentage}%, rgba(255, 255, 255, 0.2) 0)`,
+          }}
+          aria-label={`Overall completion ${progressPercentage} percent`}
         >
           <div className={styles.profileContent}>
             <h3>{progressPercentage}%</h3>
@@ -114,7 +155,7 @@ export default function AllProjectPage() {
               <p><strong>{activeCount}</strong> Active</p>
             </div>
           </div>
-        </Link>
+        </div>
       </div>
 
       <div className={styles.search}>
@@ -129,15 +170,39 @@ export default function AllProjectPage() {
         <span aria-hidden>⚙️</span>
       </div>
 
-      <div className={styles.grid}>
+      <div
+        ref={emptyGridRef}
+        className={`${styles.grid} ${
+          !loading && projects.length === 0 ? styles.gridCentered : ""
+        }`}
+      >
         {loading && (
           <p className={styles.gridMessage}>Loading projects...</p>
         )}
 
         {!loading && projects.length === 0 && (
-          <p className={styles.gridMessage}>
-            No projects yet. Tap + to create one.
-          </p>
+          <div ref={emptyStateRef} className={styles.emptyState}>
+            <div className={styles.emptyIconWrap} aria-hidden>
+              <span className={styles.emptyIcon}>🏗️</span>
+            </div>
+            <h3 className={styles.emptyTitle}>No projects yet</h3>
+            <p className={styles.emptySubtitle}>
+              Create your first site inspection 
+            </p>
+            <button
+              type="button"
+              className={styles.startProjectBtn}
+              onClick={() => {
+                setOpenMenu(false);
+                setOpenCreate(true);
+              }}
+            >
+              <span className={styles.startProjectBtnIcon} aria-hidden>
+                +
+              </span>
+              Start Project
+            </button>
+          </div>
         )}
 
         {!loading &&
