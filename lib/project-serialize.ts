@@ -8,6 +8,16 @@ type ProjectDoc = {
   members?: unknown[];
 };
 
+function getPopulatedOwnerFirstName(userId: unknown): string | undefined {
+  if (!userId || typeof userId !== "object") return undefined;
+
+  const firstName = (userId as { firstName?: unknown }).firstName;
+  if (typeof firstName !== "string") return undefined;
+
+  const trimmed = firstName.trim();
+  return trimmed || undefined;
+}
+
 export function serializeProjectForUser(
   project: ProjectDoc,
   userId: string
@@ -23,10 +33,15 @@ export function serializeProjectForUser(
     userId
   );
 
+  const ownerFirstName =
+    role === "editor" ? getPopulatedOwnerFirstName(raw.userId) : undefined;
+
   return {
     ...raw,
     _id: String(raw._id ?? ""),
     role,
+    status: raw.status === "completed" ? "completed" : "draft",
     collaborationEnabled: Boolean(raw.collaborationEnabled),
+    ...(ownerFirstName ? { ownerFirstName } : {}),
   };
 }

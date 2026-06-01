@@ -65,6 +65,8 @@
 .cardToolbar {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  min-height: 28px;
   margin-bottom: 6px;
 }
 
@@ -186,12 +188,24 @@
   color: var(--insp-color-warning-ink);
 }
 
+.statusDone {
+  background: #57cc99;
+  color: #fff;
+}
+
 .sharedBadge {
-  display: inline-block;
+  display: block;
+  max-width: 100%;
   margin-top: 4px;
+  padding: 0 2px;
   font-size: var(--insp-text-2xs);
+  line-height: var(--insp-leading-snug);
   color: var(--insp-color-accent);
   font-weight: 600;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .sharePanel {

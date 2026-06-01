@@ -6,14 +6,25 @@ export type ApiProject = {
   projectName: string;
   coverImg?: string;
   description?: string;
-  institution?: { address?: string };
+  institution?: { address?: string; name?: string };
   completionRate?: number;
+  scorePercent?: number;
+  totalScore?: number;
+  maxScore?: number;
+  status?: "draft" | "completed";
+  completedAt?: string;
   role?: "owner" | "editor";
+  ownerFirstName?: string;
   collaborationEnabled?: boolean;
   totalCriteria?: number;
   sections: {
     code: string;
+    title?: string;
     selectedGroups?: string[];
+    scorePercent?: number;
+    totalScore?: number;
+    maxScore?: number;
+    completionRate?: number;
     criteria: {
       criteriaId: string;
       score: number | null;
@@ -69,6 +80,21 @@ export type ProjectPreviewStats = {
   scoredCount: number;
   sectionCount: number;
   completionRate: number;
+  scorePercent: number;
+  totalScore: number;
+  maxScore: number;
+  scoreCounts: { pass: number; partial: number; fail: number };
+};
+
+export type SectionReportRow = {
+  code: string;
+  title: string;
+  totalItems: number;
+  scoredCount: number;
+  completionRate: number;
+  scorePercent: number;
+  totalScore: number;
+  maxScore: number;
   scoreCounts: { pass: number; partial: number; fail: number };
 };
 
@@ -78,6 +104,7 @@ export function getProjectPreviewStats(project: ApiProject): ProjectPreviewStats
   let pass = 0;
   let partial = 0;
   let fail = 0;
+  let totalScore = 0;
 
   for (const section of project.sections) {
     for (const criterion of section.criteria) {
@@ -85,19 +112,68 @@ export function getProjectPreviewStats(project: ApiProject): ProjectPreviewStats
       if (criterion.score === null || criterion.score === undefined) continue;
 
       scoredCount++;
+      totalScore += criterion.score;
       if (criterion.score === 2) pass++;
       else if (criterion.score === 1) partial++;
       else if (criterion.score === 0) fail++;
     }
   }
 
+  const maxScore = totalItems * 2;
+  const scorePercent =
+    project.scorePercent ??
+    (maxScore > 0 ? Math.round((totalScore / maxScore) * 1000) / 10 : 0);
+
   return {
     totalItems,
     scoredCount,
     sectionCount: project.sections.length,
     completionRate: Math.round(project.completionRate ?? 0),
+    scorePercent: Math.round(scorePercent * 10) / 10,
+    totalScore: project.totalScore ?? totalScore,
+    maxScore: project.maxScore ?? maxScore,
     scoreCounts: { pass, partial, fail },
   };
+}
+
+export function getProjectSectionReports(project: ApiProject): SectionReportRow[] {
+  return project.sections.map((section) => {
+    const catalog = findCatalogSection(section.code);
+    let totalItems = 0;
+    let scoredCount = 0;
+    let pass = 0;
+    let partial = 0;
+    let fail = 0;
+    let totalScore = 0;
+
+    for (const criterion of section.criteria) {
+      totalItems++;
+      if (criterion.score === null || criterion.score === undefined) continue;
+
+      scoredCount++;
+      totalScore += criterion.score;
+      if (criterion.score === 2) pass++;
+      else if (criterion.score === 1) partial++;
+      else if (criterion.score === 0) fail++;
+    }
+
+    const maxScore = totalItems * 2;
+    const scorePercent =
+      section.scorePercent ??
+      (maxScore > 0 ? Math.round((totalScore / maxScore) * 1000) / 10 : 0);
+
+    return {
+      code: section.code,
+      title: catalog?.title ?? section.code,
+      totalItems,
+      scoredCount,
+      completionRate: Math.round(section.completionRate ?? 0),
+      scorePercent: Math.round(scorePercent * 10) / 10,
+      totalScore: section.totalScore ?? totalScore,
+      maxScore: section.maxScore ?? maxScore,
+      scoreCounts: { pass, partial, fail },
+    };
+  });
 }
 
 export function buildSectionViews(project: ApiProject): ProjectSectionView[] {

@@ -16,11 +16,23 @@ type ProjectCardProps = {
   onDelete: (projectId: string) => void;
 };
 
-function pickUploadUrl(
-  file: { ufsUrl?: string | null; url?: string | null; appUrl?: string | null } | undefined
-): string | null {
+function formatSharedLabel(ownerFirstName?: string): string {
+  const name = ownerFirstName?.trim();
+  if (name) return `${name} shared with you`;
+  return "Shared with you";
+}
+
+function pickUploadUrl(file: any): string | null {
   if (!file) return null;
-  return file.ufsUrl ?? file.url ?? file.appUrl ?? null;
+  return (
+    file.ufsUrl ??
+    file.url ??
+    file.appUrl ??
+    file.fileUrl ??
+    file.serverData?.url ??
+    file.serverData?.ufsUrl ??
+    null
+  );
 }
 
 export default function ProjectCard({
@@ -39,7 +51,12 @@ export default function ProjectCard({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const kebabRef = useRef<HTMLButtonElement>(null);
   const menuStyle = useFixedMenuPosition(menuOpen, kebabRef);
-  const { startUpload, isUploading } = useUploadThing("projectCoverImg");
+  const { startUpload, isUploading } = useUploadThing("projectCoverImg", {
+    onUploadError: (error) => {
+      console.error("UploadThing Error:", error);
+      alert(`Upload failed: ${error.message}`);
+    },
+  });
 
   useEffect(() => {
     setCoverImg(project.coverImg ?? "");
@@ -63,7 +80,12 @@ export default function ProjectCard({
 
     try {
       const uploaded = await startUpload([file]);
-      const url = pickUploadUrl(uploaded?.[0]);
+
+      if (!uploaded || uploaded.length === 0) {
+        throw new Error("SILENT_ABORT");
+      }
+
+      const url = pickUploadUrl(uploaded[0]);
       if (!url) throw new Error("No upload URL returned");
 
       setCoverImg(url);
@@ -87,7 +109,11 @@ export default function ProjectCard({
         _id: String(updated._id ?? project._id),
         coverImg: savedCover,
       });
-    } catch {
+    } catch (err) {
+      if (err instanceof Error && err.message !== "SILENT_ABORT") {
+        console.error("Cover upload exception:", err);
+        alert(err.message);
+      }
       setCoverImg(previousCover);
       setActionError("Could not update cover. Try again. · อัปเดตภาพปกไม่สำเร็จ");
     } finally {
@@ -143,39 +169,34 @@ export default function ProjectCard({
           {actionError}
         </p>
       )}
-      {isOwner && (
       <div className={styles.cardToolbar}>
-        <div className={styles.menuWrap}>
-          <button
-            ref={kebabRef}
-            type="button"
-            className={styles.kebabBtn}
-            aria-label="Project options, ตัวเลือกโครงการ"
-            aria-expanded={menuOpen}
-            aria-haspopup="menu"
-            disabled={cardBusy}
-            onClick={(e) => {
-              e.stopPropagation();
-              setMenuOpen((open) => !open);
-            }}
-          >
-            ⋮
-          </button>
+        {isOwner ? (
+          <div className={styles.menuWrap}>
+            <button
+              ref={kebabRef}
+              type="button"
+              className={styles.kebabBtn}
+              aria-label="Project options, ตัวเลือกโครงการ"
+              aria-expanded={menuOpen}
+              aria-haspopup="menu"
+              disabled={cardBusy}
+              onClick={(e) => {
+                e.stopPropagation();
+                setMenuOpen((open) => !open);
+              }}
+            >
+              ⋮
+            </button>
 
-          {menuOpen && (
-            <>
-              <button
-                type="button"
-                className={styles.menuBackdrop}
-                aria-label="Close menu, ปิดเมนู"
-                onClick={() => setMenuOpen(false)}
-              />
-              <div
-                className={styles.cardMenu}
-                role="menu"
-                style={menuStyle}
-              >
-                {isOwner && (
+            {menuOpen && (
+              <>
+                <button
+                  type="button"
+                  className={styles.menuBackdrop}
+                  aria-label="Close menu, ปิดเมนู"
+                  onClick={() => setMenuOpen(false)}
+                />
+                <div className={styles.cardMenu} role="menu" style={menuStyle}>
                   <button
                     type="button"
                     className={styles.menuItem}
@@ -188,8 +209,6 @@ export default function ProjectCard({
                   >
                     Share project
                   </button>
-                )}
-                {isOwner && (
                   <button
                     type="button"
                     className={styles.menuItem}
@@ -199,8 +218,6 @@ export default function ProjectCard({
                   >
                     {isUploading ? "Uploading..." : "Upload cover photo"}
                   </button>
-                )}
-                {isOwner && (
                   <button
                     type="button"
                     className={`${styles.menuItem} ${styles.menuItemDanger}`}
@@ -210,13 +227,16 @@ export default function ProjectCard({
                   >
                     Delete project
                   </button>
-                )}
-              </div>
-            </>
-          )}
-        </div>
+                </div>
+              </>
+            )}
+          </div>
+        ) : (
+          <span className={styles.sharedBadge}>
+            {formatSharedLabel(project.ownerFirstName)}
+          </span>
+        )}
       </div>
-      )}
 
       <input
         ref={fileInputRef}
@@ -237,12 +257,15 @@ export default function ProjectCard({
         <div className={styles.cardInfo}>
           <h4>{project.projectName}</h4>
           <span>{totalItems} Checkpoints</span>
-          {!isOwner && (
-            <span className={styles.sharedBadge}>Shared with you</span>
-          )}
         </div>
-        <div className={styles.status}>
-          {Math.round(project.completionRate ?? 0)}% Done
+        <div
+          className={`${styles.status} ${
+            project.status === "completed" ? styles.statusDone : ""
+          }`}
+        >
+          {project.status === "completed"
+            ? "Completed"
+            : `${Math.round(project.completionRate ?? 0)}% progress`}
         </div>
       </button>
 

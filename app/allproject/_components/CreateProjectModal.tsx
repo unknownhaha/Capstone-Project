@@ -75,6 +75,14 @@ export default function CreateProjectModal({ open, onClose }: CreateProjectModal
       const data = await res.json().catch(() => ({}));
 
       if (!res.ok) {
+        if (res.status === 403 && Array.isArray(data.missingFields)) {
+          setError(
+            typeof data.error === "string"
+              ? data.error
+              : "Complete your profile before creating a project. · กรอกโปรไฟล์ให้ครบก่อนสร้างโครงการ"
+          );
+          return;
+        }
         const message =
           typeof data.error === "string"
             ? data.error

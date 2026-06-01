@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import styles from "../allproject.module.css";
 import PhoneShell from "../_components/PhoneShell";
 import SectionPicker from "../_components/SectionPicker";
@@ -12,13 +12,17 @@ import {
   buildSectionViews,
   type ApiProject,
 } from "../_components/project-utils";
+import { canMarkProjectComplete } from "@/lib/project-complete";
 
 export default function ProjectInspectionPage() {
   const { projectId } = useParams<{ projectId: string }>();
+  const router = useRouter();
   const { status, isAuthenticated } = useRequireAuth();
   const [project, setProject] = useState<ApiProject | null>(null);
   const [loading, setLoading] = useState(true);
   const [openAdd, setOpenAdd] = useState(false);
+  const [markingDone, setMarkingDone] = useState(false);
+  const [doneError, setDoneError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isAuthenticated || !projectId) return;
@@ -72,6 +76,41 @@ export default function ProjectInspectionPage() {
     project.role === "owner" ||
     project.role === "editor" ||
     project.role === undefined;
+  const isCompleted = project.status === "completed";
+  const readyToComplete = canMarkProjectComplete(project);
+
+  async function handleMarkDone() {
+    if (!project || !readyToComplete || markingDone) return;
+
+    const confirmed = window.confirm(
+      `Mark "${project.projectName}" as done? You can still view the inspection report afterward.`
+    );
+    if (!confirmed) return;
+
+    setDoneError(null);
+    setMarkingDone(true);
+
+    try {
+      const res = await fetch(`/api/project/${projectId}`, {
+        method: "PATCH",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "completed" }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        setDoneError(data.error ?? "Failed to mark project as done");
+        return;
+      }
+
+      router.push(`/allproject/${projectId}/report`);
+    } catch {
+      setDoneError("Failed to mark project as done. Please try again.");
+    } finally {
+      setMarkingDone(false);
+    }
+  }
 
   return (
       <PhoneShell
@@ -102,7 +141,8 @@ export default function ProjectInspectionPage() {
       >
       <div className={styles.projectScroll}>
         <p className={styles.projectProgressLabel}>
-          Progress {Math.round(project.completionRate ?? 0)}%
+          {isCompleted ? "Completed" : "In progress"} ·{" "}
+          {Math.round(project.completionRate ?? 0)}%
         </p>
 
         <div
@@ -128,6 +168,41 @@ export default function ProjectInspectionPage() {
           projectId={projectId}
           sections={sectionViews}
         />
+
+        {doneError && <p className={styles.projectDoneError}>{doneError}</p>}
+
+        {canEdit && !isCompleted && (
+          <div className={styles.projectDoneWrap}>
+            <p className={styles.projectDoneHint}>
+              {readyToComplete
+                ? "All checkpoints are scored. Mark this project as done to generate the report."
+                : "Score every checkpoint before you can mark this project as done."}
+            </p>
+            <button
+              type="button"
+              className={styles.projectDoneBtn}
+              disabled={!readyToComplete || markingDone}
+              onClick={handleMarkDone}
+            >
+              {markingDone ? "Marking done..." : "Mark as Done"}
+            </button>
+          </div>
+        )}
+
+        {isCompleted && (
+          <div className={styles.projectDoneWrap}>
+            <p className={styles.projectDoneHint}>
+              This project is marked as done.
+            </p>
+            <Link
+              href={`/allproject/${projectId}/report`}
+              className={styles.projectReportBtn}
+            >
+              View Report
+            </Link>
+          </div>
+        )}
+
         {canEdit && (
           <>
             <button
