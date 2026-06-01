@@ -1,11 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useFixedMenuPosition } from "./useFixedMenuPosition";
 import { useRouter } from "next/navigation";
 import ProjectCardThumb from "./ProjectCardThumb";
 import { useUploadThing } from "./inspection-upload";
 import { type ApiProject } from "./project-utils";
 import ShareProjectDialog from "./ShareProjectDialog";
+import DeleteConfirmDialog from "./DeleteConfirmDialog";
+import { pickUploadFileUrl } from "@/lib/upload-file-url";
 import styles from "./project-card.module.css";
 
 type ProjectCardProps = {
@@ -20,12 +23,6 @@ function formatSharedLabel(ownerFirstName?: string): string {
   return "Shared with you";
 }
 
-function pickUploadUrl(file: any): string | null {
-  if (!file) return null;
-  // Check all possible locations depending on UploadThing version
-  return file.ufsUrl ?? file.url ?? file.appUrl ?? file.fileUrl ?? file.serverData?.url ?? file.serverData?.ufsUrl ?? null;
-}
-
 export default function ProjectCard({
   project,
   onUpdate,
@@ -34,14 +31,17 @@ export default function ProjectCard({
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
   const isOwner = project.role !== "editor";
   const [coverImg, setCoverImg] = useState(project.coverImg ?? "");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const kebabRef = useRef<HTMLButtonElement>(null);
+  const menuStyle = useFixedMenuPosition(menuOpen, kebabRef);
   const { startUpload, isUploading } = useUploadThing("projectCoverImg", {
     onUploadError: (error) => {
       console.error("UploadThing Error:", error);
-      // Alert the exact reason (e.g., "File size exceeds limit", "Unauthorized")
       alert(`Upload failed: ${error.message}`);
     },
   });
@@ -68,14 +68,12 @@ export default function ProjectCard({
 
     try {
       const uploaded = await startUpload([file]);
-      
+
       if (!uploaded || uploaded.length === 0) {
-        // The onUploadError callback will have already alerted the user.
-        // We throw a silent error here to stop execution gracefully without a double alert.
         throw new Error("SILENT_ABORT");
       }
-      
-      const url = pickUploadUrl(uploaded[0]);
+
+      const url = pickUploadFileUrl(uploaded[0]);
       if (!url) throw new Error("No upload URL returned");
 
       setCoverImg(url);
@@ -105,21 +103,21 @@ export default function ProjectCard({
         alert(err.message);
       }
       setCoverImg(previousCover);
+      setActionError("Could not update cover. Try again. · อัปเดตภาพปกไม่สำเร็จ");
     } finally {
       setBusy(false);
       e.target.value = "";
     }
   }
 
-  async function handleDelete() {
+  function requestDelete() {
     setMenuOpen(false);
+    setDeleteOpen(true);
+  }
 
-    const confirmed = window.confirm(
-      `Delete "${project.projectName}"? This cannot be undone.`
-    );
-    if (!confirmed) return;
-
+  async function confirmDelete() {
     setBusy(true);
+    setActionError(null);
 
     try {
       const res = await fetch(`/api/project/${project._id}`, {
@@ -127,11 +125,19 @@ export default function ProjectCard({
         credentials: "include",
       });
 
-      if (!res.ok) throw new Error("Failed to delete project");
+      if (!res.ok) {
+        setActionError(
+          res.status >= 500
+            ? "Server error. Try again. · เซิร์ฟเวอร์ขัดข้อง"
+            : "Could not delete project. · ลบโครงการไม่สำเร็จ"
+        );
+        return;
+      }
 
+      setDeleteOpen(false);
       onDelete(String(project._id));
-    } catch (err) {
-      console.error("Delete failed:", err);
+    } catch {
+      setActionError("Network error. Try again. · เครือข่ายขัดข้อง");
     } finally {
       setBusy(false);
     }
@@ -146,14 +152,21 @@ export default function ProjectCard({
 
   return (
     <div className={`${styles.card} ${cardBusy ? styles.cardBusy : ""}`}>
+      {actionError && (
+        <p className={styles.cardActionError} role="alert">
+          {actionError}
+        </p>
+      )}
       <div className={styles.cardToolbar}>
         {isOwner ? (
           <div className={styles.menuWrap}>
             <button
+              ref={kebabRef}
               type="button"
               className={styles.kebabBtn}
-              aria-label="Project options"
+              aria-label="Project options, ตัวเลือกโครงการ"
               aria-expanded={menuOpen}
+              aria-haspopup="menu"
               disabled={cardBusy}
               onClick={(e) => {
                 e.stopPropagation();
@@ -168,10 +181,10 @@ export default function ProjectCard({
                 <button
                   type="button"
                   className={styles.menuBackdrop}
-                  aria-label="Close menu"
+                  aria-label="Close menu, ปิดเมนู"
                   onClick={() => setMenuOpen(false)}
                 />
-                <div className={styles.cardMenu} role="menu">
+                <div className={styles.cardMenu} role="menu" style={menuStyle}>
                   <button
                     type="button"
                     className={styles.menuItem}
@@ -198,7 +211,7 @@ export default function ProjectCard({
                     className={`${styles.menuItem} ${styles.menuItemDanger}`}
                     role="menuitem"
                     disabled={cardBusy}
-                    onClick={handleDelete}
+                    onClick={requestDelete}
                   >
                     Delete project
                   </button>
@@ -255,6 +268,14 @@ export default function ProjectCard({
             collaborationEnabled,
           });
         }}
+      />
+
+      <DeleteConfirmDialog
+        open={deleteOpen}
+        projectName={project.projectName}
+        busy={busy}
+        onClose={() => setDeleteOpen(false)}
+        onConfirm={() => void confirmDelete()}
       />
     </div>
   );

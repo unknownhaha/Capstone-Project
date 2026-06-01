@@ -1,0 +1,61 @@
+.skeletonCard {
+  width: 100%;
+  height: fit-content;
+  align-self: start;
+  background: var(--insp-color-card-on-tray);
+  border: 1px solid var(--insp-color-card-on-tray-border);
+  border-radius: var(--insp-radius-lg);
+  padding: var(--insp-space-sm);
+  box-shadow: var(--insp-shadow-card-on-tray);
+  opacity: 1;
+  overflow: hidden;
+}
+
+.shimmer {
+  border-radius: var(--insp-radius-sm);
+  background: linear-gradient(
+    90deg,
+    var(--insp-color-neutral-100) 0%,
+    var(--insp-color-neutral-200) 50%,
+    var(--insp-color-neutral-100) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeletonShimmer 1.2s ease-in-out infinite;
+}
+
+.skeletonThumb {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  margin-bottom: var(--insp-space-sm);
+}
+
+.skeletonLine {
+  height: 12px;
+  margin-bottom: var(--insp-space-xs);
+}
+
+.skeletonLineShort {
+  width: 55%;
+}
+
+.skeletonBadge {
+  width: 48px;
+  height: 18px;
+  margin-top: var(--insp-space-2xs);
+}
+
+@keyframes skeletonShimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shimmer {
+    animation: none;
+    background: var(--insp-color-neutral-100);
+  }
+}

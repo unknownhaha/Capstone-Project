@@ -22,7 +22,7 @@
 }
 
 .initialsText {
-  font-size: 36px;
+  font-size: var(--insp-text-thumb);
   font-weight: 700;
   letter-spacing: 0.04em;
   color: rgba(255, 255, 255, 0.92);

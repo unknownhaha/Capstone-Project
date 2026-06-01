@@ -1,0 +1,191 @@
+/**
+ * Inspection workspace tokens (aligned with DESIGN.md).
+ * Import once in app/layout.tsx; consume via var(--insp-*) in CSS modules.
+ */
+:root {
+  /* Shell scale — cadet teal, single hue family */
+  --insp-color-shell-outer: #111111;
+  --insp-color-shell-teal-light: #7fb3b6;
+  --insp-color-shell-teal: #5f9ea0;
+  --insp-color-shell-teal-deep: #4a8588;
+  /* Aligned with gradient end (was mismatched #65a1a3) */
+  --insp-color-shell-inner: #5f9ea0;
+
+  /* Work surfaces — cool paper tinted toward shell */
+  --insp-color-surface: #ffffff;
+  --insp-color-surface-muted: #f6faf9;
+  --insp-color-surface-panel: #eff5f5;
+  --insp-color-cta-surface: #f6fcfb;
+
+  /* Ink */
+  --insp-color-ink: #1a2e30;
+  --insp-color-ink-secondary: #4a6062;
+  --insp-color-ink-muted: #6a8082;
+  --insp-color-ink-placeholder: #2d4a4c;
+
+  /* Accent on white */
+  --insp-color-accent: #2d6a6a;
+  --insp-color-accent-hover: #245656;
+  --insp-color-accent-deep: #255858;
+
+  /* Progress — mint green preserved */
+  --insp-color-progress: #57cc99;
+  --insp-color-progress-deep: #3db87e;
+
+  /* Semantic */
+  --insp-color-warning: #f0d78c;
+  --insp-color-warning-ink: #3a4530;
+  --insp-color-danger: #c41e3a;
+  --insp-color-danger-alt: #ef476f;
+  --insp-color-danger-alt-hover: #d63d62;
+  --insp-color-danger-deep: #8b3040;
+  --insp-color-danger-surface: #fff0f3;
+  --insp-color-danger-border: #ffc9d4;
+
+  /* Borders — teal-tinted */
+  --insp-color-border: #dde8e8;
+  --insp-color-border-light: #e8f0f0;
+  --insp-color-border-muted: #d4e0e0;
+
+  --insp-color-overlay: rgba(26, 46, 48, 0.45);
+  --insp-color-overlay-strong: rgba(26, 46, 48, 0.52);
+
+  /* Text on teal shell */
+  --insp-color-on-shell: #ffffff;
+  --insp-color-on-shell-strong: rgba(255, 255, 255, 0.96);
+  --insp-color-on-shell-muted: rgba(255, 255, 255, 0.88);
+  --insp-color-on-shell-subtle: rgba(255, 255, 255, 0.76);
+
+  /* Glass on shell — 4-step ladder */
+  --insp-glass-1: rgba(255, 255, 255, 0.2);
+  --insp-glass-2: rgba(255, 255, 255, 0.28);
+  --insp-glass-3: rgba(255, 255, 255, 0.36);
+  --insp-glass-4: rgba(255, 255, 255, 0.46);
+  --insp-color-glass-btn: var(--insp-glass-1);
+  --insp-color-glass-btn-hover: var(--insp-glass-2);
+  --insp-color-glass-soft: var(--insp-glass-2);
+  --insp-color-glass: var(--insp-glass-3);
+  --insp-color-glass-hover: var(--insp-glass-4);
+
+  /* Solid surfaces on teal shell (opaque, hue-matched) */
+  --insp-color-shell-chip: #d8ecec;
+  --insp-color-shell-chip-hover: #c5e0e1;
+  --insp-color-shell-field: #f2f8f8;
+  --insp-color-shell-field-focus: #ffffff;
+  --insp-color-shell-tray: #c2d8d8;
+  --insp-color-shell-tray-border: #a8c0c0;
+  /* Project cards on tray: brighter sheet vs recessed container */
+  --insp-color-card-on-tray: #ffffff;
+  --insp-color-card-on-tray-border: #b5cbcb;
+  --insp-color-card-on-tray-border-hover: #8fafb0;
+  --insp-color-ring-hub: #f4faf9;
+  --insp-color-ring-track-solid: #b8d4d5;
+  --insp-color-ring-divider: #d0e2e2;
+  --insp-color-scrollbar-shell: #9eb8b9;
+
+  /* Progress ring on shell — opaque track (mint arc unchanged) */
+  --insp-color-ring-track: var(--insp-color-ring-track-solid);
+  --insp-color-ring-border: #a8c4c5;
+  --insp-color-ring-loading: #c5dada;
+
+  /* Neutrals — tinted cool */
+  --insp-color-neutral-100: #eff5f5;
+  --insp-color-neutral-200: #dce8e8;
+  --insp-color-neutral-300: #333333;
+  --insp-color-neutral-400: #222222;
+
+  /* Typography — rem scale (~1.2 ratio), 16px body minimum */
+  --insp-font-family: var(--font-inspection-sans), var(--font-noto-thai), "Segoe UI", system-ui, sans-serif;
+  --insp-font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --insp-text-2xs: 0.75rem; /* 12 — smallest UI copy */
+  --insp-text-xs: 0.8125rem; /* 13 — captions, meta */
+  --insp-text-sm: 0.875rem; /* 14 — labels, secondary */
+  --insp-text-base: 1rem; /* 16 — body, inputs */
+  --insp-text-lg: 1.125rem; /* 18 — subheads, icons */
+  --insp-text-xl: 1.25rem; /* 20 */
+  --insp-text-2xl: 1.375rem; /* 22 — section titles */
+  --insp-text-3xl: 1.75rem; /* 28 — hero secondary */
+  --insp-text-4xl: 2rem; /* 32 — display (clamp max ≤ 6rem) */
+  --insp-text-icon: 1.5rem; /* 24 — menu / control glyphs */
+  --insp-text-thumb: 2.25rem; /* 36 — card thumbnails */
+  --insp-text-hero: clamp(2.5rem, 10vw, 3.5rem); /* large status icons */
+
+  --insp-leading-tight: 1.2;
+  --insp-leading-snug: 1.35;
+  --insp-leading-normal: 1.5;
+  --insp-leading-relaxed: 1.55;
+
+  --insp-font-weight-regular: 400;
+  --insp-font-weight-medium: 500;
+  --insp-font-weight-semibold: 600;
+  --insp-font-weight-bold: 700;
+
+  /* Legacy aliases — prefer --insp-text-* in new rules */
+  --insp-font-display-size: var(--insp-text-4xl);
+  --insp-font-title-size: var(--insp-text-2xl);
+  --insp-font-body-size: var(--insp-text-base);
+  --insp-font-label-size: var(--insp-text-sm);
+  --insp-font-caption-size: var(--insp-text-xs);
+  --insp-font-micro-size: var(--insp-text-2xs);
+
+  /* Spacing (4pt base) */
+  --insp-space-2xs: 4px;
+  --insp-space-xs: 6px;
+  --insp-space-sm: 10px;
+  --insp-space-md: 14px;
+  --insp-space-lg: 18px;
+  --insp-space-xl: 28px;
+  --insp-space-2xl: 48px;
+  --insp-section-gap: 24px;
+
+  /* Radius */
+  --insp-radius-sm: 8px;
+  --insp-radius-md: 12px;
+  --insp-radius-lg: 18px;
+  --insp-radius-xl: 20px;
+  --insp-radius-pill: 999px;
+
+  /* Layout */
+  --insp-phone-max-width: 420px;
+  --insp-touch-min: 44px;
+  /* Toolbar pair: matched block size for symmetric create + progress ring */
+  --insp-toolbar-pair-size: 168px;
+  --insp-toolbar-ring-inset: 14px;
+  --insp-toolbar-create-size: var(--insp-toolbar-pair-size);
+  --insp-toolbar-ring-max: var(--insp-toolbar-pair-size);
+
+  /* Z-index scale */
+  --insp-z-dropdown: 30;
+  --insp-z-overlay: 40;
+  --insp-z-nav: 45;
+  --insp-z-modal-backdrop: 50;
+  --insp-z-modal: 60;
+  --insp-z-alert: 70;
+
+  /* Motion */
+  --insp-duration-fast: 0.15s;
+  --insp-duration-normal: 0.2s;
+  --insp-duration-panel: 0.35s;
+
+  /* Shadows — teal-tinted (not neutral black on shell) */
+  --insp-shadow-card-teal: 0 6px 18px rgba(36, 78, 80, 0.18);
+  --insp-shadow-card-teal-hover: 0 10px 24px rgba(32, 72, 74, 0.22);
+  --insp-shadow-card-on-tray: 0 2px 6px rgba(32, 72, 74, 0.1);
+  --insp-shadow-card-on-tray-hover: 0 4px 10px rgba(32, 72, 74, 0.16);
+  --insp-shadow-sheet: 0 8px 20px rgba(32, 72, 74, 0.2);
+  --insp-shadow-shell-control: 0 4px 12px rgba(32, 72, 74, 0.14);
+  --insp-shadow-drawer: -8px 0 24px rgba(36, 78, 80, 0.18);
+  --insp-shadow-card: var(--insp-shadow-card-teal);
+  --insp-shadow-modal: 0 16px 40px rgba(32, 72, 74, 0.22);
+  --insp-shadow-elevated: var(--insp-shadow-shell-control);
+  --insp-shadow-inset-ring: inset 0 4px 8px rgba(32, 72, 74, 0.18);
+
+  /* Gradients — shell environment */
+  --insp-gradient-shell: linear-gradient(
+    165deg,
+    var(--insp-color-shell-teal-light) 0%,
+    var(--insp-color-shell-teal) 48%,
+    var(--insp-color-shell-teal-deep) 100%
+  );
+}

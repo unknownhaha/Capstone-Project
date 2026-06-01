@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "../allproject.module.css";
 import sectionStyles from "./section.module.css";
 import SectionPicker from "./SectionPicker";
+import { useModalA11y } from "./useModalA11y";
 
 type CreateProjectModalProps = {
   open: boolean;
@@ -13,12 +14,26 @@ type CreateProjectModalProps = {
 
 export default function CreateProjectModal({ open, onClose }: CreateProjectModalProps) {
   const router = useRouter();
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const titleId = useId();
   const [location, setLocation] = useState("");
   const [projectName, setProjectName] = useState("");
   const [description, setDescription] = useState("");
   const [selectedGroupIds, setSelectedGroupIds] = useState<Set<string>>(new Set());
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+
+  useModalA11y(open, onClose, dialogRef);
+
+  useEffect(() => {
+    if (open) return;
+    setLocation("");
+    setProjectName("");
+    setDescription("");
+    setSelectedGroupIds(new Set());
+    setError(null);
+    setSubmitting(false);
+  }, [open]);
 
   const toggleGroup = (groupId: string) => {
     setSelectedGroupIds((prev) => {
@@ -33,12 +48,12 @@ export default function CreateProjectModal({ open, onClose }: CreateProjectModal
     setError(null);
 
     if (!location.trim() || !projectName.trim()) {
-      setError("Location and project name are required.");
+      setError("Location and project name are required. · กรอกสถานที่และชื่อโครงการ");
       return;
     }
 
     if (selectedGroupIds.size === 0) {
-      setError("Select at least one criteria group.");
+      setError("Select at least one criteria group. · เลือกกลุ่มเกณฑ์อย่างน้อย 1 กลุ่ม");
       return;
     }
 
@@ -50,79 +65,122 @@ export default function CreateProjectModal({ open, onClose }: CreateProjectModal
         headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({
-          projectName,
-          location,
-          description,
+          projectName: projectName.trim(),
+          location: location.trim(),
+          description: description.trim(),
           criteriaGroupIds: Array.from(selectedGroupIds),
         }),
       });
 
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
 
       if (!res.ok) {
         if (res.status === 403 && Array.isArray(data.missingFields)) {
           setError(
-            data.error ??
-              "Complete your profile before creating a project."
+            typeof data.error === "string"
+              ? data.error
+              : "Complete your profile before creating a project. · กรอกโปรไฟล์ให้ครบก่อนสร้างโครงการ"
           );
           return;
         }
-        setError(data.error ?? "Failed to create project");
+        const message =
+          typeof data.error === "string"
+            ? data.error
+            : res.status >= 500
+              ? "Server error. Try again. · เซิร์ฟเวอร์ขัดข้อง ลองอีกครั้ง"
+              : "Failed to create project. · สร้างโครงการไม่สำเร็จ";
+        setError(message);
         return;
       }
 
       onClose();
       router.push(`/allproject/${data._id}`);
     } catch {
-      setError("Failed to create project. Please try again.");
+      setError("Network error. Check your connection. · เครือข่ายขัดข้อง ลองอีกครั้ง");
     } finally {
       setSubmitting(false);
     }
   };
 
+  if (!open) return null;
+
   return (
     <>
-      {open && <div className={styles.overlay} onClick={onClose} />}
+      <button
+        type="button"
+        className={styles.overlayBackdrop}
+        aria-label="Close create project dialog, ปิดหน้าต่างสร้างโครงการ"
+        onClick={onClose}
+      />
       <div
-        className={`${styles.createBoxFull} ${open ? styles.showCreateFull : ""}`}
+        ref={dialogRef}
+        className={`${styles.createBoxFull} ${styles.showCreateFull}`}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
       >
         <div className={styles.createHeader}>
-          <h3>Create Project</h3>
+          <h3 id={titleId}>Create project · สร้างโครงการ</h3>
           <button
             type="button"
             className={styles.createClose}
             onClick={onClose}
-            aria-label="Close"
+            aria-label="Close create project dialog, ปิด"
           >
             ✕
           </button>
         </div>
 
         <div className={styles.createBody}>
-          {error && <p className={sectionStyles.errorText}>{error}</p>}
+          {error && (
+            <p className={sectionStyles.errorText} role="alert">
+              {error}
+            </p>
+          )}
 
           <div className={styles.createFields}>
+            <label className={styles.fieldLabel} htmlFor="create-location">
+              Location · สถานที่
+            </label>
             <div className={styles.inputGroup}>
-              <span>📍</span>
+              <span aria-hidden>📍</span>
               <input
-                placeholder="Location"
+                id="create-location"
+                name="location"
+                placeholder="Building or site name"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
+                maxLength={200}
+                required
+                autoComplete="off"
               />
             </div>
 
+            <label className={styles.fieldLabel} htmlFor="create-project-name">
+              Project name · ชื่อโครงการ
+            </label>
             <input
+              id="create-project-name"
+              name="projectName"
               className={styles.input}
-              placeholder="Project Name"
+              placeholder="e.g. Main dormitory inspection"
               value={projectName}
               onChange={(e) => setProjectName(e.target.value)}
+              maxLength={120}
+              required
             />
 
+            <label className={styles.fieldLabel} htmlFor="create-description">
+              Description (optional) · คำอธิบาย (ไม่บังคับ)
+            </label>
             <textarea
+              id="create-description"
+              name="description"
               className={styles.textarea}
-              placeholder="Description"
+              placeholder="Notes for your team"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+              maxLength={2000}
             />
           </div>
 
@@ -130,7 +188,7 @@ export default function CreateProjectModal({ open, onClose }: CreateProjectModal
             Selected: {selectedGroupIds.size} criteria groups
           </p>
 
-          <p className={styles.createSectionLabel}>Sections</p>
+          <p className={styles.createSectionLabel}>Sections · หมวดเกณฑ์</p>
 
           <div className={styles.createCriteriaScroll}>
             <SectionPicker
@@ -144,11 +202,12 @@ export default function CreateProjectModal({ open, onClose }: CreateProjectModal
 
         <div className={styles.createFooter}>
           <button
+            type="button"
             className={styles.submit}
             onClick={handleSubmit}
             disabled={submitting}
           >
-            {submitting ? "Creating..." : "Create Project"}
+            {submitting ? "Creating... · กำลังสร้าง" : "Create project · สร้างโครงการ"}
           </button>
         </div>
       </div>

@@ -112,27 +112,14 @@ function VerifyForm() {
         </p>
 
         {emailFailed && !error && (
-          <div
-            style={{
-              padding: "10px",
-              background: "#fff3cd",
-              color: "#664d03",
-              borderRadius: "8px",
-              marginBottom: "16px",
-              fontSize: "14px",
-            }}
-          >
+          <div className="noticeWarning">
             Your account was created, but the verification email could not be sent.
             Ask whoever runs the app to set EMAIL_USER and EMAIL_PASS in .env, then tap
             Resend Code below.
           </div>
         )}
 
-        {error && (
-          <div style={{ padding: "10px", background: "#f8d7da", color: "#721c24", borderRadius: "8px", marginBottom: "16px", fontSize: "14px" }}>
-            {error}
-          </div>
-        )}
+        {error && <div className="noticeError">{error}</div>}
 
         {/* OTP Inputs */}
         <form onSubmit={handleSubmit}>

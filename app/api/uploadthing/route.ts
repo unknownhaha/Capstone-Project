@@ -3,6 +3,7 @@ import { createRouteHandler } from "uploadthing/next";
 import { auth } from "@/auth";
 import User from "@/lib/model/user";
 import { connectDB } from "@/lib/db";
+import { pickUploadFileUrl } from "@/lib/upload-file-url";
 
 export const runtime = "nodejs";
 
@@ -24,7 +25,7 @@ export const uploadRouter = {
         await connectDB();
 
         const userId = metadata.userId;
-        const imageUrl = file.ufsUrl ?? file.url ?? (file as any).appUrl ?? (file as any).fileUrl;
+        const imageUrl = pickUploadFileUrl(file);
 
         if (!imageUrl) {
           return;
@@ -58,7 +59,7 @@ export const uploadRouter = {
       return { userId: session.user.id };
     })
     .onUploadComplete(async ({ file }) => {
-      return { url: file.ufsUrl ?? file.url ?? (file as any).appUrl ?? (file as any).fileUrl };
+      return { url: pickUploadFileUrl(file) };
     }),
 
   projectCoverImg: f({
@@ -72,7 +73,7 @@ export const uploadRouter = {
       return { userId: session.user.id };
     })
     .onUploadComplete(async ({ file }) => {
-      return { url: file.ufsUrl ?? file.url ?? (file as any).appUrl ?? (file as any).fileUrl };
+      return { url: pickUploadFileUrl(file) };
     }),
 } satisfies FileRouter;
 

@@ -47,9 +47,7 @@ export default function ProjectInspectionPage() {
     return (
       <div className={styles.container}>
         <div className={styles.phone}>
-          <p style={{ color: "white", textAlign: "center", marginTop: 40 }}>
-            Loading...
-          </p>
+          <p className={styles.projectLoading}>Loading...</p>
         </div>
       </div>
     );
@@ -58,7 +56,7 @@ export default function ProjectInspectionPage() {
   if (loading) {
     return (
       <PhoneShell title="Project" subtitle="Loading...">
-        <p style={{ color: "white" }}>Loading project...</p>
+        <p className={styles.projectLoading}>Loading project...</p>
       </PhoneShell>
     );
   }
@@ -135,21 +133,15 @@ export default function ProjectInspectionPage() {
                 <span className={styles.addCriteriaTooltip}>Add new criteria</span>
               </button>
             )}
-            <Link href="/allproject" style={{ color: "white", fontSize: 24, marginBottom: 15 }}>
+            <Link href="/allproject" className={styles.closeProjectLink} aria-label="Close project">
               ✕
             </Link>
           </div>
         }
       >
       <div className={styles.projectScroll}>
-        <p
-          style={{
-            margin: "0 0 12px",
-            fontSize: 12,
-            color: "#555",
-          }}
-        >
-          {isCompleted ? "Completed" : "In progress"}{" "}
+        <p className={styles.projectProgressLabel}>
+          {isCompleted ? "Completed" : "In progress"} ·{" "}
           {Math.round(project.completionRate ?? 0)}%
         </p>
 

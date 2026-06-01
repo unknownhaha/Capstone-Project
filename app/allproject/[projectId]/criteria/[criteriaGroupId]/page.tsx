@@ -230,7 +230,7 @@ export default function CriteriaItemsPage() {
               ...section,
               criteria: section.criteria.map((c) =>
                 c.criteriaId === itemId
-                  ? { ...c, score: previousScore ?? undefined }
+                  ? { ...c, score: previousScore ?? null }
                   : c
               ),
             })),
@@ -310,17 +310,7 @@ export default function CriteriaItemsPage() {
             </h1>
 
             {conflictMsg && (
-              <p
-                role="alert"
-                style={{
-                  margin: "0 0 12px",
-                  padding: "10px 12px",
-                  background: "#fff3cd",
-                  color: "#664d03",
-                  borderRadius: "8px",
-                  fontSize: "13px",
-                }}
-              >
+              <p role="alert" className={itemStyles.conflictNotice}>
                 {conflictMsg}
               </p>
             )}

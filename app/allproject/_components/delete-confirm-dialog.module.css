@@ -1,0 +1,105 @@
+.panel {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  pointer-events: none;
+}
+
+.panel .backdrop,
+.panel .dialog {
+  pointer-events: auto;
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  border: none;
+  margin: 0;
+  padding: 0;
+  background: var(--insp-color-overlay-strong);
+  cursor: pointer;
+}
+
+.dialog {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 360px);
+  padding: 20px;
+  border-radius: 18px;
+  background: var(--insp-color-surface);
+  box-shadow: var(--insp-shadow-modal);
+  color: var(--insp-color-ink);
+}
+
+.title {
+  margin: 0 0 10px;
+  font-size: var(--insp-text-lg);
+  font-weight: 700;
+  text-wrap: balance;
+}
+
+.body {
+  margin: 0 0 6px;
+  font-size: var(--insp-text-sm);
+  line-height: 1.45;
+  color: var(--insp-color-ink-secondary);
+}
+
+.bodyTh {
+  margin: 0 0 18px;
+  font-size: var(--insp-text-xs);
+  line-height: 1.4;
+  color: var(--insp-color-ink-muted);
+}
+
+.projectName {
+  font-weight: 700;
+  color: var(--insp-color-ink);
+  word-break: break-word;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cancelBtn,
+.deleteBtn {
+  min-height: 44px;
+  border-radius: 999px;
+  font-size: var(--insp-text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.cancelBtn {
+  background: var(--insp-color-neutral-100);
+  color: var(--insp-color-accent);
+}
+
+.deleteBtn {
+  background: var(--insp-color-danger);
+  color: var(--insp-color-on-shell);
+}
+
+.deleteBtn:disabled,
+.cancelBtn:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.cancelBtn:focus-visible,
+.deleteBtn:focus-visible {
+  outline: 2px solid var(--insp-color-accent);
+  outline-offset: 3px;
+}
+
+.deleteBtn:focus-visible {
+  outline-color: var(--insp-color-danger);
+}

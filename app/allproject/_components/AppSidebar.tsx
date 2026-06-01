@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import styles from "./sidebar.module.css";
+import { useModalA11y } from "./useModalA11y";
 
 type AppSidebarProps = {
   open: boolean;
@@ -23,6 +24,10 @@ export default function AppSidebar({ open, onClose }: AppSidebarProps) {
   const { data: session } = useSession();
   const [user, setUser] = useState<SidebarUser | null>(null);
   const [loggingOut, setLoggingOut] = useState(false);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const titleId = useId();
+
+  useModalA11y(open, onClose, panelRef);
 
   useEffect(() => {
     if (!open || !session?.user?.id) return;
@@ -74,19 +79,28 @@ export default function AppSidebar({ open, onClose }: AppSidebarProps) {
   if (!open) return null;
 
   return (
-    <>
-      <div className={styles.overlay} onClick={onClose} aria-hidden />
+    <div ref={panelRef} className={styles.sidebarPanel}>
+      <button
+        type="button"
+        className={styles.overlay}
+        aria-label="Close navigation menu, ปิดเมนู"
+        onClick={onClose}
+      />
       <aside
         className={`${styles.sidebar} ${styles.sidebarOpen}`}
-        aria-label="Navigation menu"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
       >
         <div className={styles.header}>
-          <h2 className={styles.headerTitle}>Menu</h2>
+          <h2 id={titleId} className={styles.headerTitle}>
+            Menu · เมนู
+          </h2>
           <button
             type="button"
             className={styles.closeBtn}
             onClick={onClose}
-            aria-label="Close menu"
+            aria-label="Close menu, ปิดเมนู"
           >
             ✕
           </button>
@@ -100,7 +114,9 @@ export default function AppSidebar({ open, onClose }: AppSidebarProps) {
               className={styles.avatar}
             />
           ) : (
-            <div className={styles.avatarFallback}>{initials}</div>
+            <div className={styles.avatarFallback} aria-hidden>
+              {initials}
+            </div>
           )}
           <p className={styles.userName}>{displayName}</p>
           <p className={styles.userEmail}>
@@ -108,7 +124,7 @@ export default function AppSidebar({ open, onClose }: AppSidebarProps) {
           </p>
         </div>
 
-        <nav className={styles.nav}>
+        <nav className={styles.nav} aria-label="Main navigation">
           <Link
             href="/allproject"
             className={`${styles.navLink} ${
@@ -118,7 +134,7 @@ export default function AppSidebar({ open, onClose }: AppSidebarProps) {
             }`}
             onClick={onClose}
           >
-            My Projects
+            My Projects · โครงการ
           </Link>
           <Link
             href="/profile"
@@ -127,7 +143,7 @@ export default function AppSidebar({ open, onClose }: AppSidebarProps) {
             }`}
             onClick={onClose}
           >
-            Profile
+            Profile · โปรไฟล์
           </Link>
         </nav>
 
@@ -138,10 +154,10 @@ export default function AppSidebar({ open, onClose }: AppSidebarProps) {
             onClick={handleLogout}
             disabled={loggingOut}
           >
-            {loggingOut ? "Logging out..." : "Log out"}
+            {loggingOut ? "Logging out..." : "Log out · ออกจากระบบ"}
           </button>
         </div>
       </aside>
-    </>
+    </div>
   );
 }

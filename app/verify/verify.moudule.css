@@ -4,7 +4,7 @@
   justify-content: center;
   align-items: center;
   background: linear-gradient(to bottom, #7fb3b6, #5f9ea0);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--insp-font-family);
   padding: 20px;
 }
 
@@ -20,20 +20,20 @@
 }
 
 .icon {
-  font-size: 56px;
+  font-size: var(--insp-text-hero);
   margin-bottom: 24px;
   display: block;
 }
 
 h2 {
   margin: 0 0 12px 0;
-  font-size: 28px;
+  font-size: var(--insp-text-3xl);
   font-weight: 700;
   color: #1a1a1a;
 }
 
 .desc {
-  font-size: 14px;
+  font-size: var(--insp-text-sm);
   margin-bottom: 32px;
   color: #666;
   line-height: 1.5;
@@ -52,7 +52,7 @@ h2 {
   border: 2px solid #ddd;
   outline: none;
   text-align: center;
-  font-size: 24px;
+  font-size: var(--insp-text-icon);
   font-weight: 600;
   border-radius: 12px;
   color: black;
@@ -74,7 +74,7 @@ h2 {
 .resend {
   margin-bottom: 20px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: var(--insp-text-sm);
   color: #5f9ea0;
   text-decoration: none;
   font-weight: 500;
@@ -100,7 +100,7 @@ h2 {
   background: #5f9ea0;
   color: white;
   font-weight: 600;
-  font-size: 16px;
+  font-size: var(--insp-text-base);
   cursor: pointer;
   border-radius: 12px;
   transition: background 0.2s ease;
@@ -113,4 +113,26 @@ h2 {
 .submit:disabled {
   background: #ccc;
   cursor: not-allowed;
+}
+
+.noticeWarning {
+  padding: 10px;
+  margin-bottom: 16px;
+  border-radius: var(--insp-radius-sm);
+  background: #fff3cd;
+  color: #664d03;
+  font-size: var(--insp-text-sm);
+  line-height: var(--insp-leading-normal);
+  text-align: left;
+}
+
+.noticeError {
+  padding: 10px;
+  margin-bottom: 16px;
+  border-radius: var(--insp-radius-sm);
+  background: #f8d7da;
+  color: #721c24;
+  font-size: var(--insp-text-sm);
+  line-height: var(--insp-leading-normal);
+  text-align: left;
 }

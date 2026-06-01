@@ -15,7 +15,7 @@
 
 .header h3 {
   margin: 0;
-  font-size: 18px;
+  font-size: var(--insp-text-lg);
   font-weight: 600;
   color: #1f2937;
 }
@@ -27,7 +27,7 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: var(--insp-text-sm);
   font-weight: 500;
   transition: background-color 0.2s;
 }
@@ -47,7 +47,7 @@
   border-left: 4px solid #ef4444;
   border-radius: 4px;
   color: #dc2626;
-  font-size: 14px;
+  font-size: var(--insp-text-sm);
   margin-bottom: 12px;
 }
 
@@ -58,7 +58,7 @@
 }
 
 .riskLevel {
-  font-size: 32px;
+  font-size: var(--insp-text-4xl);
   font-weight: bold;
   margin-bottom: 12px;
   text-align: center;
@@ -73,13 +73,13 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 8px;
-  font-size: 14px;
+  font-size: var(--insp-text-sm);
   font-weight: 500;
   color: #374151;
 }
 
 .scoreValue {
-  font-size: 16px;
+  font-size: var(--insp-text-base);
   font-weight: 600;
 }
 
@@ -104,7 +104,7 @@
   border: 1px solid #d1d5db;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: var(--insp-text-sm);
   font-weight: 500;
   color: #374151;
   text-align: left;
@@ -128,7 +128,7 @@
   display: flex;
   justify-content: space-between;
   padding: 6px 0;
-  font-size: 14px;
+  font-size: var(--insp-text-sm);
   line-height: 1.6;
 }
 
@@ -138,7 +138,7 @@
 }
 
 .confidence {
-  font-size: 13px;
+  font-size: var(--insp-text-xs);
   color: #6b7280;
   text-align: center;
   padding-top: 8px;
@@ -149,7 +149,7 @@
   margin-top: 12px;
   padding: 12px;
   border-radius: 4px;
-  font-size: 13px;
+  font-size: var(--insp-text-xs);
   line-height: 1.5;
 }
 
@@ -159,7 +159,7 @@
   border: 1px solid #d1d5db;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 13px;
+  font-size: var(--insp-text-xs);
   transition: all 0.2s;
 }
 

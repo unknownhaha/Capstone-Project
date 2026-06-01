@@ -19,20 +19,20 @@
 
 .title {
   margin: 0 0 12px;
-  font-size: 20px;
+  font-size: var(--insp-text-xl);
   color: #1a2e30;
 }
 
 .message {
   margin: 0 0 20px;
-  font-size: 14px;
+  font-size: var(--insp-text-sm);
   color: #5a7072;
   line-height: 1.5;
 }
 
 .link {
   display: inline-block;
-  font-size: 14px;
+  font-size: var(--insp-text-sm);
   color: #2d6a6a;
   font-weight: 600;
   text-decoration: none;
