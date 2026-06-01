@@ -1,0 +1,67 @@
+/**
+ * Global typography — pairs with inspection-tokens.css.
+ * Readability-first: 16px body, Thai + Latin via --insp-font-family.
+ */
+
+html {
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--insp-font-family);
+  font-size: var(--insp-text-base);
+  font-weight: var(--insp-font-weight-regular);
+  line-height: var(--insp-leading-normal);
+  color: var(--insp-color-ink, var(--foreground));
+  font-kerning: normal;
+  font-feature-settings: "kern" 1;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+  line-height: var(--insp-leading-tight);
+  letter-spacing: -0.02em;
+  font-weight: var(--insp-font-weight-bold);
+}
+
+h4,
+h5,
+h6 {
+  line-height: var(--insp-leading-snug);
+  font-weight: var(--insp-font-weight-semibold);
+}
+
+p,
+li,
+dd {
+  text-wrap: pretty;
+}
+
+input,
+textarea,
+select,
+button {
+  font-family: inherit;
+}
+
+input,
+textarea,
+select {
+  font-size: var(--insp-text-base);
+  line-height: var(--insp-leading-normal);
+}
+
+strong,
+b {
+  font-weight: var(--insp-font-weight-semibold);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto;
+  }
+}

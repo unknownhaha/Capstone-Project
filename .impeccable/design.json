@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-01T00:00:00.000Z",
+  "title": "Design System: Capstone Accessibility Inspection",
+  "extensions": {
+    "colorMeta": {
+      "shell-teal": {
+        "role": "primary",
+        "displayName": "Cadet Teal Shell",
+        "canonical": "oklch(68% 0.06 200)",
+        "tonalRamp": ["#2d4a4c", "#3d6568", "#4a8588", "#5f9ea0", "#6badae", "#7fb3b6", "#9ac5c7", "#d4e8e9"]
+      },
+      "surface-white": {
+        "role": "neutral",
+        "displayName": "Work Surface White",
+        "canonical": "oklch(100% 0 0)",
+        "tonalRamp": ["#1a2e30", "#4a6062", "#6a8082", "#9ab0b2", "#c5d5d6", "#e2ecec", "#f0f4f4", "#ffffff"]
+      },
+      "progress-complete": {
+        "role": "secondary",
+        "displayName": "Progress Mint",
+        "canonical": "oklch(78% 0.14 155)",
+        "tonalRamp": ["#1a3d2e", "#2d6a4f", "#3d8f66", "#57cc99", "#7dd9ad", "#a8e8c4", "#d4f5e4", "#f0fdf7"]
+      },
+      "ink-primary": {
+        "role": "neutral",
+        "displayName": "Ink Primary",
+        "canonical": "oklch(22% 0.02 200)",
+        "tonalRamp": ["#0a1213", "#111c1d", "#1a2e30", "#2d4a4c", "#4a6062", "#6a8082", "#9ab0b2", "#d4e0e1"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Screen titles inside the phone shell." },
+      "body": { "displayName": "Body", "purpose": "Criterion copy, subtitles, form text." },
+      "label": { "displayName": "Label", "purpose": "Form labels and compact metadata." }
+    },
+    "shadows": [
+      { "name": "card-lift", "value": "0 4px 16px rgba(0, 0, 0, 0.1)", "purpose": "Project cards on dashboard grid." },
+      { "name": "phone-frame", "value": "0 24px 64px rgba(0, 0, 0, 0.35)", "purpose": "Auth phone device shadow on #111 stage." },
+      { "name": "button-primary", "value": "0 8px 20px rgba(74, 133, 136, 0.35)", "purpose": "Login primary CTA depth." },
+      { "name": "focus-ring", "value": "0 0 0 3px rgba(95, 158, 160, 0.18)", "purpose": "Input focus on white surfaces." }
+    ],
+    "motion": [
+      { "name": "ease-standard", "value": "cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "Default UI transitions (150–200ms)." },
+      { "name": "press-scale", "value": "transform 0.15s ease", "purpose": "Card and button active scale 0.97." }
+    ],
+    "breakpoints": [
+      { "name": "phone", "value": "420px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Main submit on auth and teal-gradient actions.",
+      "html": "<button type=\"button\" class=\"ds-btn-primary\">Sign in</button>",
+      "css": ".ds-btn-primary { width: 100%; height: 50px; border: none; border-radius: 14px; background: linear-gradient(135deg, #5f9ea0, #4a8588); color: #fff; font-size: 15px; font-weight: 700; letter-spacing: 0.04em; cursor: pointer; box-shadow: 0 8px 20px rgba(74, 133, 136, 0.35); transition: transform 0.12s, box-shadow 0.15s; font-family: system-ui, sans-serif; } .ds-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(74, 133, 136, 0.42); } .ds-btn-primary:active { transform: scale(0.98); } .ds-btn-primary:focus-visible { outline: 2px solid #5f9ea0; outline-offset: 2px; }"
+    },
+    {
+      "name": "Surface CTA",
+      "kind": "button",
+      "refersTo": "button-surface",
+      "description": "White pill CTA on teal shell (empty state, primary actions on gradient).",
+      "html": "<button type=\"button\" class=\"ds-btn-surface\"><span class=\"ds-btn-surface-icon\">+</span> Start Project</button>",
+      "css": ".ds-btn-surface { display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; border: none; border-radius: 999px; background: #fff; color: #2d6a6a; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14); font-family: system-ui, sans-serif; transition: transform 0.15s, box-shadow 0.2s; } .ds-btn-surface:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18); background: #f8fffe; } .ds-btn-surface-icon { width: 22px; height: 22px; border-radius: 50%; background: #5f9ea0; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 600; }"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input-default",
+      "description": "Login and inspection text inputs on white sheets.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Email</span><input class=\"ds-input\" type=\"email\" placeholder=\"you@example.com\" /></label>",
+      "css": ".ds-field { display: flex; flex-direction: column; gap: 8px; font-family: system-ui, sans-serif; } .ds-field-label { font-size: 13px; font-weight: 600; color: #3d5a5c; } .ds-input { width: 100%; height: 48px; padding: 0 14px; border: 1.5px solid #e2ecec; border-radius: 12px; background: #f8fafa; color: #1a2e30; font-size: 15px; outline: none; transition: border-color 0.15s, box-shadow 0.15s; } .ds-input::placeholder { color: #9ab0b2; } .ds-input:focus { border-color: #5f9ea0; background: #fff; box-shadow: 0 0 0 3px rgba(95, 158, 160, 0.18); }"
+    },
+    {
+      "name": "Project Card",
+      "kind": "card",
+      "refersTo": "button-surface",
+      "description": "Dashboard project tile: white card on teal grid.",
+      "html": "<article class=\"ds-card\"><h4 class=\"ds-card-title\">Site A — Main Hall</h4><span class=\"ds-card-meta\">24 Checkpoints</span><span class=\"ds-card-badge\">42% Done</span></article>",
+      "css": ".ds-card { background: #ffffff; border-radius: 18px; padding: 10px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); font-family: system-ui, sans-serif; } .ds-card-title { margin: 0; font-size: 15px; color: #1a2e30; font-weight: 600; } .ds-card-meta { display: block; font-size: 11px; color: #6a8082; margin-top: 4px; } .ds-card-badge { display: inline-block; margin-top: 8px; background: #ffd166; padding: 4px 8px; border-radius: 999px; font-size: 10px; color: #333; font-weight: 600; }"
+    },
+    {
+      "name": "Search Pill",
+      "kind": "input",
+      "refersTo": "input-default",
+      "description": "Frosted search bar on dashboard shell.",
+      "html": "<div class=\"ds-search\"><span aria-hidden=\"true\">🔍</span><input type=\"search\" placeholder=\"Search Project...\" /></div>",
+      "css": ".ds-search { display: flex; align-items: center; background: rgba(255, 255, 255, 0.35); padding: 10px 14px; border-radius: 999px; font-family: system-ui, sans-serif; } .ds-search input { flex: 1; border: none; background: transparent; outline: none; margin: 0 8px; color: #fff; font-size: 15px; } .ds-search input::placeholder { color: rgba(255, 255, 255, 0.85); }"
+    },
+    {
+      "name": "Status Chip",
+      "kind": "chip",
+      "refersTo": "button-surface",
+      "description": "Score / progress pill on inspection rows.",
+      "html": "<span class=\"ds-chip ds-chip-warn\">In progress</span>",
+      "css": ".ds-chip { display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; font-family: system-ui, sans-serif; } .ds-chip-warn { background: #ffd166; color: #333; } .ds-chip-pass { background: #57cc99; color: #1a2e30; } .ds-chip-fail { background: #ef476f; color: #fff; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Field Clipboard",
+    "overview": "The interface behaves like a rugged clipboard you carry on site: a calm teal shell frames every task, and white panels hold the real work. Decoration stays minimal; hierarchy comes from size, weight, and the green progress ring.",
+    "keyCharacteristics": [
+      "Phone shell ~420px on #111 stage",
+      "Teal gradient environment, white work surfaces",
+      "Semantic score colors: amber, green, red",
+      "Geist typography via Next.js layout",
+      "Soft shadows, no nested card stacks"
+    ],
+    "rules": [
+      { "name": "The Shell vs. Sheet Rule", "body": "Teal gradients belong to the phone shell only. Inspection content sits on white or #f8fafa sheets.", "section": "colors" },
+      { "name": "The One Accent Rule", "body": "Teal is environmental; green is progress; amber is status. No fourth decorative accent.", "section": "colors" },
+      { "name": "The Task Type Rule", "body": "UI chrome in English; standard catalog content in Thai. Do not shrink Thai below 13px for density.", "section": "typography" },
+      { "name": "The Flat Card Interior Rule", "body": "Cards do not nest cards. Use borders and tints inside inspection sheets.", "section": "elevation" },
+      { "name": "The No Glass Default Rule", "body": "Glass blur only on login logo mark. Not on dashboard cards or modals.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do keep the phone column at max-width 420px for inspection flows.",
+      "Do use white cards on teal for scannable project lists.",
+      "Do use verb + object button labels.",
+      "Do maintain WCAG AA contrast on white surfaces.",
+      "Do honor prefers-reduced-motion on new animations."
+    ],
+    "donts": [
+      "Don't use generic SaaS landing pages inside the app shell.",
+      "Don't use cream / sand warm-neutral AI default backgrounds.",
+      "Don't build dense admin dashboards with nested cards or side-stripe borders.",
+      "Don't hide inspection data behind playful consumer animations.",
+      "Don't treat the product like a dorm-finder or events marketplace.",
+      "Don't add gradient text, glassmorphism-by-default, or numbered section eyebrows.",
+      "Don't stretch project cards to fill grid row height."
+    ]
+  }
+}

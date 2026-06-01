@@ -23,7 +23,7 @@
 .footer {
   margin: 24px 0 0;
   text-align: center;
-  font-size: 14px;
+  font-size: var(--insp-text-sm);
   color: #5a7072;
 }
 

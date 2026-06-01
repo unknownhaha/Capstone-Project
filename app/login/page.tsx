@@ -206,7 +206,7 @@ function LoginForm() {
             </Link>
           </p>
 
-          <p className={styles.signup} style={{ marginTop: 12, fontSize: 13 }}>
+          <p className={`${styles.signup} ${styles.signupSecondary}`}>
             Need to verify your email?{" "}
             <Link
               href={

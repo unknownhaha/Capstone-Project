@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useFixedMenuPosition } from "./useFixedMenuPosition";
 import { useRouter } from "next/navigation";
 import ProjectCardThumb from "./ProjectCardThumb";
 import { useUploadThing } from "./inspection-upload";
 import { type ApiProject } from "./project-utils";
 import ShareProjectDialog from "./ShareProjectDialog";
+import DeleteConfirmDialog from "./DeleteConfirmDialog";
 import styles from "./project-card.module.css";
 
 type ProjectCardProps = {
@@ -29,10 +31,14 @@ export default function ProjectCard({
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
   const isOwner = project.role !== "editor";
   const [coverImg, setCoverImg] = useState(project.coverImg ?? "");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const kebabRef = useRef<HTMLButtonElement>(null);
+  const menuStyle = useFixedMenuPosition(menuOpen, kebabRef);
   const { startUpload, isUploading } = useUploadThing("projectCoverImg");
 
   useEffect(() => {
@@ -81,24 +87,23 @@ export default function ProjectCard({
         _id: String(updated._id ?? project._id),
         coverImg: savedCover,
       });
-    } catch (err) {
-      console.error("Cover upload failed:", err);
+    } catch {
       setCoverImg(previousCover);
+      setActionError("Could not update cover. Try again. · อัปเดตภาพปกไม่สำเร็จ");
     } finally {
       setBusy(false);
       e.target.value = "";
     }
   }
 
-  async function handleDelete() {
+  function requestDelete() {
     setMenuOpen(false);
+    setDeleteOpen(true);
+  }
 
-    const confirmed = window.confirm(
-      `Delete "${project.projectName}"? This cannot be undone.`
-    );
-    if (!confirmed) return;
-
+  async function confirmDelete() {
     setBusy(true);
+    setActionError(null);
 
     try {
       const res = await fetch(`/api/project/${project._id}`, {
@@ -106,11 +111,19 @@ export default function ProjectCard({
         credentials: "include",
       });
 
-      if (!res.ok) throw new Error("Failed to delete project");
+      if (!res.ok) {
+        setActionError(
+          res.status >= 500
+            ? "Server error. Try again. · เซิร์ฟเวอร์ขัดข้อง"
+            : "Could not delete project. · ลบโครงการไม่สำเร็จ"
+        );
+        return;
+      }
 
+      setDeleteOpen(false);
       onDelete(String(project._id));
-    } catch (err) {
-      console.error("Delete failed:", err);
+    } catch {
+      setActionError("Network error. Try again. · เครือข่ายขัดข้อง");
     } finally {
       setBusy(false);
     }
@@ -125,14 +138,21 @@ export default function ProjectCard({
 
   return (
     <div className={`${styles.card} ${cardBusy ? styles.cardBusy : ""}`}>
+      {actionError && (
+        <p className={styles.cardActionError} role="alert">
+          {actionError}
+        </p>
+      )}
       {isOwner && (
       <div className={styles.cardToolbar}>
         <div className={styles.menuWrap}>
           <button
+            ref={kebabRef}
             type="button"
             className={styles.kebabBtn}
-            aria-label="Project options"
+            aria-label="Project options, ตัวเลือกโครงการ"
             aria-expanded={menuOpen}
+            aria-haspopup="menu"
             disabled={cardBusy}
             onClick={(e) => {
               e.stopPropagation();
@@ -147,10 +167,14 @@ export default function ProjectCard({
               <button
                 type="button"
                 className={styles.menuBackdrop}
-                aria-label="Close menu"
+                aria-label="Close menu, ปิดเมนู"
                 onClick={() => setMenuOpen(false)}
               />
-              <div className={styles.cardMenu} role="menu">
+              <div
+                className={styles.cardMenu}
+                role="menu"
+                style={menuStyle}
+              >
                 {isOwner && (
                   <button
                     type="button"
@@ -182,7 +206,7 @@ export default function ProjectCard({
                     className={`${styles.menuItem} ${styles.menuItemDanger}`}
                     role="menuitem"
                     disabled={cardBusy}
-                    onClick={handleDelete}
+                    onClick={requestDelete}
                   >
                     Delete project
                   </button>
@@ -233,6 +257,14 @@ export default function ProjectCard({
             collaborationEnabled,
           });
         }}
+      />
+
+      <DeleteConfirmDialog
+        open={deleteOpen}
+        projectName={project.projectName}
+        busy={busy}
+        onClose={() => setDeleteOpen(false)}
+        onConfirm={() => void confirmDelete()}
       />
     </div>
   );

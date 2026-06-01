@@ -36,7 +36,7 @@
   gap: 6px;
   color: #fff;
   text-decoration: none;
-  font-size: 14px;
+  font-size: var(--insp-text-sm);
   font-weight: 600;
   opacity: 0.95;
 }
@@ -47,14 +47,14 @@
 
 .title {
   margin: 0;
-  font-size: 26px;
+  font-size: var(--insp-text-3xl);
   font-weight: 700;
   letter-spacing: -0.02em;
 }
 
 .subtitle {
   margin: 6px 0 0;
-  font-size: 13px;
+  font-size: var(--insp-text-xs);
   line-height: 1.45;
   opacity: 0.9;
 }
@@ -66,7 +66,7 @@
   margin-top: 12px;
   padding: 6px 12px;
   border-radius: 999px;
-  font-size: 12px;
+  font-size: var(--insp-text-2xs);
   font-weight: 600;
   background: rgba(255, 255, 255, 0.22);
 }
@@ -117,7 +117,7 @@
   border-radius: 14px;
   padding: 14px 16px;
   margin-bottom: 16px;
-  font-size: 13px;
+  font-size: var(--insp-text-xs);
   line-height: 1.5;
   color: #4a6062;
 }
@@ -132,7 +132,7 @@
 
 .sectionTitle {
   margin: 0 0 10px;
-  font-size: 12px;
+  font-size: var(--insp-text-2xs);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -161,13 +161,13 @@
 }
 
 .fieldLabel {
-  font-size: 14px;
+  font-size: var(--insp-text-sm);
   font-weight: 600;
   color: #1a2e30;
 }
 
 .fieldValue {
-  font-size: 15px;
+  font-size: var(--insp-text-base);
   font-weight: 700;
   color: #5f9ea0;
   min-width: 2ch;
@@ -176,7 +176,7 @@
 
 .fieldHint {
   margin: 0 0 8px;
-  font-size: 11px;
+  font-size: var(--insp-text-2xs);
   color: #9ab0b2;
   line-height: 1.35;
 }
@@ -192,7 +192,7 @@
   display: flex;
   justify-content: space-between;
   margin-top: 4px;
-  font-size: 10px;
+  font-size: var(--insp-text-2xs);
   color: #9ab0b2;
 }
 
@@ -204,7 +204,7 @@
   border-radius: 14px;
   background: #2d4a4c;
   color: #fff;
-  font-size: 15px;
+  font-size: var(--insp-text-base);
   font-weight: 700;
   cursor: pointer;
   transition: background 0.15s, transform 0.1s;
@@ -230,7 +230,7 @@
   background: #fef2f2;
   border: 1px solid #fecaca;
   color: #991b1b;
-  font-size: 13px;
+  font-size: var(--insp-text-xs);
   line-height: 1.45;
 }
 
@@ -275,7 +275,7 @@
   display: inline-block;
   padding: 4px 12px;
   border-radius: 999px;
-  font-size: 11px;
+  font-size: var(--insp-text-2xs);
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -299,7 +299,7 @@
 
 .riskTitle {
   margin: 0;
-  font-size: 28px;
+  font-size: var(--insp-text-3xl);
   font-weight: 800;
   letter-spacing: -0.03em;
 }
@@ -338,7 +338,7 @@
   display: flex;
   justify-content: space-between;
   margin-top: 6px;
-  font-size: 11px;
+  font-size: var(--insp-text-2xs);
   color: #6b8284;
 }
 
@@ -357,7 +357,7 @@
   grid-template-columns: 88px 1fr 44px;
   align-items: center;
   gap: 10px;
-  font-size: 13px;
+  font-size: var(--insp-text-xs);
 }
 
 .probLabel {
@@ -400,7 +400,7 @@
   margin-top: 14px;
   padding-top: 14px;
   border-top: 1px solid #eef4f4;
-  font-size: 12px;
+  font-size: var(--insp-text-2xs);
   color: #6b8284;
   text-align: center;
 }
@@ -413,7 +413,7 @@
   margin-top: 12px;
   padding: 12px 14px;
   border-radius: 12px;
-  font-size: 13px;
+  font-size: var(--insp-text-xs);
   line-height: 1.45;
 }
 
@@ -431,7 +431,7 @@
 
 .disclaimer {
   margin-top: 16px;
-  font-size: 11px;
+  font-size: var(--insp-text-2xs);
   line-height: 1.4;
   color: #9ab0b2;
   text-align: center;
