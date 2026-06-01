@@ -8,6 +8,7 @@ import { useUploadThing } from "./inspection-upload";
 import { type ApiProject } from "./project-utils";
 import ShareProjectDialog from "./ShareProjectDialog";
 import DeleteConfirmDialog from "./DeleteConfirmDialog";
+import { pickUploadFileUrl } from "@/lib/upload-file-url";
 import styles from "./project-card.module.css";
 
 type ProjectCardProps = {
@@ -20,19 +21,6 @@ function formatSharedLabel(ownerFirstName?: string): string {
   const name = ownerFirstName?.trim();
   if (name) return `${name} shared with you`;
   return "Shared with you";
-}
-
-function pickUploadUrl(file: any): string | null {
-  if (!file) return null;
-  return (
-    file.ufsUrl ??
-    file.url ??
-    file.appUrl ??
-    file.fileUrl ??
-    file.serverData?.url ??
-    file.serverData?.ufsUrl ??
-    null
-  );
 }
 
 export default function ProjectCard({
@@ -85,7 +73,7 @@ export default function ProjectCard({
         throw new Error("SILENT_ABORT");
       }
 
-      const url = pickUploadUrl(uploaded[0]);
+      const url = pickUploadFileUrl(uploaded[0]);
       if (!url) throw new Error("No upload URL returned");
 
       setCoverImg(url);

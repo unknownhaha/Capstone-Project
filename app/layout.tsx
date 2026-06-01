@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist_Mono, Source_Sans_3 } from "next/font/google";
+import { Geist_Mono, Noto_Sans_Thai, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 import "./inspection-tokens.css";
 import "./typography.css";
@@ -7,7 +7,14 @@ import Providers from "./provider";
 
 const inspectionSans = Source_Sans_3({
   variable: "--font-inspection-sans",
-  subsets: ["latin", "thai"],
+  subsets: ["latin", "latin-ext"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+const notoThai = Noto_Sans_Thai({
+  variable: "--font-noto-thai",
+  subsets: ["thai", "latin"],
   weight: ["400", "500", "600", "700"],
   display: "swap",
 });
@@ -29,7 +36,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="th" className={`${inspectionSans.variable} ${geistMono.variable}`}>
+    <html lang="th" className={`${inspectionSans.variable} ${notoThai.variable} ${geistMono.variable}`}>
       <body> 
         <Providers>
           {children}

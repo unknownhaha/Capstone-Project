@@ -1019,6 +1019,13 @@
   flex: 1;
   background: #121212;
   margin-left: 8px;
+  color: var(--insp-color-on-shell);
+  caret-color: var(--insp-color-on-shell);
+}
+
+.inputGroup input::placeholder {
+  color: var(--insp-color-on-shell-muted);
+  opacity: 1;
 }
 
 .textarea {

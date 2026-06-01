@@ -230,7 +230,7 @@ export default function CriteriaItemsPage() {
               ...section,
               criteria: section.criteria.map((c) =>
                 c.criteriaId === itemId
-                  ? { ...c, score: previousScore ?? undefined }
+                  ? { ...c, score: previousScore ?? null }
                   : c
               ),
             })),

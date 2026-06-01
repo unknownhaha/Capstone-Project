@@ -95,7 +95,7 @@
   --insp-color-neutral-400: #222222;
 
   /* Typography — rem scale (~1.2 ratio), 16px body minimum */
-  --insp-font-family: var(--font-inspection-sans), "Segoe UI", system-ui, sans-serif;
+  --insp-font-family: var(--font-inspection-sans), var(--font-noto-thai), "Segoe UI", system-ui, sans-serif;
   --insp-font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
   --insp-text-2xs: 0.75rem; /* 12 — smallest UI copy */
