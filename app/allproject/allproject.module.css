@@ -861,7 +861,8 @@
 
   padding: 0;
 
-  transition: top 0.35s ease;
+  transition: top 0.35s ease, visibility 0.35s ease;
+  visibility: hidden;
 
   display: flex;
   flex-direction: column;
@@ -871,6 +872,7 @@
 
 .showCreateFull {
   top: 0;
+  visibility: visible;
 }
 
 .createHeader {
@@ -1024,7 +1026,7 @@
 }
 
 .inputGroup input::placeholder {
-  color: var(--insp-color-on-shell-muted);
+  color: var(--insp-color-ink-muted, #6a8082);
   opacity: 1;
 }
 

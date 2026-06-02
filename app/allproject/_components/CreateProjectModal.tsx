@@ -4,6 +4,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "../allproject.module.css";
 import sectionStyles from "./section.module.css";
+import skeletonStyles from "./project-card-skeleton.module.css";
 import SectionPicker from "./SectionPicker";
 import { useModalA11y } from "./useModalA11y";
 
@@ -102,114 +103,141 @@ export default function CreateProjectModal({ open, onClose }: CreateProjectModal
     }
   };
 
-  if (!open) return null;
-
   return (
     <>
-      <button
-        type="button"
-        className={styles.overlayBackdrop}
-        aria-label="Close create project dialog, ปิดหน้าต่างสร้างโครงการ"
-        onClick={onClose}
-      />
+      {open && (
+        <button
+          type="button"
+          className={styles.overlayBackdrop}
+          aria-label="Close create project dialog, ปิดหน้าต่างสร้างโครงการ"
+          onClick={onClose}
+        />
+      )}
       <div
         ref={dialogRef}
-        className={`${styles.createBoxFull} ${styles.showCreateFull}`}
+        className={`${styles.createBoxFull} ${open ? styles.showCreateFull : ""}`}
         role="dialog"
-        aria-modal="true"
+        aria-modal={open ? "true" : "false"}
         aria-labelledby={titleId}
       >
-        <div className={styles.createHeader}>
-          <h3 id={titleId}>Create project · สร้างโครงการ</h3>
-          <button
-            type="button"
-            className={styles.createClose}
-            onClick={onClose}
-            aria-label="Close create project dialog, ปิด"
-          >
-            ✕
-          </button>
-        </div>
+        {submitting ? (
+          <>
+            <div className={styles.createHeader}>
+              <h3 id={titleId}>Creating project... · กำลังสร้างโครงการ</h3>
+            </div>
+            <div className={styles.createBody} style={{ padding: "20px 20px 12px", gap: "16px" }}>
+              {/* Location placeholder skeleton */}
+              <div className={`${skeletonStyles.shimmer} ${skeletonStyles.skeletonLine}`} style={{ width: "30%", height: "16px" }} />
+              <div className={`${skeletonStyles.shimmer} ${skeletonStyles.skeletonLine}`} style={{ width: "100%", height: "48px", borderRadius: "14px" }} />
 
-        <div className={styles.createBody}>
-          {error && (
-            <p className={sectionStyles.errorText} role="alert">
-              {error}
-            </p>
-          )}
+              {/* Project name placeholder skeleton */}
+              <div className={`${skeletonStyles.shimmer} ${skeletonStyles.skeletonLine}`} style={{ width: "40%", height: "16px" }} />
+              <div className={`${skeletonStyles.shimmer} ${skeletonStyles.skeletonLine}`} style={{ width: "100%", height: "48px", borderRadius: "14px" }} />
 
-          <div className={styles.createFields}>
-            <label className={styles.fieldLabel} htmlFor="create-location">
-              Location · สถานที่
-            </label>
-            <div className={styles.inputGroup}>
-              <span aria-hidden>📍</span>
-              <input
-                id="create-location"
-                name="location"
-                placeholder="Building or site name"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                maxLength={200}
-                required
-                autoComplete="off"
-              />
+              {/* Description placeholder skeleton */}
+              <div className={`${skeletonStyles.shimmer} ${skeletonStyles.skeletonLine}`} style={{ width: "35%", height: "16px" }} />
+              <div className={`${skeletonStyles.shimmer} ${skeletonStyles.skeletonLine}`} style={{ width: "100%", height: "100px", borderRadius: "14px" }} />
+
+              {/* Selection list placeholder skeleton */}
+              <div className={`${skeletonStyles.shimmer} ${skeletonStyles.skeletonLine}`} style={{ width: "50%", height: "16px", marginTop: "12px" }} />
+              <div className={`${skeletonStyles.shimmer} ${skeletonStyles.skeletonLine}`} style={{ width: "100%", height: "200px", borderRadius: "14px" }} />
+            </div>
+          </>
+        ) : (
+          <>
+            <div className={styles.createHeader}>
+              <h3 id={titleId}>Create project · สร้างโครงการ</h3>
+              <button
+                type="button"
+                className={styles.createClose}
+                onClick={onClose}
+                aria-label="Close create project dialog, ปิด"
+              >
+                ✕
+              </button>
             </div>
 
-            <label className={styles.fieldLabel} htmlFor="create-project-name">
-              Project name · ชื่อโครงการ
-            </label>
-            <input
-              id="create-project-name"
-              name="projectName"
-              className={styles.input}
-              placeholder="e.g. Main dormitory inspection"
-              value={projectName}
-              onChange={(e) => setProjectName(e.target.value)}
-              maxLength={120}
-              required
-            />
+            <div className={styles.createBody}>
+              {error && (
+                <p className={sectionStyles.errorText} role="alert">
+                  {error}
+                </p>
+              )}
 
-            <label className={styles.fieldLabel} htmlFor="create-description">
-              Description (optional) · คำอธิบาย (ไม่บังคับ)
-            </label>
-            <textarea
-              id="create-description"
-              name="description"
-              className={styles.textarea}
-              placeholder="Notes for your team"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              maxLength={2000}
-            />
-          </div>
+              <div className={styles.createFields}>
+                <label className={styles.fieldLabel} htmlFor="create-location">
+                  Location · สถานที่
+                </label>
+                <div className={styles.inputGroup}>
+                  <span aria-hidden>📍</span>
+                  <input
+                    id="create-location"
+                    name="location"
+                    placeholder="Building or site name"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    maxLength={200}
+                    required
+                    autoComplete="off"
+                  />
+                </div>
 
-          <p className={sectionStyles.sectionCount}>
-            Selected: {selectedGroupIds.size} criteria groups
-          </p>
+                <label className={styles.fieldLabel} htmlFor="create-project-name">
+                  Project name · ชื่อโครงการ
+                </label>
+                <input
+                  id="create-project-name"
+                  name="projectName"
+                  className={styles.input}
+                  placeholder="e.g. Main dormitory inspection"
+                  value={projectName}
+                  onChange={(e) => setProjectName(e.target.value)}
+                  maxLength={120}
+                  required
+                />
 
-          <p className={styles.createSectionLabel}>Sections · หมวดเกณฑ์</p>
+                <label className={styles.fieldLabel} htmlFor="create-description">
+                  Description (optional) · คำอธิบาย (ไม่บังคับ)
+                </label>
+                <textarea
+                  id="create-description"
+                  name="description"
+                  className={styles.textarea}
+                  placeholder="Notes for your team"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  maxLength={2000}
+                />
+              </div>
 
-          <div className={styles.createCriteriaScroll}>
-            <SectionPicker
-              mode="select"
-              selectedGroupIds={selectedGroupIds}
-              onToggleGroup={toggleGroup}
-              variant="create"
-            />
-          </div>
-        </div>
+              <p className={sectionStyles.sectionCount}>
+                Selected: {selectedGroupIds.size} criteria groups
+              </p>
 
-        <div className={styles.createFooter}>
-          <button
-            type="button"
-            className={styles.submit}
-            onClick={handleSubmit}
-            disabled={submitting}
-          >
-            {submitting ? "Creating... · กำลังสร้าง" : "Create project · สร้างโครงการ"}
-          </button>
-        </div>
+              <p className={styles.createSectionLabel}>Sections · หมวดเกณฑ์</p>
+
+              <div className={styles.createCriteriaScroll}>
+                <SectionPicker
+                  mode="select"
+                  selectedGroupIds={selectedGroupIds}
+                  onToggleGroup={toggleGroup}
+                  variant="create"
+                />
+              </div>
+            </div>
+
+            <div className={styles.createFooter}>
+              <button
+                type="button"
+                className={styles.submit}
+                onClick={handleSubmit}
+                disabled={submitting}
+              >
+                Create project · สร้างโครงการ
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </>
   );

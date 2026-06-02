@@ -184,6 +184,7 @@ const handleConfirm = async () => {
                     label: "Email",
                     value: newData.email || "",
                     key: "email",
+                    disabled: true,
                   },
                   {
                     label: "Phone",

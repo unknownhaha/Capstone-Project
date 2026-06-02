@@ -5,6 +5,7 @@ interface Field {
     label : string;
     value : string;
     key : string;
+    disabled?: boolean;
 }
 interface Prop {
     title : string;
@@ -27,7 +28,7 @@ export default function Form({ title, field, isEdit, onChange, theme = "dark" }:
           <input
             className={style.input}
             value={item.value}
-            disabled={!isEdit}
+            disabled={item.disabled || !isEdit}
             onChange={(e) => onChange(item.key, e.target.value)}
           />
         </div>
