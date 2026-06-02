@@ -8,7 +8,7 @@ import { isPublicApiPath } from "@/lib/api-public-paths";
 
 
 
-const PUBLIC_PAGE_EXACT = ["/login", "/register", "/verify"] as const;
+const PUBLIC_PAGE_EXACT = ["/login", "/register", "/verify", "/forgot-password"] as const;
 
 
 

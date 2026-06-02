@@ -189,9 +189,9 @@ function LoginForm() {
                 <input type="checkbox" name="remember" disabled={isPending} />
                 Remember me
               </label>
-              <button type="button" className={styles.forgot}>
+              <Link href="/forgot-password" className={styles.forgot}>
                 Forgot password?
-              </button>
+              </Link>
             </div>
 
             <button type="submit" className={styles.loginBtn} disabled={isPending}>
