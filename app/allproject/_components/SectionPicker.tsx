@@ -59,6 +59,7 @@ export default function SectionPicker(props: SectionPickerProps) {
                 <button
                   type="button"
                   className={styles.toggleBtn}
+                  style={{ color: "#5f9ea0" }}
                   aria-label={isOpen ? "Collapse section" : "Expand section"}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -109,7 +110,7 @@ export default function SectionPicker(props: SectionPickerProps) {
               onClick={() => toggleSection(section.code)}
             >
               <h4 className={styles.sectionTitle}>{section.title}</h4>
-              <button type="button" className={styles.toggleBtn}>
+              <button type="button" className={styles.toggleBtn} style={{ color: "#5f9ea0" }}>
                 {isOpen ? "▼" : "▶"}
               </button>
             </div>
