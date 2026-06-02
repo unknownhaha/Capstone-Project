@@ -124,8 +124,15 @@
   border: none;
   border-radius: 8px;
   background: #e8e8e8;
+  color: rgb(95, 158, 160);
   cursor: pointer;
   font-size: var(--insp-text-2xs);
+  transition: background 0.15s, color 0.15s;
+}
+
+.itemToggle:hover {
+  background: #dde8e8;
+  color: #4a8588;
 }
 
 .scoreGroup {
