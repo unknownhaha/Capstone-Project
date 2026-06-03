@@ -230,6 +230,8 @@ export default function CreateProjectModal({ open, onClose }: CreateProjectModal
                   mode="select"
                   selectedGroupIds={selectedGroupIds}
                   onToggleGroup={toggleGroup}
+                  onSelectAll={selectAllGroups}
+                  onClearAll={clearAllGroups}
                   variant="create"
                 />
               </div>

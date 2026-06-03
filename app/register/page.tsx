@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
+import AppLogo from "@/app/_components/AppLogo";
 import loginStyles from "../login/login.module.css";
 import styles from "./register.module.css";
 
@@ -93,9 +94,7 @@ export default function RegisterPage() {
     <div className={`${loginStyles.shell} ${styles.scrollShell}`}>
       <div className={`${loginStyles.phone} ${styles.phoneTall}`}>
         <header className={loginStyles.hero}>
-          <div className={loginStyles.logoMark} aria-hidden>
-            ♿
-          </div>
+          <AppLogo className={loginStyles.logoMark} size={72} />
           <h1 className={loginStyles.heroTitle}>Create account</h1>
           <p className={loginStyles.heroSubtitle}>
             Join to start your accessibility inspections

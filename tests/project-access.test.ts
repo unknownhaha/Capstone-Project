@@ -2,6 +2,7 @@ import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import {
   canEditProject,
+  canLeaveProject,
   canShareProject,
   canViewProject,
   getProjectRole,
@@ -19,6 +20,11 @@ describe("project access", () => {
   it("owner can share, editor cannot", () => {
     assert.equal(canShareProject(project, ownerId), true);
     assert.equal(canShareProject(project, editorId), false);
+  });
+
+  it("editor can leave, owner cannot", () => {
+    assert.equal(canLeaveProject(project, editorId), true);
+    assert.equal(canLeaveProject(project, ownerId), false);
   });
 
   it("editor can edit and view", () => {

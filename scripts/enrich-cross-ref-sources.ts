@@ -253,7 +253,6 @@ function main() {
 
   // 2. Process each file
   let totalUpdated = 0;
-  let noMatchCount = 0;
 
   for (const file of CATALOG_FILES) {
     const full = path.join(STANDARDS_DIR, file);

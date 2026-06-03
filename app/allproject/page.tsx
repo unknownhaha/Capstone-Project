@@ -341,6 +341,11 @@ export default function AllProjectPage() {
                       prev.filter((p) => String(p._id) !== String(projectId))
                     )
                   }
+                  onRemove={(projectId) =>
+                    setProjects((prev) =>
+                      prev.filter((p) => String(p._id) !== String(projectId))
+                    )
+                  }
                 />
               ))}
           </div>

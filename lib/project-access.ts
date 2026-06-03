@@ -42,3 +42,8 @@ export function canShareProject(project: ProjectLike, userId: string): boolean {
 export function canDeleteProject(project: ProjectLike, userId: string): boolean {
   return isOwner(project, userId);
 }
+
+/** Editor leaves collaboration; project is not deleted. */
+export function canLeaveProject(project: ProjectLike, userId: string): boolean {
+  return getProjectRole(project, userId) === "editor";
+}

@@ -9,6 +9,7 @@ import { useUploadThing } from "./inspection-upload";
 import { type ApiProject } from "./project-utils";
 import ShareProjectDialog from "./ShareProjectDialog";
 import DeleteConfirmDialog from "./DeleteConfirmDialog";
+import LeaveConfirmDialog from "./LeaveConfirmDialog";
 import { pickUploadFileUrl } from "@/lib/upload-file-url";
 import styles from "./project-card.module.css";
 
@@ -16,6 +17,8 @@ type ProjectCardProps = {
   project: ApiProject;
   onUpdate: (project: ApiProject) => void;
   onDelete: (projectId: string) => void;
+  /** Drops a shared project from the dashboard (leaves collaboration; does not delete). */
+  onRemove?: (projectId: string) => void;
 };
 
 function formatSharedLabel(ownerFirstName?: string): string {
@@ -28,11 +31,13 @@ export default function ProjectCard({
   project,
   onUpdate,
   onDelete,
+  onRemove,
 }: ProjectCardProps) {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [leaveOpen, setLeaveOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
   const isOwner = project.role !== "editor";
@@ -114,6 +119,34 @@ export default function ProjectCard({
   function requestDelete() {
     setMenuOpen(false);
     setDeleteOpen(true);
+  }
+
+  async function confirmLeave() {
+    setBusy(true);
+    setActionError(null);
+
+    try {
+      const res = await fetch(`/api/project/${project._id}/leave`, {
+        method: "POST",
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        setActionError(
+          res.status >= 500
+            ? "Server error. Try again. · เซิร์ฟเวอร์ขัดข้อง"
+            : "Could not remove project from your list. · เอาออกจากรายการไม่สำเร็จ"
+        );
+        return;
+      }
+
+      setLeaveOpen(false);
+      (onRemove ?? onDelete)(String(project._id));
+    } catch {
+      setActionError("Network error. Try again. · เครือข่ายขัดข้อง");
+    } finally {
+      setBusy(false);
+    }
   }
 
   async function confirmDelete() {
@@ -227,7 +260,20 @@ export default function ProjectCard({
               )}
           </div>
         ) : (
-          <div className={styles.toolbarSpacer} aria-hidden="true" />
+          <button
+            type="button"
+            className={styles.removeBtn}
+            aria-label={`Remove ${project.projectName} from your list, เอาโครงการออกจากรายการ`}
+            disabled={cardBusy}
+            onClick={(e) => {
+              e.stopPropagation();
+              setLeaveOpen(true);
+            }}
+          >
+            <span className={styles.removeBtnIcon} aria-hidden="true">
+              ×
+            </span>
+          </button>
         )}
       </div>
 
@@ -288,6 +334,14 @@ export default function ProjectCard({
         busy={busy}
         onClose={() => setDeleteOpen(false)}
         onConfirm={() => void confirmDelete()}
+      />
+
+      <LeaveConfirmDialog
+        open={leaveOpen}
+        projectName={project.projectName}
+        busy={busy}
+        onClose={() => setLeaveOpen(false)}
+        onConfirm={() => void confirmLeave()}
       />
     </div>
   );

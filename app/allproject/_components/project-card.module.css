@@ -79,10 +79,40 @@
   z-index: 1;
 }
 
-.toolbarSpacer {
+.removeBtn {
   width: 44px;
   height: 44px;
+  padding: 0;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--insp-color-ink-secondary);
+  cursor: pointer;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.removeBtnIcon {
+  font-size: 1.75rem;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.removeBtn:focus-visible {
+  outline: 2px solid var(--insp-color-accent);
+  outline-offset: 2px;
+}
+
+.removeBtn:hover:not(:disabled) {
+  background: var(--insp-color-neutral-100);
+  color: var(--insp-color-danger);
+}
+
+.removeBtn:disabled {
+  cursor: wait;
+  opacity: 0.6;
 }
 
 .thumbSlot {

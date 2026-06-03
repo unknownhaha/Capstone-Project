@@ -890,13 +890,14 @@
 }
 
 .createClose {
+  width: 36px;
+  height: 36px;
   border: none;
-  background: var(--insp-color-neutral-200);
-  width: 32px;
-  height: 32px;
   border-radius: 50%;
+  background: var(--insp-color-neutral-100);
+  font-size: var(--insp-text-lg);
   cursor: pointer;
-  font-size: var(--insp-text-base);
+  color: var(--insp-color-neutral-300);
 }
 
 .createBody {

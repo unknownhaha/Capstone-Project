@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import AppLogo from "@/app/_components/AppLogo";
 import styles from "./login.module.css";
 import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -112,9 +113,7 @@ function LoginForm() {
     <div className={styles.shell}>
       <div className={styles.phone}>
         <header className={styles.hero}>
-          <div className={styles.logoMark} aria-hidden>
-            ♿
-          </div>
+          <AppLogo className={styles.logoMark} size={72} />
           <h1 className={styles.heroTitle}>Welcome back</h1>
           <p className={styles.heroSubtitle}>
             Sign in to manage your accessibility inspections

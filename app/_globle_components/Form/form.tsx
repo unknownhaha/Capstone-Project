@@ -7,6 +7,8 @@ interface Field {
     key : string;
     disabled?: boolean;
     placeholder?: string;
+    /** Profile: solid placeholder for identity fields; default muted hint style in light theme */
+    placeholderEmphasis?: "solid" | "muted";
 }
 interface Prop {
     title : string;
@@ -38,6 +40,12 @@ export default function Form({
         const lockedHighlight =
           !isEdit && lockedHighlightKey === item.key;
         const notifyLocked = () => onLockedInteraction?.(item.key);
+        const placeholderClass =
+          theme === "light"
+            ? item.placeholderEmphasis === "solid"
+              ? style.inputPlaceholderSolid
+              : style.inputPlaceholderMuted
+            : "";
 
         return (
           <div
@@ -71,7 +79,7 @@ export default function Form({
             <div className={style.inputAsideRow}>
               <input
                 id={isEdit ? `field-${item.key}` : undefined}
-                className={`${style.input}${lockedHighlight ? ` ${style.inputLockedHighlight}` : ""}`}
+                className={`${style.input}${placeholderClass ? ` ${placeholderClass}` : ""}${lockedHighlight ? ` ${style.inputLockedHighlight}` : ""}`}
                 type={item.key === "email" ? "email" : "text"}
                 value={item.value}
                 disabled={item.disabled || !isEdit}

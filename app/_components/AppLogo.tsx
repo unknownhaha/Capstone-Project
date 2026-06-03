@@ -1,0 +1,35 @@
+type AppLogoProps = {
+  className?: string;
+  size?: number;
+};
+
+/** Building + inspection check mark (matches app/icon.svg and favicon). */
+export default function AppLogo({ className, size = 72 }: AppLogoProps) {
+  return (
+    <div className={className} aria-hidden>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 32 32"
+        width={size}
+        height={size}
+        role="presentation"
+      >
+        <rect width="32" height="32" rx="6" fill="#5f9ea0" />
+        <path
+          fill="#ffffff"
+          d="M8 23V14l8-5 8 5v9H8zm2-4.8V21h4v-6.2h-4zm6 0V21h4v-6.2h-4z"
+        />
+        <path fill="#ffffff" d="M7 14 16 8l9 6v1H7v-1z" />
+        <circle cx="24.5" cy="24.5" r="5.5" fill="#57cc99" />
+        <path
+          fill="none"
+          stroke="#ffffff"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M22 24.5 23.6 26 27 22.2"
+        />
+      </svg>
+    </div>
+  );
+}

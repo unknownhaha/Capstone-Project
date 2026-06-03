@@ -368,6 +368,45 @@
   margin-bottom: 4px;
 }
 
+.sourceTextDisplay {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sourceTextSection {
+  margin: 0;
+}
+
+.sourceTextSectionTitle {
+  margin: 0 0 6px;
+  font-size: var(--insp-text-2xs);
+  font-weight: 700;
+  color: #3d5c5e;
+  letter-spacing: 0.01em;
+}
+
+.sourceTextList {
+  margin: 0;
+  padding-left: 1.15rem;
+  list-style: disc;
+}
+
+.sourceTextList li {
+  margin-bottom: 6px;
+  line-height: 1.5;
+  color: #2d4a4c;
+}
+
+.sourceTextList li:last-child {
+  margin-bottom: 0;
+}
+
+.sourceTextEmpty {
+  margin: 0;
+  color: #888;
+}
+
 .itemImage {
   width: 100%;
   height: auto;

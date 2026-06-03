@@ -1,11 +1,11 @@
 # Preflight report
 
-Generated: 2026-06-01T08:50:37.851Z
-Git commit: `9d60128`
+Generated: 2026-06-03T05:31:35.836Z
+Git commit: `78a169b`
 
 ## Summary
 
-**Automated checks: PASS** (ensure two test emails and single dev server before sessions)
+**Automated checks: NEEDS ATTENTION** — fix failures before field sessions
 
 ## Environment
 
@@ -31,7 +31,7 @@ Git commit: `9d60128`
 | env: EMAIL_PASS | PASS |
 | npm test | PASS |
 | npm run validate | PASS |
-| npm run build | PASS |
+| npm run build | FAIL |
 
 ## Details
 
@@ -74,47 +74,47 @@ set
 ### npm test
 
 ```
- 'test'
+test'
       ...
     # Subtest: rejects invalid status
     ok 3 - rejects invalid status
       ---
-      duration_ms: 0.4388
+      duration_ms: 1.0912
       type: 'test'
       ...
     # Subtest: rejects invalid buildingType
     ok 4 - rejects invalid buildingType
       ---
-      duration_ms: 0.4787
+      duration_ms: 0.4831
       type: 'test'
       ...
     # Subtest: allows coverImg-only patch body
     ok 5 - allows coverImg-only patch body
       ---
-      duration_ms: 0.3397
+      duration_ms: 0.3861
       type: 'test'
       ...
     # Subtest: allows valid metadata patch
     ok 6 - allows valid metadata patch
       ---
-      duration_ms: 0.3574
+      duration_ms: 0.4921
       type: 'test'
       ...
     1..6
 ok 5 - validateProjectPatchBody
   ---
-  duration_ms: 9.5427
+  duration_ms: 11.4732
   type: 'suite'
   ...
 1..5
-# tests 17
+# tests 18
 # suites 5
-# pass 17
+# pass 18
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 790.4262
+# duration_ms 1782.5926
 ```
 
 ### npm run validate
@@ -150,38 +150,23 @@ Result: 41 passed, 0 failed
 ### npm run build
 
 ```
-/[projectId]/criteria/[criteriaGroupId]
-├ ƒ /allproject/[projectId]/report
-├ ƒ /api/auth/check-email
-├ ƒ /api/auth/[...nextauth]
-├ ƒ /api/auth/register
-├ ƒ /api/auth/verify-otp
-├ ƒ /api/auth/verify-otp/resend
-├ ƒ /api/join/[token]
-├ ƒ /api/ml/predict
-├ ƒ /api/project
-├ ƒ /api/project/[projectId]
-├ ƒ /api/project/[projectId]/add-groups
-├ ƒ /api/project/[projectId]/collaboration
-├ ƒ /api/project/[projectId]/critiria/[critiriaId]
-├ ƒ /api/project/[projectId]/invite
-├ ƒ /api/project/[projectId]/section
-├ ƒ /api/project/[projectId]/section/[sectionCode]
-├ ƒ /api/uploadthing
-├ ƒ /api/users/[id]
-├ ƒ /join/[token]
-├ ○ /login
-├ ○ /ml-test
-├ ○ /_not-found
-├ ○ /profile
-├ ○ /register
-└ ○ /verify
 
+Command failed: npm run build
+npm warn Unknown env config "devdir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+Failed to type check.
 
-ƒ Proxy (Middleware)
+./app/api/project/[projectId]/leave/route.ts:36:8
+Type error: Parameter 'm' implicitly has an 'any' type.
 
-○  (Static)   prerendered as static content
-ƒ  (Dynamic)  server-rendered on demand
+  [90m34 |[0m
+  [90m35 |[0m     project.members = (project.members ?? []).filter(
+[31m[1m>[0m [90m36 |[0m       (m) => [33mString[0m(m.userId) !== userId
+  [90m   |[0m        [31m[1m^[0m
+  [90m37 |[0m     );
+  [90m38 |[0m     [36mawait[0m project.save();
+  [90m39 |[0m
+Next.js build worker exited with code: 1 and signal: null
 ```
 
 

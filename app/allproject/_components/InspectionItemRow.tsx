@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { CatalogItem } from "@/lib/standards/catalog";
 import { useUploadThing } from "./inspection-upload";
 import styles from "./items.module.css";
+import SourceTextDisplay from "./SourceTextDisplay";
 
 type InspectionItemRowProps = {
   item: CatalogItem;
@@ -132,7 +133,7 @@ export default function InspectionItemRow({
         <div className={styles.itemDetails}>
           <div className={styles.detailBlock}>
             <span className={styles.detailLabel}>ข้อความต้นฉบับ</span>
-            <p>{item.source_text || "—"}</p>
+            <SourceTextDisplay sourceText={item.source_text} />
           </div>
 
           {item.notes && (

@@ -1,6 +1,6 @@
 # Smoke results (HTTP)
 
-Generated: 2026-06-01T08:52:26.459Z
+Generated: 2026-06-03T05:34:32.159Z
 Base URL: `http://localhost:3000`
 
 ## Results

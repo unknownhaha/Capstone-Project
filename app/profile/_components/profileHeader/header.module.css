@@ -26,6 +26,11 @@
   color: #1a2e30;
 }
 
+.name input::placeholder {
+  color: #1a2e30;
+  opacity: 1;
+}
+
 .imgLocked {
   cursor: pointer;
 }

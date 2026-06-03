@@ -243,18 +243,21 @@ export default function Profile() {
                     key: "email",
                     disabled: true,
                     placeholder: profileCopy.placeholders.email,
+                    placeholderEmphasis: "solid",
                   },
                   {
                     label: profileCopy.fields.phone,
                     value: newData.phone || "",
                     key: "phone",
                     placeholder: profileCopy.placeholders.phone,
+                    placeholderEmphasis: "muted",
                   },
                   {
                     label: profileCopy.fields.address,
                     value: newData.address || "",
                     key: "address",
                     placeholder: profileCopy.placeholders.address,
+                    placeholderEmphasis: "muted",
                   },
                 ]}
                 isEdit={isEdit}
@@ -282,24 +285,28 @@ export default function Profile() {
                     value: newData.jobTitle || "",
                     key: "jobTitle",
                     placeholder: profileCopy.placeholders.jobTitle,
+                    placeholderEmphasis: "muted",
                   },
                   {
                     label: profileCopy.fields.workplace,
                     value: newData.organization || "",
                     key: "organization",
                     placeholder: profileCopy.placeholders.workplace,
+                    placeholderEmphasis: "muted",
                   },
                   {
                     label: profileCopy.fields.department,
                     value: newData.department || "",
                     key: "department",
                     placeholder: profileCopy.placeholders.department,
+                    placeholderEmphasis: "muted",
                   },
                   {
                     label: profileCopy.fields.workLocation,
                     value: newData.location || "",
                     key: "location",
                     placeholder: profileCopy.placeholders.workLocation,
+                    placeholderEmphasis: "muted",
                   },
                 ]}
                 isEdit={isEdit}

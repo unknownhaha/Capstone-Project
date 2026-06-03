@@ -40,6 +40,26 @@
     border: 1px solid #e0e0e0;
 }
 
+.light .inputPlaceholderMuted::placeholder {
+    color: #9ab0b2;
+    opacity: 0.55;
+}
+
+.light .inputPlaceholderMuted:disabled::placeholder {
+    -webkit-text-fill-color: #9ab0b2;
+    opacity: 0.55;
+}
+
+.light .inputPlaceholderSolid::placeholder {
+    color: #1a2e30;
+    opacity: 1;
+}
+
+.light .inputPlaceholderSolid:disabled::placeholder {
+    -webkit-text-fill-color: #1a2e30;
+    opacity: 1;
+}
+
 .light .labels {
     color: #333;
 }
