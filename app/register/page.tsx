@@ -176,7 +176,7 @@ export default function RegisterPage() {
                   disabled={isPending}
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
-                  <EyeIcon hidden={showPassword} />
+                  <EyeIcon hidden={!showPassword} />
                 </button>
               </div>
             </div>
@@ -203,7 +203,7 @@ export default function RegisterPage() {
                   disabled={isPending}
                   aria-label={showConfirm ? "Hide password" : "Show password"}
                 >
-                  <EyeIcon hidden={showConfirm} />
+                  <EyeIcon hidden={!showConfirm} />
                 </button>
               </div>
             </div>

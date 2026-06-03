@@ -9,6 +9,8 @@
     "lint": "eslint",
     "test": "npx tsx --test tests/**/*.test.ts",
     "validate": "npx tsx scripts/validate-premerge.ts",
+    "field-test:preflight": "npx tsx scripts/field-test-preflight.ts",
+    "field-test:smoke": "npx tsx scripts/field-test-smoke.ts",
     "impeccable:install": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-impeccable-skills.ps1"
   },
   "dependencies": {

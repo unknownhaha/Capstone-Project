@@ -106,8 +106,7 @@ export async function PATCH(
     }
 
     if (body.institution !== undefined) {
-      const inst = body.institution as { name?: string; address?: string };
-      if (inst.name !== undefined) project.institution.name = inst.name;
+      const inst = body.institution as { address?: string };
       if (inst.address !== undefined) project.institution.address = inst.address;
     }
 

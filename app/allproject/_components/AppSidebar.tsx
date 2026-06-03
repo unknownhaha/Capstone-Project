@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import styles from "./sidebar.module.css";
 import { useModalA11y } from "./useModalA11y";
+import { useTheme } from "@/app/_components/ThemeProvider";
 
 type AppSidebarProps = {
   open: boolean;
@@ -26,6 +27,7 @@ export default function AppSidebar({ open, onClose }: AppSidebarProps) {
   const [loggingOut, setLoggingOut] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
   const titleId = useId();
+  const { theme, setTheme } = useTheme();
 
   useModalA11y(open, onClose, panelRef);
 
@@ -122,6 +124,32 @@ export default function AppSidebar({ open, onClose }: AppSidebarProps) {
           <p className={styles.userEmail}>
             {user?.email ?? session?.user?.email}
           </p>
+        </div>
+
+        <div className={styles.themeBlock} role="group" aria-label="Appearance">
+          <span className={styles.themeLabel}>Appearance · ธีม</span>
+          <div className={styles.themeToggle}>
+            <button
+              type="button"
+              className={`${styles.themeBtn} ${
+                theme === "light" ? styles.themeBtnActive : ""
+              }`}
+              onClick={() => setTheme("light")}
+              aria-pressed={theme === "light"}
+            >
+              Light
+            </button>
+            <button
+              type="button"
+              className={`${styles.themeBtn} ${
+                theme === "dark" ? styles.themeBtnActive : ""
+              }`}
+              onClick={() => setTheme("dark")}
+              aria-pressed={theme === "dark"}
+            >
+              Dark
+            </button>
+          </div>
         </div>
 
         <nav className={styles.nav} aria-label="Main navigation">

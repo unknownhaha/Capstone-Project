@@ -134,6 +134,8 @@
   align-items: center;
   justify-content: center;
   transition: background 0.15s;
+  z-index: 2;
+  pointer-events: auto;
 }
 
 .togglePassword:hover {

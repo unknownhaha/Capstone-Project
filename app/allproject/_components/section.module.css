@@ -29,13 +29,44 @@
   height: 0;
 }
 
+.selectToolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+  flex-shrink: 0;
+}
+
+.selectAllBtn {
+  padding: 8px 14px;
+  border: 1px solid var(--insp-color-accent, #2d6a6a);
+  border-radius: 10px;
+  background: var(--insp-color-surface, #fff);
+  color: var(--insp-color-accent, #2d6a6a);
+  font-size: var(--insp-text-xs);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.selectAllBtn:hover {
+  background: var(--insp-color-surface-muted, #f8fafa);
+}
+
+.selectToolbarMeta {
+  font-size: var(--insp-text-2xs);
+  color: var(--insp-color-ink-muted, #6a8082);
+  font-weight: 600;
+}
+
 .sectionCard {
-  background: white;
+  background: var(--insp-color-surface, #fff);
   border-radius: 14px;
   overflow: visible;
-  color: #111;
+  color: var(--insp-color-ink, #1a2e30);
   flex-shrink: 0;
   margin-bottom: 2px;
+  border: 1px solid var(--insp-color-border-light, #e8f0f0);
 }
 
 .sectionCardCreate {
@@ -65,7 +96,7 @@
   height: 28px;
   border: none;
   border-radius: 8px;
-  background: #e8e8e8;
+  background: var(--insp-color-neutral-100, #e8e8e8);
   cursor: pointer;
   font-size: var(--insp-text-2xs);
   display: flex;

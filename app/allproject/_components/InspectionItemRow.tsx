@@ -228,7 +228,6 @@ export default function InspectionItemRow({
                 type="file"
                 accept="image/*"
                 multiple
-                capture="environment"
                 className={styles.hiddenFileInput}
                 disabled={busy}
                 onChange={handlePhotoSelected}

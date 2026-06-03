@@ -82,11 +82,6 @@ export default function ProjectInspectionPage() {
   async function handleMarkDone() {
     if (!project || !readyToComplete || markingDone) return;
 
-    const confirmed = window.confirm(
-      `Mark "${project.projectName}" as done? You can still view the inspection report afterward.`
-    );
-    if (!confirmed) return;
-
     setDoneError(null);
     setMarkingDone(true);
 

@@ -4,6 +4,7 @@ import { useState } from "react";
 import styles from "../allproject.module.css";
 import sectionStyles from "./section.module.css";
 import SectionPicker from "./SectionPicker";
+import { getAllSelectableGroupIds } from "@/lib/standards/catalog";
 
 type Props = {
   open: boolean;
@@ -24,6 +25,14 @@ export default function AddCriteriaModal({ open, onClose, projectId, onAdded }: 
       else next.add(groupId);
       return next;
     });
+  };
+
+  const selectAllGroups = () => {
+    setSelectedGroupIds(new Set(getAllSelectableGroupIds()));
+  };
+
+  const clearAllGroups = () => {
+    setSelectedGroupIds(new Set());
   };
 
   const handleSubmit = async () => {
@@ -74,7 +83,14 @@ export default function AddCriteriaModal({ open, onClose, projectId, onAdded }: 
           <p className={sectionStyles.sectionCount}>Selected: {selectedGroupIds.size} criteria groups</p>
 
           <div className={styles.createCriteriaScroll}>
-            <SectionPicker mode="select" selectedGroupIds={selectedGroupIds} onToggleGroup={toggleGroup} variant="create" />
+            <SectionPicker
+              mode="select"
+              selectedGroupIds={selectedGroupIds}
+              onToggleGroup={toggleGroup}
+              onSelectAll={selectAllGroups}
+              onClearAll={clearAllGroups}
+              variant="create"
+            />
           </div>
         </div>
 

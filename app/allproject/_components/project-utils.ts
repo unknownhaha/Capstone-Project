@@ -6,7 +6,7 @@ export type ApiProject = {
   projectName: string;
   coverImg?: string;
   description?: string;
-  institution?: { address?: string; name?: string };
+  institution?: { address?: string };
   completionRate?: number;
   scorePercent?: number;
   totalScore?: number;

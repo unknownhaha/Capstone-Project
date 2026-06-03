@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import styles from "../allproject.module.css";
 import sectionStyles from "./section.module.css";
 import SectionPicker from "./SectionPicker";
+import { getAllSelectableGroupIds } from "@/lib/standards/catalog";
 import { useModalA11y } from "./useModalA11y";
 
 type CreateProjectModalProps = {
@@ -42,6 +43,14 @@ export default function CreateProjectModal({ open, onClose }: CreateProjectModal
       else next.add(groupId);
       return next;
     });
+  };
+
+  const selectAllGroups = () => {
+    setSelectedGroupIds(new Set(getAllSelectableGroupIds()));
+  };
+
+  const clearAllGroups = () => {
+    setSelectedGroupIds(new Set());
   };
 
   const handleSubmit = async () => {
@@ -195,6 +204,8 @@ export default function CreateProjectModal({ open, onClose }: CreateProjectModal
               mode="select"
               selectedGroupIds={selectedGroupIds}
               onToggleGroup={toggleGroup}
+              onSelectAll={selectAllGroups}
+              onClearAll={clearAllGroups}
               variant="create"
             />
           </div>

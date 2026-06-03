@@ -142,12 +142,11 @@ function VerifyForm() {
             ))}
           </div>
 
-          <button 
-            type="button" 
-            className="resend" 
+          <button
+            type="button"
+            className="resend"
             onClick={handleResend}
             disabled={isResending || isPending}
-            style={{ cursor: isResending || isPending ? "not-allowed" : "pointer" }}
           >
             {isResending ? "Sending..." : "Resend Code"}
           </button>
@@ -157,7 +156,7 @@ function VerifyForm() {
             disabled={isPending}
             style={{ cursor: isPending ? "not-allowed" : "pointer" }}
           >
-            {isPending ? "Verifying..." : "SUBMIT"}
+            {isPending ? "Verifying..." : "Verify email"}
           </button>
         </form>
       </div>

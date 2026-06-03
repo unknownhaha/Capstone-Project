@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { findCatalogGroup } from "@/lib/standards/catalog";
 import PhoneShell from "../../../_components/PhoneShell";
 import InspectionItemRow from "../../../_components/InspectionItemRow";
@@ -41,6 +41,7 @@ export default function CriteriaItemsPage() {
     criteriaGroupId: string;
   }>();
   const groupId = decodeURIComponent(criteriaGroupId);
+  const router = useRouter();
   const { status, isAuthenticated } = useRequireAuth();
 
   const [project, setProject] = useState<ApiProject | null>(null);
@@ -286,6 +287,11 @@ export default function CriteriaItemsPage() {
     projectItemIds.has(item.item_id)
   );
 
+  const scoredCount = items.filter(
+    (item) => getScore(item.item_id) !== null
+  ).length;
+  const allScored = items.length > 0 && scoredCount === items.length;
+
   return (
     <PhoneShell
       title={project.projectName}
@@ -315,6 +321,10 @@ export default function CriteriaItemsPage() {
               </p>
             )}
 
+            <p className={itemStyles.checklistProgress}>
+              {scoredCount} of {items.length} scored
+            </p>
+
             <div className={itemStyles.itemsList}>
               {items.map((item) => (
                 <InspectionItemRow
@@ -331,6 +341,22 @@ export default function CriteriaItemsPage() {
                   onImagesChange={handleImagesChange}
                 />
               ))}
+            </div>
+
+            <div className={itemStyles.checklistFooter}>
+              <p className={itemStyles.checklistFooterHint}>
+                {allScored
+                  ? "All checkpoints in this group are scored. Return to the criteria list."
+                  : "Score every checkpoint to finish this group."}
+              </p>
+              <button
+                type="button"
+                className={itemStyles.checklistSubmitBtn}
+                disabled={!allScored}
+                onClick={() => router.push(`/allproject/${projectId}`)}
+              >
+                Back to criteria
+              </button>
             </div>
           </div>
         </div>

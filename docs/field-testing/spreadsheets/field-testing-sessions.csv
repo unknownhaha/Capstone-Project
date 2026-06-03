@@ -1,0 +1,2 @@
+session_id,date,time_start,role,device,os,browser,network,app_url,git_commit,language_comfort,facilitator,notes
+U1-EXAMPLE,2026-06-01,10:00,owner,iPhone 15,iOS 18,Safari,Wi-Fi,http://localhost:3000,,fluent_th_en,YourName,Example row — delete or replace after real session

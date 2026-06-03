@@ -1,0 +1,2 @@
+bug_id,session_id,severity,area,steps_reproduce,expected,actual,device_browser,evidence_link,status
+B-001,U1-EXAMPLE,Major,Auth,1. 2. 3.,Should…,Actually…,iPhone Safari,,open

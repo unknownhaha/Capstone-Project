@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useFixedMenuPosition } from "./useFixedMenuPosition";
+import { createPortal } from "react-dom";
+import { useAnchoredMenuPosition } from "./useAnchoredMenuPosition";
 import { useRouter } from "next/navigation";
 import ProjectCardThumb from "./ProjectCardThumb";
 import { useUploadThing } from "./inspection-upload";
@@ -38,7 +39,7 @@ export default function ProjectCard({
   const [coverImg, setCoverImg] = useState(project.coverImg ?? "");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const kebabRef = useRef<HTMLButtonElement>(null);
-  const menuStyle = useFixedMenuPosition(menuOpen, kebabRef);
+  const menuStyle = useAnchoredMenuPosition(menuOpen, kebabRef);
   const { startUpload, isUploading } = useUploadThing("projectCoverImg", {
     onUploadError: (error) => {
       console.error("UploadThing Error:", error);
@@ -176,53 +177,57 @@ export default function ProjectCard({
               ⋮
             </button>
 
-            {menuOpen && (
-              <>
-                <button
-                  type="button"
-                  className={styles.menuBackdrop}
-                  aria-label="Close menu, ปิดเมนู"
-                  onClick={() => setMenuOpen(false)}
-                />
-                <div className={styles.cardMenu} role="menu" style={menuStyle}>
+            {menuOpen &&
+              createPortal(
+                <>
                   <button
                     type="button"
-                    className={styles.menuItem}
-                    role="menuitem"
-                    disabled={cardBusy}
-                    onClick={() => {
-                      setMenuOpen(false);
-                      setShareOpen(true);
-                    }}
+                    className={styles.menuBackdrop}
+                    aria-label="Close menu, ปิดเมนู"
+                    onClick={() => setMenuOpen(false)}
+                  />
+                  <div
+                    className={styles.cardMenu}
+                    role="menu"
+                    style={menuStyle}
                   >
-                    Share project
-                  </button>
-                  <button
-                    type="button"
-                    className={styles.menuItem}
-                    role="menuitem"
-                    disabled={cardBusy}
-                    onClick={openCoverPicker}
-                  >
-                    {isUploading ? "Uploading..." : "Upload cover photo"}
-                  </button>
-                  <button
-                    type="button"
-                    className={`${styles.menuItem} ${styles.menuItemDanger}`}
-                    role="menuitem"
-                    disabled={cardBusy}
-                    onClick={requestDelete}
-                  >
-                    Delete project
-                  </button>
-                </div>
-              </>
-            )}
+                    <button
+                      type="button"
+                      className={styles.menuItem}
+                      role="menuitem"
+                      disabled={cardBusy}
+                      onClick={() => {
+                        setMenuOpen(false);
+                        setShareOpen(true);
+                      }}
+                    >
+                      Share project
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.menuItem}
+                      role="menuitem"
+                      disabled={cardBusy}
+                      onClick={openCoverPicker}
+                    >
+                      {isUploading ? "Uploading..." : "Upload cover photo"}
+                    </button>
+                    <button
+                      type="button"
+                      className={`${styles.menuItem} ${styles.menuItemDanger}`}
+                      role="menuitem"
+                      disabled={cardBusy}
+                      onClick={requestDelete}
+                    >
+                      Delete project
+                    </button>
+                  </div>
+                </>,
+                document.body
+              )}
           </div>
         ) : (
-          <span className={styles.sharedBadge}>
-            {formatSharedLabel(project.ownerFirstName)}
-          </span>
+          <div className={styles.toolbarSpacer} aria-hidden="true" />
         )}
       </div>
 
@@ -241,7 +246,14 @@ export default function ProjectCard({
         disabled={cardBusy}
         onClick={() => router.push(`/allproject/${project._id}`)}
       >
-        <ProjectCardThumb project={displayProject} />
+        <div className={styles.thumbSlot}>
+          <ProjectCardThumb project={displayProject} />
+          {!isOwner ? (
+            <span className={styles.sharedBadge}>
+              {formatSharedLabel(project.ownerFirstName)}
+            </span>
+          ) : null}
+        </div>
         <div className={styles.cardInfo}>
           <h4>{project.projectName}</h4>
           <span>{totalItems} Checkpoints</span>

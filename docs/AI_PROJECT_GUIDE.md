@@ -271,13 +271,21 @@ npm run build    # Production build
 npm run lint     # ESLint
 npm test         # Unit tests (lib/project-patch, concurrency, access)
 npm run validate # Pre-merge checks (scripts/validate-premerge.ts)
+npm run field-test:preflight  # Field-test env + test/validate/build report
+npm run field-test:smoke      # HTTP smoke (requires npm run dev)
 ```
 
 After schema changes to Mongoose models, **restart dev server**.
 
 ---
 
-## 16. When unsure
+## 16. Field testing (real-world)
+
+Spreadsheets, runbooks, and results live in [`docs/field-testing/`](field-testing/README.md). Do not edit `.cursor/plans/` plan files; implement artifacts under `docs/field-testing/` instead.
+
+---
+
+## 17. When unsure
 
 1. Re-read this file and the specific component you are editing.
 2. Trace data from MongoDB schema → API route → page state → child component.

@@ -11,7 +11,7 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
-  background: #f8f9fa;
+  background: var(--insp-color-surface-muted, #f8f9fa);
   border-radius: 22px;
   box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.08);
   overflow: hidden;
@@ -406,6 +406,54 @@
 
 .photoBtn:hover:not(:disabled) {
   background: #4a8588;
+}
+
+.checklistProgress {
+  margin: 0 0 12px;
+  font-size: var(--insp-text-xs);
+  font-weight: 600;
+  color: var(--insp-color-ink-secondary, #4a6062);
+}
+
+.checklistFooter {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--insp-color-border-light, #e8f0f0);
+}
+
+.checklistFooterHint {
+  margin: 0 0 12px;
+  font-size: var(--insp-text-xs);
+  line-height: 1.45;
+  color: var(--insp-color-ink-muted, #6a8082);
+}
+
+.checklistSubmitBtn {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 12px;
+  background: var(--insp-color-shell-teal, #5f9ea0);
+  color: var(--insp-color-on-shell, #fff);
+  font-size: var(--insp-text-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+
+.checklistSubmitBtn:hover:not(:disabled) {
+  background: var(--insp-color-shell-teal-deep, #4a8588);
+}
+
+.checklistSubmitBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.checklistSubmitBtn:focus-visible {
+  outline: 2px solid var(--insp-color-accent, #2d6a6a);
+  outline-offset: 3px;
 }
 
 .loading {

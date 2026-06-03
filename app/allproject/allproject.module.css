@@ -710,9 +710,11 @@
   align-items: start;
   overflow-y: auto;
   overscroll-behavior: contain;
+  padding-top: var(--insp-space-xs);
   padding-bottom: var(--insp-space-sm);
-  scrollbar-width: thin;
-  scrollbar-color: var(--insp-color-scrollbar-shell) transparent;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 /* Must follow .grid — overrides 2-column layout when empty */
@@ -720,19 +722,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   grid-template-columns: unset;
   min-height: 240px;
   width: 100%;
 }
 
 .grid::-webkit-scrollbar {
-  width: 5px;
-}
-
-.grid::-webkit-scrollbar-thumb {
-  background: var(--insp-color-scrollbar-shell);
-  border-radius: var(--insp-radius-pill);
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 /* ===== CARD ===== */

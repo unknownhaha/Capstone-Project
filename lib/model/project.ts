@@ -86,31 +86,13 @@ const projectSchema = new mongoose.Schema(
     },
 
     institution: {
-      name: String,
       address: String,
     },
-
 
     buildingType: {
       type: String,
       enum: ["single_floor", "multi_floor"],
       default: "single_floor",
-    },
-
-    toiletInfo: {
-      count: { type: Number, default: 0 },
-
-      arrangement: {
-        type: String,
-        enum: ["shared", "separate", "other"],
-      },
-
-      arrangementNote: {
-        type: String,
-        required: function (this: { arrangement?: string }) {
-          return this.arrangement === "other";
-        },
-      },
     },
 
     status: {

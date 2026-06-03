@@ -348,6 +348,13 @@ export const STANDARDS_CATALOG: CatalogSection[] = STANDARD_SOURCES.map((standar
   buildCatalogSection(standard as Record<string, unknown>)
 );
 
+/** All criteria group ids available when creating or extending a project. */
+export function getAllSelectableGroupIds(): string[] {
+  return STANDARDS_CATALOG.flatMap((section) =>
+    section.groups.map((group) => group.id)
+  );
+}
+
 const CATALOG_ITEM_BY_ID = new Map<string, CatalogItem>();
 
 for (const section of STANDARDS_CATALOG) {
