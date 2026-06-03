@@ -303,7 +303,6 @@ Authentication ใช้ **NextAuth v5** แบบ Credentials + JWT, `middlewar
 
 - ส่งออกรายงาน PDF/Excel จากผลการตรวจ
 - แจ้งเตือนเมื่อโครงการใกล้ครบหรือมี conflict
-- เชื่อมต่อกับ ML service สำหรับวิเคราะห์ความเสี่ยงอาคาร (โฟลเดอร์ `ml-service/` มี prototype Random Forest)
 - รองรับ offline mode สำหรับพื้นที่สัญญาณอ่อน
 
 ---

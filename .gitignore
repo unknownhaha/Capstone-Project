@@ -41,8 +41,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# python (ml-service)
-ml-service/.venv/
-ml-service/__pycache__/
+# python (figure extraction scripts)
+__pycache__/
 *.pyc
-ml-service/models/
