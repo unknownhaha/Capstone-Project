@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import AppLogo from "@/app/_components/AppLogo";
+import CreateProjectFormSkeleton from "@/app/allproject/_components/CreateProjectFormSkeleton";
 import styles from "./login.module.css";
 import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -230,7 +231,14 @@ function LoginForm() {
 function LoginFallback() {
   return (
     <div className={styles.shell}>
-      <p className={styles.loading}>Loading...</p>
+      <div className={styles.phone}>
+        <div className={styles.card}>
+          <p className={styles.srOnly} aria-live="polite">
+            Loading... · กำลังโหลด
+          </p>
+          <CreateProjectFormSkeleton variant="criteriaOnly" />
+        </div>
+      </div>
     </div>
   );
 }

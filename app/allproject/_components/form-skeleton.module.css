@@ -1,0 +1,71 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+  min-height: 0;
+}
+
+.block {
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.label {
+  width: 30%;
+  height: 16px;
+}
+
+.labelMd {
+  width: 40%;
+  height: 16px;
+}
+
+.labelSm {
+  width: 35%;
+  height: 16px;
+}
+
+.labelLg {
+  width: 50%;
+  height: 16px;
+  margin-top: 12px;
+}
+
+.input {
+  width: 100%;
+  height: 48px;
+  border-radius: 14px;
+}
+
+.textarea {
+  width: 100%;
+  height: 100px;
+  border-radius: 14px;
+}
+
+.listBlock {
+  width: 100%;
+  height: 200px;
+  border-radius: 14px;
+}
+
+.progressLabel {
+  width: 40%;
+  height: 14px;
+  margin-bottom: 12px;
+}
+
+.progressBar {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+}
+
+.sectionList {
+  width: 100%;
+  flex: 1;
+  min-height: 240px;
+  border-radius: 14px;
+}

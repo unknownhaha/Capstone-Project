@@ -44,3 +44,5 @@ next-env.d.ts
 # python (figure extraction scripts)
 __pycache__/
 *.pyc
+
+.vercel

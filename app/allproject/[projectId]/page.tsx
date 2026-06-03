@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import styles from "../allproject.module.css";
+import InspectionPageLoading from "../_components/InspectionPageLoading";
 import PhoneShell from "../_components/PhoneShell";
+import ProjectInspectionSkeleton from "../_components/ProjectInspectionSkeleton";
 import SectionPicker from "../_components/SectionPicker";
 import AddCriteriaModal from "../_components/AddCriteriaModal";
 import { useRequireAuth } from "../_components/useRequireAuth";
@@ -45,19 +47,23 @@ export default function ProjectInspectionPage() {
 
   if (status === "loading" || !isAuthenticated) {
     return (
-      <div className={styles.container}>
-        <div className={styles.phone}>
-          <p className={styles.projectLoading}>Loading...</p>
-        </div>
-      </div>
+      <InspectionPageLoading
+        title="Project · โครงการ"
+        liveMessage="Loading... · กำลังโหลด"
+      >
+        <ProjectInspectionSkeleton />
+      </InspectionPageLoading>
     );
   }
 
   if (loading) {
     return (
-      <PhoneShell title="Project" subtitle="Loading...">
-        <p className={styles.projectLoading}>Loading project...</p>
-      </PhoneShell>
+      <InspectionPageLoading
+        title="Project · โครงการ"
+        liveMessage="Loading project... · กำลังโหลดโครงการ"
+      >
+        <ProjectInspectionSkeleton />
+      </InspectionPageLoading>
     );
   }
 

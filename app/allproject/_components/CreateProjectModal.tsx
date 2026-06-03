@@ -1,11 +1,16 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import styles from "../allproject.module.css";
 import sectionStyles from "./section.module.css";
-import skeletonStyles from "./project-card-skeleton.module.css";
-import SectionPicker from "./SectionPicker";
+import CreateProjectFormSkeleton from "./CreateProjectFormSkeleton";
+
+const SectionPickerLazy = dynamic(() => import("./SectionPicker"), {
+  loading: () => <CreateProjectFormSkeleton variant="criteriaOnly" />,
+  ssr: false,
+});
 import { getAllSelectableGroupIds } from "@/lib/standards/catalog";
 import { useModalA11y } from "./useModalA11y";
 
@@ -134,22 +139,8 @@ export default function CreateProjectModal({ open, onClose }: CreateProjectModal
             <div className={styles.createHeader}>
               <h3 id={titleId}>Creating project... · กำลังสร้างโครงการ</h3>
             </div>
-            <div className={styles.createBody} style={{ padding: "20px 20px 12px", gap: "16px" }}>
-              {/* Location placeholder skeleton */}
-              <div className={`${skeletonStyles.shimmer} ${skeletonStyles.skeletonLine}`} style={{ width: "30%", height: "16px" }} />
-              <div className={`${skeletonStyles.shimmer} ${skeletonStyles.skeletonLine}`} style={{ width: "100%", height: "48px", borderRadius: "14px" }} />
-
-              {/* Project name placeholder skeleton */}
-              <div className={`${skeletonStyles.shimmer} ${skeletonStyles.skeletonLine}`} style={{ width: "40%", height: "16px" }} />
-              <div className={`${skeletonStyles.shimmer} ${skeletonStyles.skeletonLine}`} style={{ width: "100%", height: "48px", borderRadius: "14px" }} />
-
-              {/* Description placeholder skeleton */}
-              <div className={`${skeletonStyles.shimmer} ${skeletonStyles.skeletonLine}`} style={{ width: "35%", height: "16px" }} />
-              <div className={`${skeletonStyles.shimmer} ${skeletonStyles.skeletonLine}`} style={{ width: "100%", height: "100px", borderRadius: "14px" }} />
-
-              {/* Selection list placeholder skeleton */}
-              <div className={`${skeletonStyles.shimmer} ${skeletonStyles.skeletonLine}`} style={{ width: "50%", height: "16px", marginTop: "12px" }} />
-              <div className={`${skeletonStyles.shimmer} ${skeletonStyles.skeletonLine}`} style={{ width: "100%", height: "200px", borderRadius: "14px" }} />
+            <div className={styles.createBody}>
+              <CreateProjectFormSkeleton />
             </div>
           </>
         ) : (
@@ -226,7 +217,7 @@ export default function CreateProjectModal({ open, onClose }: CreateProjectModal
               <p className={styles.createSectionLabel}>Sections · หมวดเกณฑ์</p>
 
               <div className={styles.createCriteriaScroll}>
-                <SectionPicker
+                <SectionPickerLazy
                   mode="select"
                   selectedGroupIds={selectedGroupIds}
                   onToggleGroup={toggleGroup}

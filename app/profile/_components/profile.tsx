@@ -5,6 +5,8 @@ import Form from "@/app/_globle_components/Form/form";
 import style from "./profile.module.css";
 import PhoneShell from "@/app/allproject/_components/PhoneShell";
 import AppSidebar from "@/app/allproject/_components/AppSidebar";
+import CreateProjectFormSkeleton from "@/app/allproject/_components/CreateProjectFormSkeleton";
+import allprojectStyles from "@/app/allproject/allproject.module.css";
 import { profileCopy } from "@/app/profile/profile-copy";
 import { useSession } from "next-auth/react";
 import { useState, useEffect, useCallback } from "react";
@@ -174,7 +176,14 @@ export default function Profile() {
       <div className={style.page}>
         <div className={style.contentPanel}>
           {!newData ? (
-            <p className={style.loading}>{profileCopy.loading}</p>
+            <>
+              <p className={allprojectStyles.srOnly} aria-live="polite">
+                {profileCopy.loading}
+              </p>
+              <div className={allprojectStyles.pageLoadingBody}>
+                <CreateProjectFormSkeleton />
+              </div>
+            </>
           ) : (
             <div className={style.inner}>
               <Header

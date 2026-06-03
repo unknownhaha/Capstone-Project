@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { findCatalogGroup } from "@/lib/standards/catalog";
 import PhoneShell from "../../../_components/PhoneShell";
+import CriteriaItemsSkeleton from "../../../_components/CriteriaItemsSkeleton";
+import InspectionPageLoading from "../../../_components/InspectionPageLoading";
 import InspectionItemRow from "../../../_components/InspectionItemRow";
 import { useRequireAuth } from "../../../_components/useRequireAuth";
 import {
@@ -245,15 +247,23 @@ export default function CriteriaItemsPage() {
 
   if (status === "loading" || !isAuthenticated) {
     return (
-      <div className={itemStyles.loading}>Loading...</div>
+      <InspectionPageLoading
+        title="Criteria · เกณฑ์"
+        liveMessage="Loading... · กำลังโหลด"
+      >
+        <CriteriaItemsSkeleton />
+      </InspectionPageLoading>
     );
   }
 
   if (loading) {
     return (
-      <PhoneShell title="Criteria" subtitle="Loading...">
-        <p className={itemStyles.loading}>Loading items...</p>
-      </PhoneShell>
+      <InspectionPageLoading
+        title="Criteria · เกณฑ์"
+        liveMessage="Loading items... · กำลังโหลดรายการ"
+      >
+        <CriteriaItemsSkeleton />
+      </InspectionPageLoading>
     );
   }
 

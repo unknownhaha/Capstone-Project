@@ -33,18 +33,13 @@ function isPublicPagePath(pathname: string): boolean {
 
 
 export async function middleware(request: NextRequest) {
-
-  const token = await getToken({
-
-    req: request,
-
-    secret: process.env.AUTH_SECRET,
-
-  });
-
   const { pathname } = request.nextUrl;
 
-
+  const token = await getToken({
+    req: request,
+    secret: process.env.AUTH_SECRET,
+    secureCookie: process.env.NODE_ENV === "production",
+  });
 
   if (pathname.startsWith("/api/")) {
     if (isPublicApiPath(pathname)) {

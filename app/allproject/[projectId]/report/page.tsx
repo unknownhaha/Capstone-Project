@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import styles from "../../allproject.module.css";
 import PhoneShell from "../../_components/PhoneShell";
+import CreateProjectFormSkeleton from "../../_components/CreateProjectFormSkeleton";
+import InspectionPageLoading from "../../_components/InspectionPageLoading";
 import ProjectReportView from "../../_components/ProjectReportView";
 import { useRequireAuth } from "../../_components/useRequireAuth";
 import { type ApiProject } from "../../_components/project-utils";
@@ -36,21 +38,31 @@ export default function ProjectReportPage() {
 
   if (status === "loading" || !isAuthenticated) {
     return (
-      <div className={styles.container}>
-        <div className={styles.phone}>
-          <p style={{ color: "white", textAlign: "center", marginTop: 40 }}>
-            Loading...
-          </p>
+      <InspectionPageLoading
+        title="Report · รายงาน"
+        liveMessage="Loading... · กำลังโหลด"
+      >
+        <div className={styles.pageLoadingBody}>
+          <div className={styles.projectScroll}>
+            <CreateProjectFormSkeleton variant="criteriaOnly" />
+          </div>
         </div>
-      </div>
+      </InspectionPageLoading>
     );
   }
 
   if (loading) {
     return (
-      <PhoneShell title="Report" subtitle="Loading...">
-        <p style={{ color: "white" }}>Loading report...</p>
-      </PhoneShell>
+      <InspectionPageLoading
+        title="Report · รายงาน"
+        liveMessage="Loading report... · กำลังโหลดรายงาน"
+      >
+        <div className={styles.pageLoadingBody}>
+          <div className={styles.projectScroll}>
+            <CreateProjectFormSkeleton variant="criteriaOnly" />
+          </div>
+        </div>
+      </InspectionPageLoading>
     );
   }
 
