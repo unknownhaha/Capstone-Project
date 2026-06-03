@@ -1,21 +1,17 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import styles from "./allproject.module.css";
 import PhoneShell from "./_components/PhoneShell";
 import CreateProjectModal from "./_components/CreateProjectModal";
 import ProfileRequiredModal from "./_components/ProfileRequiredModal";
 import AppSidebar from "./_components/AppSidebar";
 import { useRequireAuth } from "./_components/useRequireAuth";
-import { useProfileComplete } from "./_components/useProfileComplete";
+import { useDashboardData } from "./_components/useDashboardData";
 import ProjectCard from "./_components/ProjectCard";
 import ProjectCardSkeleton from "./_components/ProjectCardSkeleton";
 import { filterProjects, type ApiProject } from "./_components/project-utils";
-import {
-  projectLoadErrorCopy,
-  projectLoadErrorFromResponse,
-  type ProjectLoadErrorKind,
-} from "./_components/project-load-error";
+import { projectLoadErrorCopy } from "./_components/project-load-error";
 
 const SKELETON_COUNT = 4;
 
@@ -24,16 +20,18 @@ export default function AllProjectPage() {
   const [openMenu, setOpenMenu] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
   const [openProfileRequired, setOpenProfileRequired] = useState(false);
-  const [projects, setProjects] = useState<ApiProject[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [loadError, setLoadError] = useState<ProjectLoadErrorKind | null>(null);
   const {
-    loading: profileLoading,
+    projects,
+    setProjects,
+    loading,
+    profileLoading,
     complete: profileComplete,
     missingFields,
-    refresh: refreshProfile,
-  } = useProfileComplete(isAuthenticated);
+    loadError,
+    refreshAll: loadProjects,
+    refreshProfile,
+  } = useDashboardData(isAuthenticated);
 
   const visibleProjects = useMemo(
     () => filterProjects(projects, searchQuery),
@@ -51,39 +49,6 @@ export default function AllProjectPage() {
           projects.reduce((sum, p) => sum + Number(p.completionRate ?? 0), 0) /
             projects.length
         );
-
-  const loadProjects = useCallback(async () => {
-    setLoading(true);
-    setLoadError(null);
-    let res: Response | null = null;
-    try {
-      res = await fetch("/api/project", { credentials: "include" });
-      if (!res.ok) {
-        setLoadError(projectLoadErrorFromResponse(res, false));
-        return;
-      }
-      const data = (await res.json()) as ApiProject[];
-      setProjects(data);
-    } catch {
-      setLoadError(projectLoadErrorFromResponse(res, true));
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!isAuthenticated) return;
-    void loadProjects();
-
-    const refreshOnVisible = () => {
-      if (document.visibilityState === "visible") {
-        void loadProjects();
-      }
-    };
-
-    document.addEventListener("visibilitychange", refreshOnVisible);
-    return () => document.removeEventListener("visibilitychange", refreshOnVisible);
-  }, [isAuthenticated, loadProjects]);
 
   const showEmptyState = !loading && loadError === null && projects.length === 0;
   const loadErrorCopy = loadError ? projectLoadErrorCopy(loadError) : null;

@@ -1,0 +1,100 @@
+.page {
+  min-height: 100vh;
+  background: #f4f6f6;
+}
+
+.header {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 16px 8px;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #1a2e30;
+}
+
+.subtitle {
+  margin: 6px 0 0;
+  font-size: 0.9rem;
+  color: #4a5c5e;
+  line-height: 1.45;
+}
+
+.subtitle a {
+  color: #4a8588;
+  font-weight: 600;
+}
+
+.steps {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px 12px;
+  font-size: 0.875rem;
+  color: #4a5c5e;
+  line-height: 1.5;
+}
+
+.steps code {
+  font-size: 0.8rem;
+  background: #e8efef;
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.steps a {
+  color: #4a8588;
+  font-weight: 600;
+}
+
+.authNote {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px 12px;
+  font-size: 0.875rem;
+  color: #4a5c5e;
+  line-height: 1.5;
+}
+
+.authNote ul {
+  margin: 8px 0 12px;
+  padding-left: 1.25rem;
+}
+
+.clearAuthBtn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #b8d4d6;
+  background: #fff;
+  color: #1a2e30;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.clearAuthBtn:hover {
+  background: #eff5f5;
+}
+
+.stepsDetails {
+  max-width: 1200px;
+  margin: 0 auto 8px;
+  padding: 0 16px;
+  font-size: 0.875rem;
+  color: #4a5c5e;
+}
+
+.stepsDetails summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: #1a2e30;
+}
+
+
+.swagger {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 8px 32px;
+}

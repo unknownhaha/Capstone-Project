@@ -117,8 +117,10 @@ Capstone-Project/
 | `app/api/auth/` | สมัคร OTP NextAuth (`runtime = "nodejs"`) |
 | `app/api/project/` | CRUD โครงการ PATCH **critiria** add-groups collaboration **leave** |
 | `app/api/join/[token]/` | เข้าร่วมเป็น editor |
-| `app/api/users/[id]/` | โปรไฟล์ GET/PATCH |
+| `app/api/users/[id]/` | โปรไฟล์ GET/PUT |
 | `app/api/uploadthing/` | อัปโหลดไฟล์ (ตรวจ session ต่อ slug) |
+| `app/api/openapi/` | OpenAPI JSON สำหรับ Swagger |
+| `app/api-docs/` | หน้า Swagger UI (`/api-docs`) |
 | `app/_components/` | `ThemeProvider`, `AppLogo` |
 | `app/_globle_components/Form/` | ฟอร์มโปรไฟล์ใช้ซ้ำ |
 
@@ -236,9 +238,91 @@ npm run field-test:smoke   # smoke HTTP (ต้องรัน dev server ก่
 
 ---
 
+## API Routes — เส้นทาง API ทั้งหมด
+
+**Swagger UI (อ่านง่าย):** เปิด [`/api-docs`](http://localhost:3000/api-docs) หลังรัน dev server  
+**OpenAPI JSON:** [`GET /api/openapi`](http://localhost:3000/api/openapi) (public, ไม่ต้องล็อกอิน)
+
+### Auth — ไม่ต้อง session (middleware ยกเว้น)
+
+| Method | Path | ใช้ทำอะไร | เรียกจาก |
+|--------|------|-----------|----------|
+| `POST` | `/api/auth/register` | สมัครสมาชิก + ส่ง OTP อีเมล | `app/register/page.tsx` |
+| `POST` | `/api/auth/check-email` | ตรวจว่ามีอีเมล / verify แล้วหรือยัง | (พร้อมใช้ใน flow สมัคร) |
+| `POST` | `/api/auth/verify-otp` | ยืนยัน OTP หลังสมัคร | `app/verify/page.tsx` |
+| `POST` | `/api/auth/verify-otp/resend` | ส่ง OTP ใหม่ | `app/verify/page.tsx` |
+| `POST` | `/api/auth/forgot-password` | ขอ OTP รีเซ็ตรหัสผ่าน | `app/forgot-password/page.tsx` |
+| `POST` | `/api/auth/reset-password` | ตั้งรหัสผ่านใหม่ด้วย OTP | `app/forgot-password/page.tsx` |
+| `*` | `/api/auth/[...nextauth]` | NextAuth — login, session, CSRF, signout | `app/login/page.tsx` (`signIn`) |
+
+### Users — ต้องล็อกอิน (cookie session)
+
+| Method | Path | ใช้ทำอะไร | เรียกจาก |
+|--------|------|-----------|----------|
+| `GET` | `/api/users/{id}` | อ่านโปรไฟล์ตัวเอง (`id` = user ใน session) | `profile.tsx`, `AppSidebar.tsx`, `useDashboardData` |
+| `PUT` | `/api/users/{id}` | บันทึกโปรไฟล์ | `app/profile/_components/profile.tsx` |
+
+### Projects — ต้องล็อกอิน
+
+| Method | Path | ใช้ทำอะไร | เรียกจาก |
+|--------|------|-----------|----------|
+| `GET` | `/api/project` | รายการโครงการ (ของตัวเอง + แชร์) — **server ใช้ `Promise.all` ค้น owned + shared** | `app/allproject/page.tsx` (`useDashboardData`) |
+| `POST` | `/api/project` | สร้างโครงการ (โปรไฟล์ต้องครบ) | `CreateProjectModal.tsx` |
+| `GET` | `/api/project/{projectId}` | โหลดโครงการเดียว | หน้าโครงการ / เกณฑ์ / รายงาน |
+| `PATCH` | `/api/project/{projectId}` | แก้ชื่อ ปก สถานะ completed ฯลฯ | `ProjectCard`, หน้าโครงการ (Mark done) |
+| `DELETE` | `/api/project/{projectId}` | ลบโครงการ (เจ้าของ) | `ProjectCard.tsx` |
+
+### Inspection (เกณฑ์ / หมวด) — ต้องล็อกอิน
+
+| Method | Path | ใช้ทำอะไร | เรียกจาก |
+|--------|------|-----------|----------|
+| `PATCH` | `/api/project/{projectId}/critiria/{critiriaId}` | คะแนน 0/1/2 หมายเหตุ รูป (`expectedUpdatedAt` → 409 ถ้าชน) | `InspectionItemRow` / หน้า criteria |
+| `POST` | `/api/project/{projectId}/add-groups` | เพิ่มกลุ่มเกณฑ์ในโครงการเดิม | `AddCriteriaModal.tsx` |
+| `POST` | `/api/project/{projectId}/section` | เพิ่มหมวดด้วย `code` | (API พร้อมใช้; UI หลักใช้ add-groups) |
+| `DELETE` | `/api/project/{projectId}/section/{sectionCode}` | ลบหมวดออกจากโครงการ | (API พร้อมใช้) |
+
+> **หมายเหตุ:** สะกดใน URL คือ **`critiria`** (ไม่ใช่ criteria) — อย่าเปลี่ยนโดยไม่แก้ client
+
+### Collaboration — ต้องล็อกอิน
+
+| Method | Path | ใช้ทำอะไร | เรียกจาก |
+|--------|------|-----------|----------|
+| `GET` | `/api/project/{projectId}/invite` | ดึงลิงก์เชิญ (เมื่อเปิด collaboration) | `ShareProjectDialog.tsx` |
+| `POST` | `/api/project/{projectId}/collaboration` | `enable` / `disable` / `rotate_invite` | `ShareProjectDialog.tsx` |
+| `POST` | `/api/project/{projectId}/leave` | ผู้แก้ไขเอาโครงการแชร์ออกจากรายการ | `ProjectCard.tsx` |
+| `POST` | `/api/join/{token}` | เข้าร่วมเป็น editor จากลิงก์เชิญ | `app/join/[token]/page.tsx` |
+
+### Uploads
+
+| Method | Path | ใช้ทำอะไร | เรียกจาก |
+|--------|------|-----------|----------|
+| `POST` | `/api/uploadthing` | UploadThing handler — `profileImg`, `inspectionImg`, `projectCoverImg` | `profile` header, `InspectionItemRow`, `ProjectCard` |
+
+### Client: `Promise.all` (โหลดคู่ขนาน)
+
+| ไฟล์ | ก่อน | หลัง |
+|------|------|------|
+| `app/allproject/page.tsx` | `GET /api/project` + `GET /api/users/{id}` แยก 2 hook | **`useDashboardData`** — `Promise.all` ในไฟล์เดียว |
+| `app/api/project/route.ts` (GET) | — | มี `Promise.all` ค้น owned + shared อยู่แล้ว |
+
+ไฟล์อื่นมี `fetch` แค่ครั้งเดียวต่อ action (PATCH/POST) หรือเรียกซ้ำหลัง mutation — ไม่รวม `Promise.all`
+
+### สถานะ HTTP ที่พบบ่อย
+
+| Code | ความหมาย |
+|------|----------|
+| `401` | ไม่มี session / middleware กั้น |
+| `403` | ไม่มีสิทธิ์ หรือโปรไฟล์ไม่ครบตอนสร้างโครงการ |
+| `404` | ไม่พบโครงการ / user / invite |
+| `409` | อีเมลซ้ำ หรือแก้เกณฑ์ชน `updatedAt` |
+
+---
+
 ## เอกสารที่เกี่ยวข้อง
 
 - [`docs/AI_PROJECT_GUIDE.md`](docs/AI_PROJECT_GUIDE.md) — สถาปัตยกรรม API ข้อควรระวัง (EN)
+- [`/api-docs`](http://localhost:3000/api-docs) — Swagger UI (หลัง `npm run dev`)
+- [`GET /api/openapi`](http://localhost:3000/api/openapi) — OpenAPI 3 spec (JSON)
 - [`docs/reports/user-flow-diagram.md`](docs/reports/user-flow-diagram.md) — แผนภาพ user flow
 - [`docs/reports/er-diagram-user-project.md`](docs/reports/er-diagram-user-project.md) — โมเดล User / Project
 - [`docs/field-testing/README.md`](docs/field-testing/README.md) — โปรโตคอลทดสอบภาคสนาม
