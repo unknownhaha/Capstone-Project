@@ -21,7 +21,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
       async authorize(credentials) {
         try {
-          if (!credentials?.email || !credentials?.password) return null;
+          if (!credentials?.email || !credentials?.password) {
+            return null;
+          }
 
           const email = String(credentials.email).trim().toLowerCase();
           const password = String(credentials.password);
@@ -32,13 +34,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             "contact.email": email,
           }).select("+password isEmailVerified createdAt");
 
-          if (!user?.password) return null;
+          if (!user?.password) {
+            return null;
+          }
 
           const isValid = await bcrypt.compare(password, user.password);
-          if (!isValid) return null;
+          if (!isValid) {
+            return null;
+          }
 
           const mustVerify = user.isEmailVerified === false;
-          if (mustVerify && !isLegacyUser(user.createdAt)) {
+          const legacy = isLegacyUser(user.createdAt);
+          if (mustVerify && !legacy) {
             throw new EmailNotVerifiedError();
           }
 

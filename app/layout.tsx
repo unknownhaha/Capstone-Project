@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist_Mono, Noto_Sans_Thai, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 import "./inspection-tokens.css";
+import "./theme-overrides.css";
 import "./typography.css";
 import Providers from "./provider";
 
@@ -36,8 +37,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="th" className={`${inspectionSans.variable} ${notoThai.variable} ${geistMono.variable}`}>
-      <body> 
+    <html
+      lang="th"
+      className={`${inspectionSans.variable} ${notoThai.variable} ${geistMono.variable}`}
+      data-theme="light"
+      suppressHydrationWarning
+    >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem("insp-theme");document.documentElement.dataset.theme=t==="dark"?"dark":"light";}catch(e){}})();`,
+          }}
+        />
+      </head>
+      <body suppressHydrationWarning> 
         <Providers>
           {children}
         </Providers>

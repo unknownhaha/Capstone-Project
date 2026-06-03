@@ -74,8 +74,11 @@ function LoginForm() {
       });
 
       if (result?.error || !result?.ok) {
-        const code = (result as { code?: string })?.code;
-        if (code === "email_not_verified") {
+        const errCode = result?.error ?? "";
+        if (
+          errCode === "email_not_verified" ||
+          errCode.includes("email_not_verified")
+        ) {
           setError("Please verify your email before logging in.");
         } else {
           setError("Invalid email or password.");
@@ -158,7 +161,7 @@ function LoginForm() {
                   disabled={isPending}
                   aria-label={show ? "Hide password" : "Show password"}
                 >
-                  <EyeIcon hidden={show} />
+                  <EyeIcon hidden={!show} />
                 </button>
               </div>
             </div>

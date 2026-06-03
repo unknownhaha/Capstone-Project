@@ -1,0 +1,65 @@
+/**
+ * Manual light/dark overrides (sidebar toggle).
+ * Default / light uses tokens from inspection-tokens.css.
+ */
+html[data-theme="dark"] {
+  color-scheme: dark;
+
+  --background: #0e1415;
+  --foreground: #e8f0f0;
+
+  --insp-color-shell-outer: #080c0d;
+  --insp-color-shell-teal-light: #4a7a7d;
+  --insp-color-shell-teal: #3d6669;
+  --insp-color-shell-teal-deep: #2f5255;
+  --insp-color-shell-inner: #3d6669;
+  --insp-gradient-shell: linear-gradient(
+    165deg,
+    #4a7a7d 0%,
+    #3d6669 45%,
+    #2f5255 100%
+  );
+
+  --insp-color-surface: #1a2426;
+  --insp-color-surface-muted: #243032;
+  --insp-color-surface-panel: #1e2a2c;
+  --insp-color-cta-surface: #1e2a2c;
+
+  --insp-color-ink: #e8f0f0;
+  --insp-color-ink-secondary: #b8c8ca;
+  --insp-color-ink-muted: #8aa0a2;
+  --insp-color-ink-placeholder: #9ab0b2;
+
+  --insp-color-accent: #7fb3b6;
+  --insp-color-accent-hover: #9ec5c7;
+  --insp-color-accent-deep: #5f9ea0;
+
+  --insp-color-border: #3a4a4c;
+  --insp-color-border-light: #2e3c3e;
+  --insp-color-border-muted: #354446;
+
+  --insp-color-shell-tray: #243234;
+  --insp-color-shell-tray-border: #354446;
+  --insp-color-card-on-tray: #1e2a2c;
+  --insp-color-card-on-tray-border: #3a4a4c;
+  --insp-color-card-on-tray-border-hover: #4d6062;
+
+  --insp-color-neutral-100: #2a3638;
+  --insp-color-neutral-300: #c8d8da;
+  --insp-color-neutral-400: #b0c0c2;
+
+  --insp-color-danger-surface: #3a2228;
+  --insp-color-danger-border: #5a3038;
+
+  --insp-glass-1: rgba(255, 255, 255, 0.08);
+  --insp-glass-2: rgba(255, 255, 255, 0.12);
+  --insp-glass-3: rgba(255, 255, 255, 0.16);
+  --insp-glass-4: rgba(255, 255, 255, 0.22);
+
+  --insp-color-overlay: rgba(0, 0, 0, 0.55);
+  --insp-color-overlay-strong: rgba(0, 0, 0, 0.65);
+}
+
+html[data-theme="dark"] body {
+  background: var(--insp-color-shell-outer);
+}

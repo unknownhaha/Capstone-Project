@@ -5,10 +5,12 @@ import {
   type RefObject,
 } from "react";
 
-const MENU_ESTIMATE_HEIGHT = 152;
+const MENU_WIDTH = 168;
+const MENU_HEIGHT = 152;
+const VIEWPORT_PAD = 8;
 
-/** Position a dropdown with `position: fixed` so it escapes overflow scroll parents. */
-export function useFixedMenuPosition(
+/** Fixed menu coords from anchor; flips horizontal alignment when it would clip off-screen left. */
+export function useAnchoredMenuPosition(
   open: boolean,
   anchorRef: RefObject<HTMLElement | null>
 ) {
@@ -25,23 +27,32 @@ export function useFixedMenuPosition(
       if (!el) return;
 
       const rect = el.getBoundingClientRect();
+
+      let left = rect.right - MENU_WIDTH;
+      if (left < VIEWPORT_PAD) {
+        left = rect.left;
+      }
+      left = Math.max(
+        VIEWPORT_PAD,
+        Math.min(left, window.innerWidth - MENU_WIDTH - VIEWPORT_PAD)
+      );
+
       const spaceBelow = window.innerHeight - rect.bottom;
       const openUpward =
-        spaceBelow < MENU_ESTIMATE_HEIGHT + 8 &&
-        rect.top > MENU_ESTIMATE_HEIGHT;
-      const top = openUpward
-        ? rect.top - MENU_ESTIMATE_HEIGHT - 4
+        spaceBelow < MENU_HEIGHT + 8 && rect.top > MENU_HEIGHT;
+      let top = openUpward
+        ? rect.top - MENU_HEIGHT - 4
         : rect.bottom + 4;
-      const width = Math.max(168, rect.width);
-      const left = Math.min(rect.right - width, window.innerWidth - width - 8);
-      const clampedLeft = Math.max(8, left);
-      const clampedTop = Math.max(8, Math.min(top, window.innerHeight - MENU_ESTIMATE_HEIGHT - 8));
+      top = Math.max(
+        VIEWPORT_PAD,
+        Math.min(top, window.innerHeight - MENU_HEIGHT - VIEWPORT_PAD)
+      );
 
       setStyle({
         position: "fixed",
-        top: clampedTop,
-        left: clampedLeft,
-        width,
+        top,
+        left,
+        width: MENU_WIDTH,
         zIndex: 46,
       });
     };

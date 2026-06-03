@@ -8,14 +8,47 @@ interface Prop {
     lastName : string;
     profileImg : string;
     isEdit: boolean; 
-    onChange: (field: string, value: string) => void; 
+    onChange: (field: string, value: string) => void;
+    onLockedPhotoInteraction?: () => void;
+    onLockedNameInteraction?: () => void;
+    photoLockedHighlight?: boolean;
+    nameLockedHighlight?: boolean;
+    lockedFieldMessage?: string;
 }
 
-export default function Header({firstName, lastName, profileImg, isEdit,onChange}: Prop) {
+export default function Header({
+  firstName,
+  lastName,
+  profileImg,
+  isEdit,
+  onChange,
+  onLockedPhotoInteraction,
+  onLockedNameInteraction,
+  photoLockedHighlight = false,
+  nameLockedHighlight = false,
+  lockedFieldMessage = "",
+}: Prop) {
     const [isUploading, setIsUploading] = useState(false);
   return (
     <div className={style.container}>
-            <div className={`${style.imgWrapper} ${isEdit ? style.editing : ''}`}>
+            <div className={style.photoCol}>
+            <div
+              className={`${style.imgWrapper} ${isEdit ? style.editing : ""} ${!isEdit && onLockedPhotoInteraction ? style.imgLocked : ""} ${photoLockedHighlight ? style.imgLockedHighlight : ""}`}
+              onClick={!isEdit ? onLockedPhotoInteraction : undefined}
+              onKeyDown={
+                !isEdit && onLockedPhotoInteraction
+                  ? (e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        onLockedPhotoInteraction();
+                      }
+                    }
+                  : undefined
+              }
+              role={!isEdit && onLockedPhotoInteraction ? "button" : undefined}
+              tabIndex={!isEdit && onLockedPhotoInteraction ? 0 : undefined}
+              aria-label={!isEdit ? "Profile photo, edit mode required to change" : undefined}
+            >
                     <img src={profileImg || "next.svg"} alt="Profile Picture" className={style.img} />
                        <UploadButton 
                             endpoint="profileImg"
@@ -63,8 +96,29 @@ export default function Header({firstName, lastName, profileImg, isEdit,onChange
                             disabled={!isEdit || isUploading}
                             />
                 </div>
+            {photoLockedHighlight && lockedFieldMessage ? (
+              <p className={style.lockedFieldMessage} role="alert">
+                {lockedFieldMessage}
+              </p>
+            ) : null}
+            </div>
 
-      <div className={style.name}>
+      <div
+        className={`${style.name} ${!isEdit && onLockedNameInteraction ? style.nameLocked : ""} ${nameLockedHighlight ? style.nameLockedHighlight : ""}`}
+        onClick={!isEdit ? onLockedNameInteraction : undefined}
+        onKeyDown={
+          !isEdit && onLockedNameInteraction
+            ? (e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  onLockedNameInteraction();
+                }
+              }
+            : undefined
+        }
+        role={!isEdit && onLockedNameInteraction ? "button" : undefined}
+        tabIndex={!isEdit && onLockedNameInteraction ? 0 : undefined}
+      >
         {!isEdit ? (
           <>
             <p>{firstName}</p>
@@ -82,6 +136,11 @@ export default function Header({firstName, lastName, profileImg, isEdit,onChange
             />
           </>
         )}
+        {nameLockedHighlight && lockedFieldMessage ? (
+          <p className={style.lockedFieldMessage} role="alert">
+            {lockedFieldMessage}
+          </p>
+        ) : null}
       </div>
     </div>
   );

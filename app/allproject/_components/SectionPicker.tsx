@@ -2,7 +2,10 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { STANDARDS_CATALOG } from "@/lib/standards/catalog";
+import {
+  getAllSelectableGroupIds,
+  STANDARDS_CATALOG,
+} from "@/lib/standards/catalog";
 import styles from "./section.module.css";
 
 export type ProjectSectionView = {
@@ -16,6 +19,8 @@ type SectionPickerProps =
       mode: "select";
       selectedGroupIds: Set<string>;
       onToggleGroup: (groupId: string) => void;
+      onSelectAll?: () => void;
+      onClearAll?: () => void;
       variant?: "create" | "default";
     }
   | {
@@ -41,9 +46,30 @@ export default function SectionPicker(props: SectionPickerProps) {
     const listClass = isCreate
       ? styles.sectionListCreate
       : styles.sectionList;
+    const allIds = getAllSelectableGroupIds();
+    const allSelected =
+      allIds.length > 0 && allIds.every((id) => props.selectedGroupIds.has(id));
 
     return (
       <div className={listClass}>
+        <div className={styles.selectToolbar}>
+          <button
+            type="button"
+            className={styles.selectAllBtn}
+            onClick={() => {
+              if (allSelected) {
+                props.onClearAll?.();
+              } else {
+                props.onSelectAll?.();
+              }
+            }}
+          >
+            {allSelected ? "Clear selection" : "Select all"}
+          </button>
+          <span className={styles.selectToolbarMeta}>
+            {props.selectedGroupIds.size} / {allIds.length}
+          </span>
+        </div>
         {STANDARDS_CATALOG.map((section) => {
           const isOpen = expandedSections.has(section.code);
           return (

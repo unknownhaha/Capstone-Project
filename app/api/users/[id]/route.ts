@@ -4,6 +4,15 @@ import { connectDB } from "@/lib/db";
 import User from "@/lib/model/user";
 import mongoose from "mongoose";
 
+const EMAIL_REGEX = /^\S+@\S+\.\S+$/;
+
+function normalizeEmail(value: unknown): string | null {
+  if (typeof value !== "string") return null;
+  const trimmed = value.trim().toLowerCase();
+  if (!trimmed) return null;
+  return EMAIL_REGEX.test(trimmed) ? trimmed : null;
+}
+
 export async function GET(
   req: NextRequest,
     { params }: { params: Promise<{ id: string }> }
@@ -65,7 +74,16 @@ export async function PUT(
 
     const body = await req.json();
 
-   
+    if (body.email !== undefined) {
+      const normalized = normalizeEmail(body.email);
+      if (!normalized) {
+        return NextResponse.json(
+          { error: "Please use a valid email address" },
+          { status: 400 }
+        );
+      }
+    }
+
     const updateFields: Record<string, string> = {
       ...(body.phone !== undefined && { "contact.phone": body.phone }),
       ...(body.address !== undefined && { "contact.address": body.address }),
@@ -113,8 +131,15 @@ export async function PUT(
   } catch (error) {
     console.error("PUT error:", error);
 
+    if (error instanceof mongoose.Error.ValidationError) {
+      const message = Object.values(error.errors)
+        .map((e) => e.message)
+        .join(", ");
+      return NextResponse.json({ error: message }, { status: 400 });
+    }
+
     return NextResponse.json(
-      { message: "Internal server error" },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }

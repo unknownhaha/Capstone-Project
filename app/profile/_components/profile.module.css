@@ -46,7 +46,10 @@
 .edit {
   margin-top: 1.5rem;
   width: 100%;
-  height: 2rem;
+  min-height: var(--insp-touch-min, 44px);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25;
   border-radius: 10px;
   border: transparent;
   background-color: #5f9ea0;
@@ -79,11 +82,14 @@
 
 .edit2 button {
   flex: 1;
-  height: 2rem;
+  min-height: var(--insp-touch-min, 44px);
+  padding: 0.5rem 0.5rem;
   border-radius: 10px;
   border: transparent;
   cursor: pointer;
   font-weight: 600;
+  font-size: 0.8125rem;
+  line-height: 1.25;
   transition:
     background-color 0.2s ease,
     transform 0.15s ease,
@@ -98,28 +104,65 @@
   transform: translateY(0);
 }
 
-.resetBtn {
-  background-color: #ef476f;
-  color: #fff;
+.discardBtn {
+  background-color: rgba(239, 71, 111, 0.12);
+  color: #c41e3a;
+  border: 1px solid rgba(196, 30, 58, 0.35);
 }
 
-.resetBtn:hover:not(:disabled) {
-  background-color: #d63d62;
-  box-shadow: 0 4px 12px rgba(239, 71, 111, 0.35);
+.discardBtn:hover:not(:disabled) {
+  background-color: rgba(239, 71, 111, 0.2);
+  box-shadow: 0 2px 8px rgba(196, 30, 58, 0.12);
 }
 
-.confirmBtn {
+.saveBtn {
   background-color: #2a9d5c;
   color: #fff;
 }
 
-.confirmBtn:hover:not(:disabled) {
+.saveBtn:hover:not(:disabled) {
   background-color: #248f52;
   box-shadow: 0 4px 12px rgba(42, 157, 92, 0.35);
+}
+
+.editLockedAlert {
+  margin: 0.5rem 0 0;
+  padding: 0.4rem 0.65rem;
+  border-radius: 8px;
+  background-color: rgba(255, 240, 243, 0.95);
+  border: 1px solid #c41e3a;
+  color: #c41e3a;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.saveSuccess {
+  margin: 0.75rem 0 0;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  background-color: #e8f8ef;
+  border: 1px solid #b8e6c8;
+  color: #1a5c36;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  text-align: center;
 }
 
 .loading {
   color: #666;
   text-align: center;
   padding: 40px 0;
+}
+
+.saveError {
+  margin: 0.75rem 0 0;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  background-color: #fff0f3;
+  border: 1px solid #ffc9d4;
+  color: #c41e3a;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  text-align: center;
 }

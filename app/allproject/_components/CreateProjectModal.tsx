@@ -6,6 +6,7 @@ import styles from "../allproject.module.css";
 import sectionStyles from "./section.module.css";
 import skeletonStyles from "./project-card-skeleton.module.css";
 import SectionPicker from "./SectionPicker";
+import { getAllSelectableGroupIds } from "@/lib/standards/catalog";
 import { useModalA11y } from "./useModalA11y";
 
 type CreateProjectModalProps = {
@@ -43,6 +44,14 @@ export default function CreateProjectModal({ open, onClose }: CreateProjectModal
       else next.add(groupId);
       return next;
     });
+  };
+
+  const selectAllGroups = () => {
+    setSelectedGroupIds(new Set(getAllSelectableGroupIds()));
+  };
+
+  const clearAllGroups = () => {
+    setSelectedGroupIds(new Set());
   };
 
   const handleSubmit = async () => {
