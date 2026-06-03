@@ -1,25 +1,25 @@
-# Capstone — Accessibility Inspection App
+# Capstone — แอปตรวจสอบการเข้าถึงอาคาร
 
-Mobile-first web application for **building accessibility inspections** against the Thai public-sector standard **มยผ. 6301** (มาตรฐานการออกแบบสิ่งอำนวยความสะดวกสำหรับผู้พิการและคนชรา). Inspectors score criteria, attach notes and photos, view reference diagrams from the standard, and track completion per project. The UI mixes **English and Thai**.
+เว็บแอปสำหรับมือถือใช้ **ตรวจสอบการเข้าถึงอาคาร** ตามมาตรฐานภาครัฐ **มยผ. 6301** (มาตรฐานการออกแบบสิ่งอำนวยความสะดวกสำหรับผู้พิการและคนชรา) ผู้ตรวจให้คะแนนเกณฑ์ บันทึกหมายเหตุและรูปถ่าย ดูภาพอ้างอิงจากมาตรฐาน และติดตามความคืบหน้าต่อโครงการ ส่วนต่อประสานผสม **ภาษาอังกฤษและไทย**
 
-**Deep technical reference for developers and AI agents:** [`docs/AI_PROJECT_GUIDE.md`](docs/AI_PROJECT_GUIDE.md)
-
----
-
-## What this project does
-
-| Capability | Description |
-|------------|-------------|
-| **Accounts** | Register with email OTP, login, profile (name, contact, workplace), profile photo |
-| **Projects** | Create inspection projects with location, name, description, and selected criteria groups |
-| **Inspection** | Per-criterion score **0 / 1 / 2**, notes, multiple inspection photos |
-| **Standards** | Checklist text from JSON catalog; **original clause text** (`source_text`) with cross-reference enrichment; reference **figures** from มยผ. PDF |
-| **Collaboration** | Owner enables sharing, invite link (`/join/[token]`); editors join and co-inspect; editors can **leave** shared projects from the dashboard |
-| **Reporting** | Project completion %, report view, optional ML assessment hook |
+**คู่มือเทคนิคสำหรับนักพัฒนาและ AI:** [`docs/AI_PROJECT_GUIDE.md`](docs/AI_PROJECT_GUIDE.md) (ภาษาอังกฤษ)
 
 ---
 
-## System workflow (end-to-end)
+## โครงการนี้ทำอะไร
+
+| ความสามารถ | คำอธิบาย |
+|------------|----------|
+| **บัญชีผู้ใช้** | สมัครสมาชิกด้วย OTP อีเมล เข้าสู่ระบบ โปรไฟล์ (ชื่อ ติดต่อ ที่ทำงาน) รูปโปรไฟล์ |
+| **โครงการ** | สร้างโครงการตรวจ พร้อมสถานที่ ชื่อ คำอธิบาย และเลือกกลุ่มเกณฑ์ |
+| **การตรวจ** | คะแนนต่อเกณฑ์ **0 / 1 / 2** หมายเหตุ รูปถ่ายหลายรูปต่อข้อ |
+| **มาตรฐาน** | ข้อความจากแคตตาล็อก JSON ข้อความต้นฉบับ (`source_text`) พร้อมข้ออ้างอิงข้ามข้อ ภาพอ้างอิงจาก PDF มยผ. |
+| **ทำงานร่วมกัน** | เจ้าของเปิดแชร์ ลิงก์เชิญ (`/join/[token]`) ผู้แก้ไขเข้าร่วมตรวจร่วมกัน ผู้แก้ไข **ออกจากรายการ** โครงการแชร์ได้โดยไม่ลบโครงการของเจ้าของ |
+| **รายงาน** | เปอร์เซ็นต์ความสำเร็จ หน้ารายงาน ทางเลือก ML assessment |
+
+---
+
+## ขั้นตอนการทำงานของระบบ (ภาพรวม)
 
 ```mermaid
 flowchart LR
@@ -51,200 +51,200 @@ flowchart LR
   P --> API
 ```
 
-### Typical inspector journey
+### เส้นทางผู้ตรวจทั่วไป
 
-1. **Register** → verify email OTP → **complete profile** (required before creating a project).
-2. **Login** → land on **All projects** (`/allproject`).
-3. **Create project** → enter location & name → **select criteria groups** (sections from มยผ.) → `POST /api/project` builds `sections[]` in MongoDB.
-4. Open project → **section picker** → open a **criteria group** → score each item, add notes/photos, expand **ข้อความต้นฉบับ** (formatted source text + reference image).
-5. **Owner:** share project (enable collaboration, copy invite link). **Editor:** open link while logged in → `POST /api/join/[token]` → project appears as “Shared with you”; can **remove from list** without deleting the project for the owner.
-6. **Completion** updates via Mongoose pre-save hooks when scores change; owner can mark project done when all criteria are scored.
+1. **สมัครสมาชิก** → ยืนยัน OTP อีเมล → **กรอกโปรไฟล์ให้ครบ** (จำเป็นก่อนสร้างโครงการ)
+2. **เข้าสู่ระบบ** → ไปที่ **โครงการทั้งหมด** (`/allproject`)
+3. **สร้างโครงการ** → กรอกสถานที่และชื่อ → **เลือกกลุ่มเกณฑ์** (หมวดจาก มยผ.) → `POST /api/project` สร้าง `sections[]` ใน MongoDB
+4. เปิดโครงการ → **เลือกหมวด** → เปิด **กลุ่มเกณฑ์** → ให้คะแนนแต่ละข้อ บันทึกหมายเหตุ/รูป ขยาย **ข้อความต้นฉบับ** (จัดเป็นหัวข้อและ bullet + ภาพอ้างอิง)
+5. **เจ้าของ:** แชร์โครงการ (เปิด collaboration คัดลอกลิงก์เชิญ) **ผู้แก้ไข:** เปิดลิงก์ขณะล็อกอิน → `POST /api/join/[token]` → โครงการแสดงเป็น “Shared with you” **เอาออกจากรายการ** ได้โดยไม่ลบโครงการของเจ้าของ
+6. **ความสำเร็จ** อัปเดตผ่าน Mongoose pre-save เมื่อมีการให้คะแนน เจ้าของปิดโครงการได้เมื่อให้คะแนนครบทุกเกณฑ์
 
-### Data flow (one criterion save)
+### การไหลของข้อมูล (บันทึกเกณฑ์หนึ่งข้อ)
 
 ```
-InspectionItemRow (client)
+InspectionItemRow (ฝั่ง client)
   → PATCH /api/project/[id]/critiria/[criteriaId]
-  → auth() + project access (owner | editor)
-  → optimistic concurrency (updatedAt / 409 on conflict)
-  → MongoDB criterion embedded in project.sections[].criteria[]
+  → auth() + สิทธิ์โครงการ (เจ้าของ | ผู้แก้ไข)
+  → optimistic concurrency (updatedAt / 409 เมื่อชนกัน)
+  → MongoDB เกณฑ์ฝังใน project.sections[].criteria[]
 ```
 
 ---
 
-## Tech stack
+## เทคโนโลยีที่ใช้
 
-| Layer | Technology |
-|--------|------------|
+| ชั้น | เทคโนโลยี |
+|------|-----------|
 | Framework | Next.js 16 (App Router) |
 | UI | React 19, CSS Modules |
 | Auth | NextAuth v5 (Credentials, JWT) |
-| Database | MongoDB + Mongoose |
-| Uploads | UploadThing (`profileImg`, `inspectionImg`, `projectCoverImg`) |
-| Standards | Static JSON in `lib/standards/` + `catalog.ts` |
+| ฐานข้อมูล | MongoDB + Mongoose |
+| อัปโหลด | UploadThing (`profileImg`, `inspectionImg`, `projectCoverImg`) |
+| มาตรฐาน | JSON ใน `lib/standards/` + `catalog.ts` |
 
 ---
 
-## Repository map — folders and roles
+## แผนที่โฟลเดอร์ — บทบาทของแต่ละส่วน
 
 ```
 Capstone-Project/
-├── app/                    # All UI pages and API routes (Next.js App Router)
-├── auth.ts, auth.config.ts # NextAuth providers and session/JWT config
-├── middleware.ts           # Auth redirect for pages; 401 for protected API
-├── lib/                    # Shared server logic, models, standards catalog
-├── public/                 # Static assets (standard figures, favicon)
-├── scripts/                # Maintenance: PDF figures, enrichment, field-test, validate
-├── tests/                  # Node test runner (tsx --test)
-├── docs/                   # AI guide, diagrams, field-testing runbooks, reports
-└── standards-source/       # Source PDF copy for figure extraction (not served at runtime)
+├── app/                    # หน้า UI และ API routes (Next.js App Router)
+├── auth.ts, auth.config.ts # NextAuth และการตั้งค่า session/JWT
+├── middleware.ts           # redirect เมื่อไม่ล็อกอิน; API คืน 401
+├── lib/                    # logic ฝั่งเซิร์ฟเวอร์ โมเดล แคตตาล็อกมาตรฐาน
+├── public/                 # ไฟล์คงที่ (ภาพมาตรฐาน favicon)
+├── scripts/                # ดูแล PDF enrichment ทดสอบ validate
+├── tests/                  # ทดสอบด้วย tsx --test
+├── docs/                   # คู่มือ AI แผนภาพ field-test รายงาน
+└── standards-source/       # สำเนา PDF ต้นฉบับ (ไม่ serve ตอนรันแอป)
 ```
 
-### `app/` — pages and features
+### `app/` — หน้าและฟีเจอร์
 
-| Path | Feature / responsibility |
-|------|---------------------------|
-| `app/page.tsx` | Home → redirects into project dashboard |
-| `app/login/`, `app/register/`, `app/verify/` | Authentication and email OTP |
-| `app/forgot-password/` | Password reset flow |
-| `app/profile/` | Edit profile; **must be complete** before `POST /api/project` |
-| `app/allproject/page.tsx` | **Dashboard** — list/search owned + shared projects, create modal |
-| `app/allproject/[projectId]/page.tsx` | **Project hub** — sections & groups navigation |
-| `app/allproject/[projectId]/criteria/[criteriaGroupId]/page.tsx` | **Inspection UI** — checklist for one group |
-| `app/allproject/[projectId]/report/page.tsx` | Project report / summary view |
-| `app/join/[token]/page.tsx` | Accept collaboration invite |
-| `app/allproject/_components/` | Shared UI: cards, modals, `InspectionItemRow`, `SectionPicker`, sidebar |
-| `app/api/auth/` | Register, OTP, NextAuth handler (`runtime = "nodejs"`) |
-| `app/api/project/` | CRUD projects, sections, **critiria** PATCH, add-groups, collaboration, **leave** |
-| `app/api/join/[token]/` | Join project as editor |
-| `app/api/users/[id]/` | Profile GET/PATCH |
-| `app/api/uploadthing/` | File upload routes (session checked per slug) |
+| Path | ฟีเจอร์ / หน้าที่ |
+|------|-------------------|
+| `app/page.tsx` | หน้าแรก → ไปแดชบอร์ดโครงการ |
+| `app/login/`, `app/register/`, `app/verify/` | เข้าสู่ระบบ สมัคร OTP |
+| `app/forgot-password/` | รีเซ็ตรหัสผ่าน |
+| `app/profile/` | แก้โปรไฟล์ **ต้องครบ** ก่อน `POST /api/project` |
+| `app/allproject/page.tsx` | **แดชบอร์ด** — รายการ/ค้นหาโครงการ สร้างโครงการ |
+| `app/allproject/[projectId]/page.tsx` | **ศูนย์โครงการ** — นำทางหมวดและกลุ่ม |
+| `app/allproject/[projectId]/criteria/[criteriaGroupId]/page.tsx` | **หน้าตรวจ** — checklist กลุ่มหนึ่ง |
+| `app/allproject/[projectId]/report/page.tsx` | รายงาน / สรุปโครงการ |
+| `app/join/[token]/page.tsx` | รับคำเชิญทำงานร่วมกัน |
+| `app/allproject/_components/` | UI ร่วม: การ์ด modal `InspectionItemRow` `SectionPicker` sidebar |
+| `app/api/auth/` | สมัคร OTP NextAuth (`runtime = "nodejs"`) |
+| `app/api/project/` | CRUD โครงการ PATCH **critiria** add-groups collaboration **leave** |
+| `app/api/join/[token]/` | เข้าร่วมเป็น editor |
+| `app/api/users/[id]/` | โปรไฟล์ GET/PATCH |
+| `app/api/uploadthing/` | อัปโหลดไฟล์ (ตรวจ session ต่อ slug) |
 | `app/_components/` | `ThemeProvider`, `AppLogo` |
-| `app/_globle_components/Form/` | Reusable profile form fields |
+| `app/_globle_components/Form/` | ฟอร์มโปรไฟล์ใช้ซ้ำ |
 
-### `lib/` — business logic (care about these)
+### `lib/` — logic สำคัญ (ควรใส่ใจ)
 
-| Path | What it does | Why it matters |
-|------|----------------|----------------|
-| `lib/model/project.ts` | Project schema, sections, criteria, completion hooks | Changing shape affects API + all inspection UIs |
-| `lib/model/user.ts` | User + contact | Login email, profile completeness |
-| `lib/standards/catalog.ts` | Loads JSON → `STANDARDS_CATALOG`, lookups, group IDs | Single source for checklist content |
-| `lib/standards/*.json` | Raw มยผ. criteria (`display_text`, `source_text`, clauses) | Editorial changes happen here |
-| `lib/standards/format-source-text.ts` | Parses enriched `source_text` for bullet UI | Display-only; JSON stays full legal text |
-| `lib/standards/figure-map.json` | Clause → figure file mapping | Reference images on criteria rows |
-| `lib/project-sections.ts` | Builds `sections[]` when creating/adding groups | Must stay in sync with catalog group IDs |
-| `lib/project-access.ts` | `canEditProject`, `canLeaveProject`, share rules | Authorization for PATCH / leave / share |
-| `lib/project-patch.ts` | Validates metadata PATCH body | Prevents replacing `sections` via PATCH |
-| `lib/criterion-concurrency.ts` | `updatedAt` conflict detection | Multi-inspector 409 handling |
-| `lib/profile-complete.ts` | Required fields before create project | Gates create modal |
-| `lib/db.ts` | Mongo connection | Requires `MONGO_URI` |
+| Path | ทำอะไร | ทำไมสำคัญ |
+|------|--------|-----------|
+| `lib/model/project.ts` | schema โครงการ sections เกณฑ์ completion | เปลี่ยนโครงสร้างกระทบ API และ UI ทั้งหมด |
+| `lib/model/user.ts` | ผู้ใช้และ contact | อีเมลล็อกอิน ความครบโปรไฟล์ |
+| `lib/standards/catalog.ts` | โหลด JSON → `STANDARDS_CATALOG` | แหล่งข้อความ checklist |
+| `lib/standards/*.json` | ข้อมูล มยผ. (`display_text`, `source_text`) | แก้เนื้อหามาตรฐานที่นี่ |
+| `lib/standards/format-source-text.ts` | แปลง `source_text` เป็น bullet บน UI | แสดงผลเท่านั้น JSON ยังเป็นข้อความเต็ม |
+| `lib/standards/figure-map.json` | ข้อ → ไฟล์ภาพ | ภาพอ้างอิงบนแถวเกณฑ์ |
+| `lib/project-sections.ts` | สร้าง `sections[]` ตอนสร้าง/เพิ่มกลุ่ม | ต้องตรง group ID ในแคตตาล็อก |
+| `lib/project-access.ts` | `canEditProject`, `canLeaveProject` แชร์ | สิทธิ์ PATCH / leave / share |
+| `lib/project-patch.ts` | ตรวจ body PATCH metadata | กันการแทนที่ `sections` ทั้งก้อน |
+| `lib/criterion-concurrency.ts` | ตรวจ `updatedAt` ชนกัน | ผู้ตรวจหลายคน → 409 |
+| `lib/profile-complete.ts` | ฟิลด์บังคับก่อนสร้างโครงการ | กั้น modal สร้างโครงการ |
+| `lib/db.ts` | เชื่อม Mongo | ต้องมี `MONGO_URI` |
 
-### `scripts/` — offline tooling
+### `scripts/` — เครื่องมือออฟไลน์
 
-| Script | Purpose |
-|--------|---------|
-| `enrich-cross-ref-sources.ts` | Appends referenced clause text to `source_text` for cross-ref items |
-| `extract-pdf-figures.py` | Extract diagram PNGs from มยผ. PDF |
-| `validate-premerge.ts` | Pre-merge catalog/API checks (`npm run validate`) |
-| `field-test-preflight.ts`, `field-test-smoke.ts` | Field-test environment and smoke paths |
+| Script | ใช้ทำอะไร |
+|--------|-----------|
+| `enrich-cross-ref-sources.ts` | เติมข้อความข้ออ้างอิงใน `source_text` |
+| `extract-pdf-figures.py` | ดึง PNG จาก PDF มยผ. |
+| `validate-premerge.ts` | ตรวจแคตตาล็อก/API ก่อน merge (`npm run validate`) |
+| `field-test-preflight.ts`, `field-test-smoke.ts` | ทดสอบสภาพแวดล้อมและ smoke |
 
-### `docs/` — documentation
+### `docs/` — เอกสาร
 
-| Path | Contents |
-|------|----------|
-| `docs/AI_PROJECT_GUIDE.md` | **Primary dev guide** — APIs, quirks, conventions |
-| `docs/reports/` | ER diagram, user flow, capstone report (Thai) |
-| `docs/field-testing/` | Runbooks, spreadsheets, session results |
-
----
-
-## Feature designation (what to touch for each task)
-
-| Feature | Primary files |
-|---------|----------------|
-| Project list & search | `app/allproject/page.tsx`, `project-utils.ts` |
-| Create project & select all criteria | `CreateProjectModal.tsx`, `SectionPicker.tsx`, `POST app/api/project/route.ts` |
-| Project card (cover, kebab, shared badge, leave) | `ProjectCard.tsx`, `project-card.module.css`, `LeaveConfirmDialog.tsx`, `leave/route.ts` |
-| Share / invite | `ShareProjectDialog.tsx`, `collaboration/route.ts`, `invite/route.ts`, `join/` |
-| Section navigation | `[projectId]/page.tsx`, `SectionPicker.tsx` (navigate mode) |
-| Criterion scoring & photos | `InspectionItemRow.tsx`, `critiria/[critiriaId]/route.ts` |
-| Source text display (bullets + cross-refs) | `SourceTextDisplay.tsx`, `format-source-text.ts`, enriched JSON |
-| Add criteria to existing project | `AddCriteriaModal.tsx`, `add-groups/route.ts` |
-| Profile & create gate | `profile/`, `profile-complete.ts`, `users/[id]/route.ts` |
-| Auth / login errors | `auth.ts`, `auth.config.ts`, `app/login/page.tsx` |
-| Theme / branding | `ThemeProvider.tsx`, `lib/theme.ts`, `AppLogo.tsx`, `app/layout.tsx` |
-| Standards content | `lib/standards/*.json`, run `enrich-cross-ref-sources.ts` after cross-ref edits |
+| Path | เนื้อหา |
+|------|---------|
+| `docs/AI_PROJECT_GUIDE.md` | **คู่มือหลักสำหรับ dev** — API ข้อควรระวัง |
+| `docs/reports/` | ER diagram user flow รายงานโครงงาน |
+| `docs/field-testing/` | runbook สเปรดชีต ผลทดสอบ |
 
 ---
 
-## Important areas to care about
+## แก้ฟีเจอร์ใด — ไปที่ไฟล์ไหน
 
-1. **API spelling `critiria`** — URL segment is intentional; renaming breaks clients.
-2. **Catalog vs MongoDB** — JSON defines *what* can be inspected; project documents store *scores* per `criteriaId`. Do not PATCH whole `sections` from the client.
-3. **Reference `img` vs inspection `imgs`** — `item.img` is มยผ. diagram; `criterion.imgs` are user uploads.
-4. **Concurrency** — Two inspectors editing the same criterion → **409**; UI should refresh. Prefer splitting work by section/group.
-5. **Auth** — Client `fetch` must use `credentials: "include"`; `AUTH_SECRET` and `AUTH_URL` (for invite links / ngrok) must be set in production.
-6. **Profile gate** — Incomplete profile blocks project creation (403 + `missingFields`).
-7. **File `อย่ายุ่งกับอันนี้.json`** — Facilities standard bundle; filename is intentional.
-8. **One dev server** — Only one `next dev` on port 3000 to avoid session confusion.
+| ฟีเจอร์ | ไฟล์หลัก |
+|---------|----------|
+| รายการโครงการและค้นหา | `app/allproject/page.tsx`, `project-utils.ts` |
+| สร้างโครงการและเลือกเกณฑ์ทั้งหมด | `CreateProjectModal.tsx`, `SectionPicker.tsx`, `app/api/project/route.ts` |
+| การ์ดโครงการ (ปก เมนู แบดจ์แชร์ ออกจากรายการ) | `ProjectCard.tsx`, `LeaveConfirmDialog.tsx`, `leave/route.ts` |
+| แชร์ / เชิญ | `ShareProjectDialog.tsx`, `collaboration/route.ts`, `invite/route.ts`, `join/` |
+| นำทางหมวด | `[projectId]/page.tsx`, `SectionPicker.tsx` (โหมด navigate) |
+| ให้คะแนนและรูปถ่าย | `InspectionItemRow.tsx`, `critiria/[critiriaId]/route.ts` |
+| แสดงข้อความต้นฉบับ (bullet + อ้างอิง) | `SourceTextDisplay.tsx`, `format-source-text.ts`, JSON ที่ enrich แล้ว |
+| เพิ่มเกณฑ์ในโครงการเดิม | `AddCriteriaModal.tsx`, `add-groups/route.ts` |
+| โปรไฟล์และกั้นสร้างโครงการ | `profile/`, `profile-complete.ts`, `users/[id]/route.ts` |
+| Auth / login | `auth.ts`, `auth.config.ts`, `app/login/page.tsx` |
+| ธีม / โลโก้ | `ThemeProvider.tsx`, `AppLogo.tsx`, `app/layout.tsx` |
+| เนื้อหามาตรฐาน | `lib/standards/*.json`, รัน `enrich-cross-ref-sources.ts` หลังแก้ข้ออ้างอิง |
 
 ---
 
-## Getting started
+## จุดสำคัญที่ควรใส่ใจ
 
-### Prerequisites
+1. **สะกด API `critiria`** — ใน URL ตั้งใจไว้ เปลี่ยนจะพัง client
+2. **แคตตาล็อก vs MongoDB** — JSON กำหนดว่าตรวจอะไรได้ เอกสารโครงการเก็บ**คะแนน** ต่อ `criteriaId` ห้าม PATCH `sections` ทั้งก้อนจาก client
+3. **ภาพอ้างอิง `img` vs รูปตรวจ `imgs`** — `item.img` คือแผนภาพ มยผ. `criterion.imgs` คือรูปที่ผู้ใช้อัปโหลด
+4. **ชนกันหลายคน** — แก้เกณฑ์เดียวกันพร้อมกัน → **409** ควร refresh แบ่งงานตามหมวด/กลุ่ม
+5. **Auth** — `fetch` ต้อง `credentials: "include"` ตั้ง `AUTH_SECRET` และ `AUTH_URL` (ลิงก์เชิญ / ngrok)
+6. **กั้นโปรไฟล์** — โปรไฟล์ไม่ครบสร้างโครงการไม่ได้ (403 + `missingFields`)
+7. **ไฟล์ `อย่ายุ่งกับอันนี้.json`** — ชุดมาตรฐานสิ่งอำนวยความสะดวก ชื่อไฟล์ตั้งใจ
+8. **dev server เดียว** — รัน `next dev` แค่พอร์ต 3000 เดียว กัน session สับสน
+
+---
+
+## เริ่มต้นใช้งาน
+
+### สิ่งที่ต้องมี
 
 - Node.js 20+
-- MongoDB instance
-- UploadThing account
-- (Optional) Gmail app password for OTP email
+- MongoDB
+- บัญชี UploadThing
+- (ทางเลือก) Gmail App Password สำหรับ OTP
 
-### Setup
+### ติดตั้ง
 
 ```bash
 cp .env.example .env
-# Fill MONGO_URI, AUTH_SECRET, UPLOADTHING_TOKEN, EMAIL_* for OTP
+# กรอก MONGO_URI, AUTH_SECRET, UPLOADTHING_TOKEN, EMAIL_* สำหรับ OTP
 
 npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). Default flow: register → verify → profile → `/allproject`.
+เปิด [http://localhost:3000](http://localhost:3000) ลำดับปกติ: สมัคร → ยืนยัน → โปรไฟล์ → `/allproject`
 
-### Quality commands
+### คำสั่งตรวจคุณภาพ
 
 ```bash
-npm test              # Unit tests (access, profile, concurrency, format-source-text, …)
-npm run validate      # Catalog / API pre-merge checks
-npm run build         # Production build
-npm run field-test:smoke   # HTTP smoke paths (dev server must be running)
+npm test              # ทดสอบหน่วย (access, profile, concurrency, format-source-text, …)
+npm run validate      # ตรวจแคตตาล็อก/API ก่อน merge
+npm run build         # build production
+npm run field-test:smoke   # smoke HTTP (ต้องรัน dev server ก่อน)
 ```
 
 ---
 
-## Environment variables
+## ตัวแปรสภาพแวดล้อม
 
-| Variable | Required | Purpose |
-|----------|----------|---------|
-| `MONGO_URI` | Yes | MongoDB |
-| `AUTH_SECRET` | Yes | NextAuth / JWT |
-| `UPLOADTHING_TOKEN` | Yes | Uploads |
-| `AUTH_URL` | Recommended | Base URL for invite links (set to ngrok URL when testing on phone) |
-| `EMAIL_USER` / `EMAIL_PASS` | For OTP | Registration verification email |
+| ตัวแปร | จำเป็น | ใช้ทำอะไร |
+|--------|--------|-----------|
+| `MONGO_URI` | ใช่ | MongoDB |
+| `AUTH_SECRET` | ใช่ | NextAuth / JWT |
+| `UPLOADTHING_TOKEN` | ใช่ | อัปโหลด |
+| `AUTH_URL` | แนะนำ | URL ฐานสำหรับลิงก์เชิญ (ตั้งเป็น ngrok เมื่อทดบนมือถือ) |
+| `EMAIL_USER` / `EMAIL_PASS` | สำหรับ OTP | อีเมลยืนยันตอนสมัคร |
 
-See [`.env.example`](.env.example).
-
----
-
-## Related documentation
-
-- [`docs/AI_PROJECT_GUIDE.md`](docs/AI_PROJECT_GUIDE.md) — architecture, API table, auth pitfalls, figure pipeline
-- [`docs/reports/user-flow-diagram.md`](docs/reports/user-flow-diagram.md) — user journey diagram
-- [`docs/reports/er-diagram-user-project.md`](docs/reports/er-diagram-user-project.md) — User / Project data model
-- [`docs/field-testing/README.md`](docs/field-testing/README.md) — field test protocol
+ดู [`.env.example`](.env.example)
 
 ---
 
-## License / academic context
+## เอกสารที่เกี่ยวข้อง
 
-Capstone project — accessibility inspection tooling aligned with **มยผ. 6301**. Standards text and figures derive from the official standard PDF; app logic and UI are project-owned.
+- [`docs/AI_PROJECT_GUIDE.md`](docs/AI_PROJECT_GUIDE.md) — สถาปัตยกรรม API ข้อควรระวัง (EN)
+- [`docs/reports/user-flow-diagram.md`](docs/reports/user-flow-diagram.md) — แผนภาพ user flow
+- [`docs/reports/er-diagram-user-project.md`](docs/reports/er-diagram-user-project.md) — โมเดล User / Project
+- [`docs/field-testing/README.md`](docs/field-testing/README.md) — โปรโตคอลทดสอบภาคสนาม
+
+---
+
+## บริบทโครงงาน
+
+โครงงาน Capstone — เครื่องมือตรวจการเข้าถึงตาม **มยผ. 6301** ข้อความและภาพมาจาก PDF มาตรฐานอย่างเป็นทางการ logic และ UI เป็นของโครงการนี้
